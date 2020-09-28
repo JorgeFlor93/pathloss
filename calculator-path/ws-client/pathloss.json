@@ -1,0 +1,16 @@
+{
+  "executable":"pathloss",
+  "actions": [
+    {
+      "object":"Area",
+      "model":"fspl",
+      "AntennasTx":[[51.349,-2.2299, 20],[51.379,-2.2300, 30]], 
+      "areaCorners": [
+	      {
+	        "topleft": [51.449000,-2.239900, 1],
+      	  "botright": [51.446709,-2.235768, 1]
+        }
+      ]
+    }
+  ]
+}

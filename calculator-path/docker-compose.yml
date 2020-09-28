@@ -1,0 +1,31 @@
+
+version: '3.7'
+
+services:
+
+  ws-server:
+    image: ws-server:latest
+    container_name: ws-server
+    hostname: ws-server
+    restart: always
+    build:
+      context: ./
+      dockerfile: Docker/ws-server.Dockerfile
+    volumes:
+      - ./build:/home/app/build
+    ports:
+      - 8080:8080
+
+  ws-client:
+    image: ws-client:latest
+    container_name: ws-client
+    hostname: ws-client
+    build:
+      context: ./
+      dockerfile: Docker/ws-client.Dockerfile
+    depends_on: 
+      - ws-server
+    volumes:
+      - ./ws-client:/usr/share/nginx/html
+    ports:
+      - 80:80

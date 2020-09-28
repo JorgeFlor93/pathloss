@@ -1,0 +1,46 @@
+
+
+body, #global, #out {
+  margin: 0;
+  padding: 0;
+
+}
+
+body, #global {
+  height: 100vh;
+  width: 100vw;
+}
+
+#status, #loader {
+  margin: 10px;
+  padding: 10px;
+}
+
+body, #global, #status, #loader {
+  overflow: hidden;
+}
+
+#status, #loaded, #loader {
+  text-align: center;
+}
+
+#out, #in {
+  height: 85vh;
+  width: 50vw;
+  overflow: scroll;
+}
+
+#display {
+  display: flex;
+}
+
+#loaded {
+  height: 0vh;
+  width: 0vw;
+  visibility: hidden;
+}
+
+#loader {
+  height: 5vh;
+  width: 95vw;
+}
