@@ -7,6 +7,6 @@
 class Executable {
   public:
     virtual ~Executable(){};
-    virtual void execute() = 0;
+    virtual void execute(std::string work) = 0;
     virtual nlohmann::json result() = 0;
 };

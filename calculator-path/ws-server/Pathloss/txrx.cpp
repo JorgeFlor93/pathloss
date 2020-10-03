@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "txrx.hpp"
 
 void Pairtxrx::setTx(struct site tx){
@@ -25,8 +24,8 @@ Coord& Pairtxrx::getRx(){
     return this->vp.back();
 }
 
-void Pairtxrx::setLoss(int propmodel, int pmenv){
-    this->loss = LossReport(this->tx, this->rx, propmodel, pmenv);
+void Pairtxrx::setLoss(float freq, std::string propmodel, std::string pmenv){
+    this->loss = LossReport(this->tx, this->rx, propmodel, pmenv, freq);
 }
 
 double Pairtxrx::getLoss(){

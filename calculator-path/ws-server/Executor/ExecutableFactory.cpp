@@ -1,38 +1,18 @@
 
 #include "ExecutableFactory.hpp"
 
-Executable* ExecutableFactory::create (std::string executable, nlohmann::json actions) {
-  // if (executable == "calculator") {
-  //   Calculator calculator{};
-  //   ExecutableCalculator* executableCalculator = new ExecutableCalculator{}; //Creas decorador
-  //   executableCalculator->setCalculator(calculator); //Decoras a calculator
-     
-  //   std::string operation = actions["operation"].get<std::string>();
-  //   std::vector<double> operands = actions["operands"].get<std::vector<double>>();
-  //   executableCalculator->addFixedCalculation(operation, operands);
-
-  //   return executableCalculator;
-  // } 
-  // else if(executable == "matrixcalculator") {
-  //   MatrixCalculator matrixcalculator{};
-  //   ExecutableMatrixCalculator* executableMatrix = new ExecutableMatrixCalculator{};
-  //   executableMatrix->setMatrixCalculator(matrixcalculator);
-
-  //   std::string operation = actions["operation"].get<std::string>();
-  //   std::vector<std::vector<std::vector<double>>> operands = actions["operands"].get<std::vector<std::vector<std::vector<double>>>>();
-  //   executableMatrix->addFixedMatrixCalculation(operation, operands);
-
-  //   return executableMatrix;
-  // }
+Executable* ExecutableFactory::create (std::string executable, nlohmann::json atributes, nlohmann::json actions) {
   if(executable == "pathloss"){
     Pathloss pathloss{};
     ExecutablePathloss* executablePathloss = new ExecutablePathloss{};
     executablePathloss->setPathloss(pathloss);
 
-    std::string model = actions["model"].get<std::string>();
-    std::string object = actions["object"].get<std::string>(); 
-    nlohmann::json areaCoord = actions["areaCorners"].get<nlohmann::json>();
-    executablePathloss->addFixedPathloss(model, object, areaCoord);
+    float freq = atributes["frequency"].get<float>();
+    std::string model = atributes["model"].get<std::string>(); 
+    nlohmann::json areaCoord = atributes["areaCorners"][0].get<nlohmann::json>();
+    std::vector<std::vector<double>> vTx = atributes["AntennasTx"].get<std::vector<std::vector<double>>>();
+    std::string env_mode = atributes["propagation_model"].get<std::string>();
+    executablePathloss->addFixedPathloss(freq, model, env_mode, areaCoord, vTx, actions);
     return executablePathloss;
   }
   else {

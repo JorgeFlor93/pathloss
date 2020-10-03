@@ -66,14 +66,6 @@ bool Coord::validCoord(double lat, double lon, float alt){
     return correctalt && correctlon && correctalt;
 }
 
-bool Coord::setTx(double minloss, struct site tx){
-    bool correctloss;
-    this->loss = minloss;
-    this->btx = tx;
-    correctloss = (minloss > 0);
-    return correctloss;  
-}
-
 double Coord::getBtxloss(){
     return this->loss;
 }
@@ -81,3 +73,19 @@ double Coord::getBtxloss(){
 struct site Coord::getBtx(){
     return this->btx;
 }
+
+bool Coord::assignTx(double minloss, struct site tx){
+    bool correctloss;
+    this->loss = minloss;
+    this->btx = tx;
+    correctloss = (minloss > 0);
+    return correctloss;  
+}
+
+// bool Coord::setTx(double minloss, struct site tx){
+//     bool correctloss;
+//     this->loss = minloss;
+//     this->btx = tx;
+//     correctloss = (minloss > 0);
+//     return correctloss;  
+// }

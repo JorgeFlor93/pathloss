@@ -1,7 +1,8 @@
-#include "coordinate.hh"
-#include "coordinate.hh"
-#include "lossreport.hh"
+#pragma once
+#include "coordinate.hpp"
+#include "lossreport.hpp"
 #include <vector>
+#include <iostream>
 
 class Pairtxrx{
 public:
@@ -9,11 +10,10 @@ public:
     void setRx(struct site rx);
     struct site getstx();
     void assignPar(Coord tx, Coord rx);
-    void setLoss(int propmodel, int pmenv);
+    void setLoss(float freq, std::string propmodel, std::string pmenv);
     double getLoss();
     Coord& getTx();
     Coord& getRx();
- 
 private:
     std::vector<Coord> vp;
     struct site tx;
