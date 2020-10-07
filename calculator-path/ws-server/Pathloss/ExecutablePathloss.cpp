@@ -24,23 +24,23 @@ void ExecutablePathloss::setCalculus(float freq, std::string prop_model, std::st
   return this->pathloss.setCalculus(freq, prop_model, env_mode, areaCoord, vTx, points);
 }
 
-void ExecutablePathloss::addFixedPathloss(float freq, std::string prop_model, std::string env_mode, nlohmann::json areaCoord, std::vector<std::vector<double>> vTx, nlohmann::json actions){ //crear 
-  this->model = prop_model;  
-  this->env_mode = env_mode;
-  this->jsarea = areaCoord;
-  this->vTx = vTx;
-  this->freq = freq;
-  this->operations = actions["operation"].get<std::vector<std::string>>();
-  this->points = actions["Points"].get<std::vector<double>>();
+void ExecutablePathloss::addFixedPathloss(nlohmann::json atributes, nlohmann::json operands){ //crear 
+  this->model =  atributes["model"].get<std::string>();
+  this->env_mode = atributes["propagation_model"].get<std::string>();
+  this->jsarea = atributes["areaCorners"][0].get<nlohmann::json>();
+  this->vTx = atributes["AntennasTx"][0];
+  this->freq = atributes["frequency"].get<float>();
+  this->points = operands["Points"].get<std::vector<double>>();
+  
+  this->setCalculus(this->freq, this->model, this->env_mode, this->jsarea, this->vTx["value"].get<std::vector<std::vector<double>>>(), this->points); // Se establece el área 
 }
 
-void ExecutablePathloss::execute(std::string work) {  //ejecutar
-  this->setCalculus(this->freq, this->model, this->env_mode, this->jsarea, this->vTx, this->points); // Se establece el área 
-  if(work == "BestTx"){
+void ExecutablePathloss::execute(nlohmann::json work) {  //ejecutar
+  if(work["id"].get<std::string>() == "A1000"){
     this->sresult = this->getBestTx(this->points);
   }
-  else if(work == "AllTxLoss"){
-    this->sresult = this->getAllTxLoss(this->vTx, this->points);
+  else if(work["id"].get<std::string>() == "A2000"){
+    this->sresult = this->getAllTxLoss(this->vTx["value"].get<std::vector<std::vector<double>>>(), this->points);
   }
   // else if(*it == "printAreaLoss"){
   //   for(std::vector<std::vector<double>>::iterator itb=this->vTx.begin(); itb != vTx.end();++itb){
@@ -60,9 +60,9 @@ void ExecutablePathloss::setPathloss(Pathloss pathloss){ //decorar
     this->pathloss = pathloss;
 }
 
-nlohmann::json ExecutablePathloss::result(){ //enviar
+nlohmann::json ExecutablePathloss::result(nlohmann::json f){ //enviar
   nlohmann::json j_out;
-  j_out["result"] = this->sresult;
+  j_out[f["function"].get<std::string>()] = this->sresult;
   return j_out;
 }
 

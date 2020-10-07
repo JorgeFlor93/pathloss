@@ -12,6 +12,7 @@
 class Pathloss{
 public:
   std::vector<std::vector<double>> displayArea(nlohmann::json varea);
+  nlohmann::json wsHttpR();
   std::vector<std::vector<double>> displayvTx(std::vector<std::vector<double>> vTx);
   void setArea(std::vector<double> tl, std::vector<double> br);
   std::vector<Coord> getArea();

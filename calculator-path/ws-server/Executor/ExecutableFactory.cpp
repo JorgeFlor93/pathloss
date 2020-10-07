@@ -1,18 +1,12 @@
 
 #include "ExecutableFactory.hpp"
 
-Executable* ExecutableFactory::create (std::string executable, nlohmann::json atributes, nlohmann::json actions) {
+Executable* ExecutableFactory::create (std::string executable, nlohmann::json atributes, nlohmann::json operands) {
   if(executable == "pathloss"){
     Pathloss pathloss{};
     ExecutablePathloss* executablePathloss = new ExecutablePathloss{};
     executablePathloss->setPathloss(pathloss);
-
-    float freq = atributes["frequency"].get<float>();
-    std::string model = atributes["model"].get<std::string>(); 
-    nlohmann::json areaCoord = atributes["areaCorners"][0].get<nlohmann::json>();
-    std::vector<std::vector<double>> vTx = atributes["AntennasTx"].get<std::vector<std::vector<double>>>();
-    std::string env_mode = atributes["propagation_model"].get<std::string>();
-    executablePathloss->addFixedPathloss(freq, model, env_mode, areaCoord, vTx, actions);
+    executablePathloss->addFixedPathloss(atributes, operands);
     return executablePathloss;
   }
   else {

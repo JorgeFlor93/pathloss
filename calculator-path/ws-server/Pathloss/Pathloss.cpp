@@ -90,7 +90,7 @@ std::vector<double> Pathloss::getBestTx(std::vector<double> point){
     ret.push_back(a.lat);
     ret.push_back(a.dislon);
     ret.push_back(a.txalt);
-    ret.push_back(a.loss);
+    //ret.push_back(a.loss);
     return ret;
 }
 
@@ -142,17 +142,52 @@ std::vector<std::vector<double>> Pathloss::getAllTxLoss(std::vector<std::vector<
 
     for(auto it = vTx.begin(); it != vTx.end(); ++it){ //Por cada antena se calculan las pérdidas al área
         p.assignCoord(it->at(0),it->at(1),it->at(2));
-        arealoss.push_back(*it);
         ptrx.setTx(p.getStruct());
         ptrx.setRx(closeRx.getStruct());
         ptrx.setLoss(this->freq, this->model, this->env_mode);
-        aux.push_back(closeRx.getLat());
-        aux.push_back(closeRx.getdisLon());
-        aux.push_back(ptrx.getLoss());
-        arealoss.push_back(aux);
+        // aux.push_back(closeRx.getLat());
+        // aux.push_back(closeRx.getdisLon());
+        // aux.push_back(closeRx.getTxalt());
+        // aux.push_back(ptrx.getLoss());
+        // arealoss.push_back(aux);
+        it->push_back(ptrx.getLoss());
+        arealoss.push_back(*it);
+        aux.clear();
     }
     return arealoss;
 }
+
+ nlohmann::json wsHttpR(){
+     std::vector<std::vector<double>> varea = getvectorArea();
+     int result = 0;
+     result = ws_http_client_main(const std::string& url,
+                                const std::string& headersData,
+                                const std::string& data,
+                                bool headersOnly,
+                                int connectTimeout,
+                                int transferTimeout,
+                                bool followRedirects,
+                                int maxRedirects,
+                                bool verbose,
+                                bool save,
+                                const std::string& output,
+                                bool compress,
+                                const ix::SocketTLSOptions& tlsOptions
+     );
+//      int ws_http_client_main(const std::string& url,
+//                             const std::string& headersData,
+//                             const std::string& data,
+//                             bool headersOnly,
+//                             int connectTimeout,
+//                             int transferTimeout,
+//                             bool followRedirects,
+//                             int maxRedirects,
+//                             bool verbose,
+//                             bool save,
+//                             const std::string& output,
+//                             bool compress,
+//                             const ix::SocketTLSOptions& tlsOptions)
+//  }
 
 /*FUNCIONES AUXILIARES*/
 
