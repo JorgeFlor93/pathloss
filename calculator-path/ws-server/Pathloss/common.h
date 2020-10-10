@@ -1,6 +1,8 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#include <string>
+
 #define GAMMA 		2.5
 
 #ifndef PI
@@ -40,10 +42,10 @@ struct dem {
 struct site {
 	double lat;
 	double lon; 
-	float txalt; //Altura de la antena 
-	float alt; // Altura de la antena respecto del nivel del mar, txalt+GetElevation	
-	double loss;
-	double dislon;
+	float txalt;
+	float alt; // Altura respecto del nivel del mar, txalt+GetElevation	
+	double loss; // lon modificada para ser coherente con los archivos de lectura del terreno
+	double dislon; //Lon verdadera
 	char name[50];
 	char filename[255];
 };

@@ -9,15 +9,15 @@ COMMUNICATIONS=Communications/
 LOSS=Pathloss/
 MODEL=Pathloss/models/
 
-main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}txrx.o ${BUILD}Pathloss.o ${BUILD}lossreport.o ${BUILD}fspl.o ${BUILD}hata.o \
+main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}classAntenna.o ${BUILD}Pathloss.o ${BUILD}lossreport.o ${BUILD}fspl.o ${BUILD}hata.o \
 ${BUILD}distance.o ${BUILD}coordinate.o ${BUILD}ExecutablePathloss.o
-	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}txrx.o ${BUILD}lossreport.o ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
+	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}classAntenna.o ${BUILD}lossreport.o ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
 	${BUILD}coordinate.o ${BUILD}fspl.o ${BUILD}hata.o ${BUILD}distance.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
 
-${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp ${CALCULATOR}Calculator.hpp ${EXECUTOR}ExecutableFactory.hpp ${LOSS}Pathloss.hpp json.hpp
+${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp  ${EXECUTOR}ExecutableFactory.hpp ${LOSS}Pathloss.hpp json.hpp
 	${CC} ${CF} -c ${EXECUTOR}ExecutableFactory.cpp -o ${BUILD}ExecutableFactory.o
 
 ${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp json.hpp
@@ -38,8 +38,8 @@ ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp ${EXECUTOR}Executor.
 ${BUILD}lossreport.o: ${LOSS}lossreport.cpp  ${LOSS}lossreport.hpp ${LOSS}Pathloss.hpp ${LOSS}coordinate.hpp
 	${CC} ${CF} -c  ${LOSS}lossreport.cpp -o ${BUILD}lossreport.o
 
-${BUILD}txrx.o: ${LOSS}txrx.cpp  ${LOSS}txrx.hpp ${LOSS}coordinate.hpp ${LOSS}lossreport.hpp
-	${CC} ${CF} -c  ${LOSS}txrx.cpp -o ${BUILD}txrx.o
+${BUILD}classAntenna.o: ${LOSS}classAntenna.cpp  ${LOSS}classAntenna.hpp 
+	${CC} ${CF} -c  ${LOSS}classAntenna.cpp -o ${BUILD}classAntenna.o
 
 ${BUILD}fspl.o: ${MODEL}fspl.cc ${MODEL}fspl.hh
 	${CC} ${CF} -c ${MODEL}fspl.cc -o ${BUILD}fspl.o

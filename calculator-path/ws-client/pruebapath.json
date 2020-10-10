@@ -1,39 +1,46 @@
 {
   "executable":"pathloss",
   "atributes": [
-      {
-        "id":"A101",
-        "frequency": 2500,
-        "model":"fspl",
-        "propagation_model":"RURAL",
-        "AntennasTx":[
+      { 
+        "antennas":[
           {
-            "name":"vAntennasTx",
-            "value":[[51.349,-2.2299, 20],[51.379,-2.2300, 30]]
+            "type":"antenna",
+            "id":"A101",
+            "frequency":2500,
+            "lat":51.349,
+            "lon":-2.2299,
+            "height": 20
+          },
+          {
+            "type":"antenna",
+            "id":"A102",
+            "frequency":5000,
+            "lat":51.379,
+            "lon":-2.2300,
+            "height": 30
           }
         ],
-        "areaCorners": [
+        "model":"fspl",
+        "propagation_model":"RURAL",
+        "location": [
           {
-            "topleft":[51.449000,-2.239900, 1],
-            "botright":[51.446709,-2.235768, 1]
+            "type":"area",
+            "topleft":[51.449000,-2.239900],
+            "botright":[51.446709,-2.235768]
           }
         ]
       }
     ],
   "actions": [
     {
-      "id":"A1000",
-      "function":"BestTx"
-    },
-    {
-      "id":"A2000",
-      "function":"AllTxLoss"
-    }   
+      "id":"A3000",
+      "function":"AreaLoss"
+    } 
   ],
   "operands":[
     {
       "name":"vOperands",
-      "Points": [51.452000,-2.289900, 2]
+      "Points": [51.452000,-2.289900]
     }
   ] 
 }

@@ -1,7 +1,7 @@
 
 #include "txrx.hpp"
 
-void Pairtxrx::setTx(struct site tx){
+void Pairtxrx::setTx(antenna tx){
     this->tx = tx;
 }
 void Pairtxrx::setRx(struct site rx){
@@ -11,13 +11,13 @@ void Pairtxrx::setRx(struct site rx){
 struct site Pairtxrx::getstx(){
     return this->tx;
 }
-void Pairtxrx::assignPar(Coord tx, Coord rx){
-    this->vp.push_back(tx);
-    this->vp.push_back(rx);
-}
+// void Pairtxrx::assignPar(Coord tx, Coord rx){
+//     this->vp.push_back(tx);
+//     this->vp.push_back(rx);
+// }
 
-Coord& Pairtxrx::getTx(){
-    return this->vp.front();
+antenna Pairtxrx::getTx(){
+    return this->tx;
 }
 
 Coord& Pairtxrx::getRx(){

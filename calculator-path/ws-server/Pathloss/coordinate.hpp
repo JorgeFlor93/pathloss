@@ -20,6 +20,7 @@ class Coord{
     double getBtxloss();//obtiene best Tx Loss
     struct site getBtx();//obtiene estructura btx
     bool assignTx(double minloss, struct site tx);
+    
     private:
     struct site point; // lat, lon, alt , loss , dislon del punto
     double loss;

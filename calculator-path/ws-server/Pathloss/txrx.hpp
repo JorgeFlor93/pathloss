@@ -3,20 +3,21 @@
 #include "lossreport.hpp"
 #include <vector>
 #include <iostream>
+#include "classAntenna.hpp"
 
 class Pairtxrx{
 public:
-    void setTx(struct site tx);
+    void setTx(antenna tx);
     void setRx(struct site rx);
     struct site getstx();
-    void assignPar(Coord tx, Coord rx);
+    // void assignPar(Coord tx, Coord rx);
     void setLoss(float freq, std::string propmodel, std::string pmenv);
     double getLoss();
-    Coord& getTx();
+    antenna getTx();
     Coord& getRx();
 private:
     std::vector<Coord> vp;
-    struct site tx;
+    antenna tx;
     struct site rx;
     double loss;
 };
