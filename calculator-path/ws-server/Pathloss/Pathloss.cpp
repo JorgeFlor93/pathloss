@@ -60,15 +60,31 @@ nlohmann::json Pathloss::setAreaLoss(){
     double loss;
     nlohmann::json jout;
     nlohmann::json aux;
-    // nlohmann::json areaPoint;
+    nlohmann::json areaPoint;
     for(auto itx = this->vTx.begin(); itx != this->vTx.end(); ++itx){  
-         aux["antenna"] = { {"id", itx->getId()}, {"type:", itx->getType()} };
-         jout += aux;
-         aux.clear();
-        // for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
-        //     loss = Loss(*itx, *it); 
-        //     //areaPoint["Point"] = {it->getLat(), it->getdisLon()};
-        // }       
+        aux["antenna"] = { 
+                        {"id", itx->getId()}, 
+                        {"type", itx->getType()},
+                        {"lat", itx->getLat()},
+                        {"lon", itx->getLon()},
+                        {"height", itx->getHeight()},
+                        {"frequency", itx->getFrequency()}
+                        // {"AreaLoss",  {"Point",  {"lat", 10}, {"lon", 1}, {"LOSS", 5} } }
+                        };
+        for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
+            loss = Loss(*itx, *it); 
+            areaPoint["Point"] = { 
+                                {"lat", it->getLat()} , 
+                                {"lon", it->getdisLon()}, 
+                                {"loss", loss} 
+                                };
+            aux.push_back(areaPoint);
+            areaPoint.clear();
+        }  
+        
+        
+        jout.push_back(aux); 
+        aux.clear();     
     }
     return jout;
 }

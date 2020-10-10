@@ -15,6 +15,9 @@ class antenna: public Coord{
     std::string getId();
     float getFrequency();
     struct site getStruct();
+    double getLat();
+    double getLon();
+    float getHeight();
     std::vector<double> getVector();
     void setParameters(double lat, double lon, float height, std::string type, std::string id, float frequency);
 };

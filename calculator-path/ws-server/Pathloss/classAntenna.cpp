@@ -25,3 +25,13 @@ std::string antenna::getId(){
 std::string antenna::getType(){
     return this->type;
 }
+
+double antenna::getLat(){
+    return this->parameters.lat;
+}
+double antenna::getLon(){
+    return this->parameters.lon;
+}
+float antenna::getHeight(){
+    return this->parameters.alt;
+}
