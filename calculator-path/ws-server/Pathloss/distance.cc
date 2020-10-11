@@ -104,7 +104,7 @@ std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, dou
         current_point(0,1) += lng_res;
     }
 
-    for (int i = 0; i < data.size(); i++){ // Introduzco las coordenadas del area en un vector, con las alturas reales
+    for (int i = 0; i < data.size(); i++){ // Introduzco las coordenadas del area en un vector, con las alturas reales (no de momento)
                 p.assignCoord(data[i](0,0), data[i](0,1), Height); 
                 //p.setAlt(); 
                 varea.push_back(p);       

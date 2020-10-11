@@ -58,33 +58,32 @@ std::vector<antenna> Pathloss::setCalculus(nlohmann::json atributes)
 
 nlohmann::json Pathloss::setAreaLoss(){
     double loss;
+    std::vector<std::vector<double>> vloss;
+    std::vector<double> ploss;
     nlohmann::json jout;
     nlohmann::json aux;
     nlohmann::json areaPoint;
     for(auto itx = this->vTx.begin(); itx != this->vTx.end(); ++itx){  
+        for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
+            loss = Loss(*itx, *it);
+            ploss.push_back(loss);
+            ploss.push_back(it->getLat());
+            ploss.push_back(it->getdisLon());
+            vloss.push_back(ploss);
+            ploss.clear();
+        }  
         aux["antenna"] = { 
                         {"id", itx->getId()}, 
                         {"type", itx->getType()},
                         {"lat", itx->getLat()},
                         {"lon", itx->getLon()},
                         {"height", itx->getHeight()},
-                        {"frequency", itx->getFrequency()}
-                        // {"AreaLoss",  {"Point",  {"lat", 10}, {"lon", 1}, {"LOSS", 5} } }
-                        };
-        for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
-            loss = Loss(*itx, *it); 
-            areaPoint["Point"] = { 
-                                {"lat", it->getLat()} , 
-                                {"lon", it->getdisLon()}, 
-                                {"loss", loss} 
-                                };
-            aux.push_back(areaPoint);
-            areaPoint.clear();
-        }  
-        
-        
+                        {"frequency", itx->getFrequency()},
+                        {"Area Loss [Loss, Lat, Lon]", vloss}
+                        };           
         jout.push_back(aux); 
-        aux.clear();     
+        aux.clear();   
+        vloss.clear();  
     }
     return jout;
 }
