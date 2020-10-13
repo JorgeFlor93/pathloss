@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "Eigen/Core"
 #include "Eigen/Dense"
-
+#include <memory>
 
 std::vector<Eigen::Matrix<double, 1, 2>> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng);
 

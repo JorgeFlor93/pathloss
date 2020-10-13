@@ -9,19 +9,6 @@ std::vector<Coord> Pathloss::getArea(){
     return this->varea;
 }
 
-std::vector<std::vector<double>> Pathloss::getvectorArea(){ //Conversor std::vector<Coord> TO std::vector<std::vector<double>>
-    std::vector<std::vector<double>> vector;
-    std::vector<double> coord;
-    for (std::vector<Coord>::iterator it = this->varea.begin(); it != this->varea.end(); ++it){
-        coord.push_back(it->getLat());
-        coord.push_back(it->getdisLon());
-        coord.push_back(it->getTxalt());
-        vector.push_back(coord);
-        coord.clear();
-    }
-    return vector;
-}
-
 std::vector<antenna> Pathloss::setCalculus(nlohmann::json atributes)
 {   
     this->model = atributes["model"].get<std::string>();
@@ -58,7 +45,9 @@ std::vector<antenna> Pathloss::setCalculus(nlohmann::json atributes)
 
 nlohmann::json Pathloss::setAreaLoss(){
     double loss;
+    int total_points = this->varea.size();
     std::vector<std::vector<double>> vloss;
+    vloss.reserve(total_points);
     std::vector<double> ploss;
     nlohmann::json jout;
     nlohmann::json aux;
@@ -66,25 +55,26 @@ nlohmann::json Pathloss::setAreaLoss(){
     for(auto itx = this->vTx.begin(); itx != this->vTx.end(); ++itx){  
         for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
             loss = Loss(*itx, *it);
-            ploss.push_back(loss);
-            ploss.push_back(it->getLat());
-            ploss.push_back(it->getdisLon());
-            vloss.push_back(ploss);
+            ploss.emplace_back(loss);
+            vloss.emplace_back(ploss);
             ploss.clear();
         }  
         aux["antenna"] = { 
+                        {"total points: ", total_points},
                         {"id", itx->getId()}, 
                         {"type", itx->getType()},
                         {"lat", itx->getLat()},
                         {"lon", itx->getLon()},
                         {"height", itx->getHeight()},
                         {"frequency", itx->getFrequency()},
-                        {"Area Loss [Loss, Lat, Lon]", vloss}
+                        {"Area Loss", vloss}
                         };           
-        jout.push_back(aux); 
+        jout.emplace_back(aux); 
         aux.clear();   
         vloss.clear();  
     }
+    vloss.shrink_to_fit();
+    ploss.shrink_to_fit();
     return jout;
 }
 // std::vector<std::uint8_t> v = {'t', 'r', 'u', 'e'};
@@ -95,29 +85,19 @@ double Pathloss::Loss(antenna tx, Coord rx){
 }
 
 
-/*FUNCIONES AUXILIARES*/
+// std::vector<std::vector<double>> Pathloss::getvectorArea(){ //Conversor std::vector<Coord> TO std::vector<std::vector<double>>
+//     std::vector<std::vector<double>> vector;
+//     std::vector<double> coord;
+//     for (std::vector<Coord>::iterator it = this->varea.begin(); it != this->varea.end(); ++it){
+//         coord.push_back(it->getLat());
+//         coord.push_back(it->getdisLon());
+//         coord.push_back(it->getTxalt());
+//         vector.push_back(coord);
+//         coord.clear();
+//     }
+//     return vector;
+// }
 
-double miles_to_km(double miles){   
-    return miles*1.60934;
-}
-
-double Distance(struct site site1, struct site site2)
-{
-
-	double lat1, lon1, lat2, lon2, distance;
-
-	lat1 = site1.lat * DEG2RAD;
-	lon1 = site1.lon * DEG2RAD;
-	lat2 = site2.lat * DEG2RAD;
-	lon2 = site2.lon * DEG2RAD;
-
-	distance =
-	    3959.0 * acos(sin(lat1) * sin(lat2) +
-			  cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
-
-	distance = miles_to_km(distance);
-	return distance;
-}
 // std::vector<double> Pathloss::getBestTx(std::vector<double> point){
 //     Coord p;
 //     Coord nearRx;

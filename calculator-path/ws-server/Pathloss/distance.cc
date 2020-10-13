@@ -72,43 +72,42 @@ int get_dimension_lat(double line_start_lat, double line_end_lat){
 
 std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, double bot_lng, float Height){
     
-    Coord p;
-    std::vector<Coord> varea;
     //get lat and lng dimension
     int amount_lat = 0;
     int amount_lng = 0;
     amount_lat = get_dimension_lat(top_lat, bot_lat);
     amount_lng = get_dimension_lng(top_lng, bot_lng);
 
-    std::vector<Eigen::Matrix<double, 1, 2>> data;
-    Eigen::Matrix<double, 1, 2> start_point;
-    Eigen::Matrix<double, 1, 2> current_point;
+    std::vector<Coord> varea;
+    varea.reserve(amount_lat*amount_lng);
+    Coord p;
+    std::vector<double> start_point;
+    std::vector<double> current_point;
 
-    start_point(0,0) = top_lat - lat_res/2;
-    current_point(0,0) = start_point(0,0);
-    current_point(0,1) = top_lng + lng_res/2;
+    start_point.emplace_back(top_lat - lat_res/2);
+    current_point.emplace_back(start_point.at(0));
+    current_point.emplace_back(top_lng + lng_res/2);
 
     for(int i = 0; i < amount_lng; i++){
         for(int j = 0; j < amount_lat; j++){
-            if(current_point(0,1) >= 180 && current_point(0,1) < 360){
-                current_point(0,1) = 360 - current_point(0,1);
-                current_point(0,1) *= -1;
+            if(current_point.at(1) >= 180 && current_point.at(1) < 360){
+                current_point.at(1) = 360 - current_point.at(1);
+                current_point.at(1) *= -1;
             }
-            else if(current_point(0,1) > 0 && current_point(0,1) < 180){
-                current_point(0,1) *= -1;
+            else if(current_point.at(1) > 0 && current_point.at(1) < 180){
+                current_point.at(1) *= -1;
             }
-            data.push_back(current_point);
-            current_point(0,0) -= lat_res;
+            
+            p.assignCoord(current_point.at(0), current_point.at(1), 1);
+            //p.setAlt();
+            varea.emplace_back(p);
+            current_point.at(0) -= lat_res;
         }
-        current_point(0,0) = start_point(0,0);
-        current_point(0,1) += lng_res;
+        current_point.at(0) = current_point.at(0);
+       current_point.at(1) += lng_res;
     }
-
-    for (int i = 0; i < data.size(); i++){ // Introduzco las coordenadas del area en un vector, con las alturas reales (no de momento)
-                p.assignCoord(data[i](0,0), data[i](0,1), Height); 
-                //p.setAlt(); 
-                varea.push_back(p);       
-            }         
-
+    current_point.shrink_to_fit();
+    start_point.shrink_to_fit();
+    // varea.shrink_to_fit();
     return varea;
 }

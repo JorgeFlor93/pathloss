@@ -29,8 +29,5 @@ private:
   std::string type;
 };
 
-double Distance(struct site site1, struct site site2);
-double miles_to_km(double miles);
-
 
 
