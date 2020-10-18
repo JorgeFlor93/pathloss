@@ -7,12 +7,6 @@ struct site Coord::getStruct(){
     return this->point;
 }
 
-std::vector<double> Coord::getPos(){
-    std::vector<double> Pos;
-    Pos.push_back(this->point.lat);
-    Pos.push_back(this->point.dislon);
-}
-
 double Coord::getLat(){
     return this->point.lat;    
 }
@@ -36,9 +30,6 @@ float Coord::getTxalt(){
 //     return this->point.alt = this->point.txalt + float(GetElevation(this->point)* METERS_PER_FOOT); // altura q introduzco + altura elevacion del terreno
 // }
 
-void Coord::setRedalt(float alt){
-    this->point.alt = alt;
-}
 
 bool Coord::assignCoord(double lat, double lon, float txalt){
     if(!validCoord(lat, lon, txalt)){
@@ -64,22 +55,6 @@ bool Coord::validCoord(double lat, double lon, float alt){
     correctlon = (lon > -180) && (lon < 180);
     correctalt = (alt >= 0);
     return correctalt && correctlon && correctalt;
-}
-
-double Coord::getBtxloss(){
-    return this->loss;
-}
-
-struct site Coord::getBtx(){
-    return this->btx;
-}
-
-bool Coord::assignTx(double minloss, struct site tx){
-    bool correctloss;
-    this->loss = minloss;
-    this->btx = tx;
-    correctloss = (minloss > 0);
-    return correctloss;  
 }
 
 // bool Coord::setTx(double minloss, struct site tx){

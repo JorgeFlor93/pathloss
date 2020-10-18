@@ -20,8 +20,9 @@
             "height": 30
           }
         ],
-        "model":"fspl",
-        "propagation_model":"RURAL",
+        "propagationMethod":"fspl",
+        "propagation_mode":"RURAL",
+        "resolution":"90m",
         "location": [
           {
             "type":"area",

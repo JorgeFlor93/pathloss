@@ -1,18 +1,12 @@
 #include "Pathloss.hpp"
 
-
-void Pathloss::setArea(std::vector<double> tl, std::vector<double> br){
-    this->varea = get_area(tl[0], tl[1], br[0], br[1], 1/*Altura del receptor*/);
-}
-
-std::vector<Coord> Pathloss::getArea(){
-    return this->varea;
-}
-
-std::vector<antenna> Pathloss::setCalculus(nlohmann::json atributes)
+void Pathloss::setAtributes(nlohmann::json atributes)
 {   
-    this->model = atributes["model"].get<std::string>();
-    this->env_mode = atributes["propagation_model"].get<std::string>();
+    this->propagationMethod = atributes["propagationMethod"].get<std::string>();
+    this->propagationModel = atributes["propagation_mode"].get<std::string>();
+    this->resolution = atributes["resolution"].get<std::string>();
+    this->location = atributes["location"][0].get<nlohmann::json>();
+
     antenna aux;
     for(nlohmann::json::iterator it = atributes["antennas"].begin(); it != atributes["antennas"].end(); ++it)
     {
@@ -23,68 +17,55 @@ std::vector<antenna> Pathloss::setCalculus(nlohmann::json atributes)
                           (*it)["id"].get<std::string>(),
                           (*it)["frequency"].get<float>()
                           );
-        this->vTx.push_back(aux);
+        this->vectorTx.emplace_back(aux);
     }
-
-    /*setType*/
-    if(atributes["location"][0]["type"].get<std::string>() == "area"){ /*setAREA*/
-        this->type = "area";
-        setArea(atributes["location"][0]["topleft"].get<std::vector<double>>(), 
-                atributes["location"][0]["botright"].get<std::vector<double>>()); //set varea
-    }
-    // else if (){} /*setLINE*/
-
-    return this->vTx;
 }
 
-// 
-
-// std::vector<Pairtxrx> Pathloss::getPtrx(){
-//     return this->ptrx;
-// }
-
 nlohmann::json Pathloss::setAreaLoss(){
-    double loss;
-    int total_points = this->varea.size();
-    std::vector<std::vector<double>> vloss;
-    vloss.reserve(total_points);
-    std::vector<double> ploss;
+
+    int amount_lat = 0;
+    int amount_lng = 0;
+    int area_points = 0;
     nlohmann::json jout;
     nlohmann::json aux;
-    nlohmann::json areaPoint;
-    for(auto itx = this->vTx.begin(); itx != this->vTx.end(); ++itx){  
-        for(auto it = this->varea.begin(); it != this->varea.end(); ++it){
-            loss = Loss(*itx, *it);
-            ploss.emplace_back(loss);
-            vloss.emplace_back(ploss);
-            ploss.clear();
-        }  
+    std::vector<double> tl = this->location["topleft"].get<std::vector<double>>();
+    std::vector<double> br = this->location["botright"].get<std::vector<double>>();
+
+    set_res(this->resolution); // Input Resolution (30m, 90m)
+
+    amount_lat = get_dimension_lat(tl[0], br[0]); 
+    amount_lng = get_dimension_lng(tl[1], br[1]);
+    area_points = amount_lat * amount_lng;
+
+    for(auto itx = this->vectorTx.begin(); itx != this->vectorTx.end(); ++itx){    
+        this->propagation = get_arealoss(tl[0], tl[1], br[0], br[1], //Area Corners
+                                        itx->getStruct(), itx->getFrequency(), //struct site tx(lat, lon), freq tx
+                                        this->propagationMethod, 
+                                        this->propagationModel);
         aux["antenna"] = { 
-                        {"total points: ", total_points},
                         {"id", itx->getId()}, 
                         {"type", itx->getType()},
                         {"lat", itx->getLat()},
                         {"lon", itx->getLon()},
                         {"height", itx->getHeight()},
                         {"frequency", itx->getFrequency()},
-                        {"Area Loss", vloss}
-                        };           
-        jout.emplace_back(aux); 
-        aux.clear();   
-        vloss.clear();  
+                        {"Area points", area_points},
+                        {"Area Loss", this->propagation}
+                    };       
+        jout.emplace_back(aux);     
     }
-    vloss.shrink_to_fit();
-    ploss.shrink_to_fit();
+    tl.shrink_to_fit();
+    br.shrink_to_fit();
     return jout;
 }
-// std::vector<std::uint8_t> v = {'t', 'r', 'u', 'e'};
-// json j = json::parse(v.begin(), v.end());
 
-double Pathloss::Loss(antenna tx, Coord rx){
-    return LossReport(tx.getStruct(), rx.getStruct(), this->model, this->env_mode, tx.getFrequency());
-}
+// void Pathloss::setArea(std::vector<double> tl, std::vector<double> br){
+//     this->varea = get_area(tl[0], tl[1], br[0], br[1], 1/*Altura del receptor*/);
+// }
 
-
+// std::vector<Coord> Pathloss::getArea(){
+//     return this->varea;
+// }
 // std::vector<std::vector<double>> Pathloss::getvectorArea(){ //Conversor std::vector<Coord> TO std::vector<std::vector<double>>
 //     std::vector<std::vector<double>> vector;
 //     std::vector<double> coord;
@@ -96,7 +77,7 @@ double Pathloss::Loss(antenna tx, Coord rx){
 //         coord.clear();
 //     }
 //     return vector;
-// }
+// } shared_ptr<Photo> temp = dynamic_pointer_cast<Photo>(p);	
 
 // std::vector<double> Pathloss::getBestTx(std::vector<double> point){
 //     Coord p;

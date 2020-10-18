@@ -12,7 +12,7 @@ public:
   ~ExecutablePathloss(){};
   void setPathloss(Pathloss pathloss); //decorar
   void addFixedPathloss(nlohmann::json atributes, nlohmann::json operands);
-  std::vector<antenna> setCalculus(nlohmann::json atributes);
+  void setAtributes(nlohmann::json atributes);
   void execute(nlohmann::json work);
   nlohmann::json result(nlohmann::json f);
   nlohmann::json setAreaLoss();

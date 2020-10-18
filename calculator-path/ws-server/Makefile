@@ -14,31 +14,31 @@ ${BUILD}distance.o ${BUILD}coordinate.o ${BUILD}ExecutablePathloss.o
 	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}classAntenna.o ${BUILD}lossreport.o ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
 	${BUILD}coordinate.o ${BUILD}fspl.o ${BUILD}hata.o ${BUILD}distance.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
-${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp
+${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp ${LOSS}common.h
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
 
-${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp  ${EXECUTOR}ExecutableFactory.hpp ${LOSS}Pathloss.hpp json.hpp
+${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp  ${EXECUTOR}ExecutableFactory.hpp ${LOSS}Pathloss.hpp json.hpp ${LOSS}common.h
 	${CC} ${CF} -c ${EXECUTOR}ExecutableFactory.cpp -o ${BUILD}ExecutableFactory.o
 
 ${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp json.hpp
 	${CC} ${CF} -c ${COMMUNICATIONS}Websocket.cpp -o ${BUILD}Websocket.o
 
-${BUILD}distance.o: ${LOSS}distance.cc  ${LOSS}distance.hh 
+${BUILD}distance.o: ${LOSS}distance.cc  ${LOSS}distance.hh ${LOSS}common.h
 	${CC} ${CF} -c  ${LOSS}distance.cc -o ${BUILD}distance.o
 	
-${BUILD}coordinate.o: ${LOSS}coordinate.cpp  ${LOSS}coordinate.hpp
+${BUILD}coordinate.o: ${LOSS}coordinate.cpp  ${LOSS}coordinate.hpp ${LOSS}common.h
 	${CC} ${CF} -c  ${LOSS}coordinate.cpp -o ${BUILD}coordinate.o
 
-${BUILD}Pathloss.o: ${LOSS}Pathloss.cpp ${LOSS}Pathloss.hpp 
+${BUILD}Pathloss.o: ${LOSS}Pathloss.cpp ${LOSS}Pathloss.hpp ${LOSS}common.h
 	${CC} ${CF} -c ${LOSS}Pathloss.cpp -o ${BUILD}Pathloss.o
 
 ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp 
 	${CC} ${CF} -c ${LOSS}ExecutablePathloss.cpp -o ${BUILD}ExecutablePathloss.o
 
-${BUILD}lossreport.o: ${LOSS}lossreport.cpp
+${BUILD}lossreport.o: ${LOSS}lossreport.cpp ${LOSS}common.h
 	${CC} ${CF} -c  ${LOSS}lossreport.cpp -o ${BUILD}lossreport.o
 
-${BUILD}classAntenna.o: ${LOSS}classAntenna.cpp  ${LOSS}classAntenna.hpp 
+${BUILD}classAntenna.o: ${LOSS}classAntenna.cpp  ${LOSS}classAntenna.hpp ${LOSS}common.h
 	${CC} ${CF} -c  ${LOSS}classAntenna.cpp -o ${BUILD}classAntenna.o
 
 ${BUILD}fspl.o: ${MODEL}fspl.cc ${MODEL}fspl.hh

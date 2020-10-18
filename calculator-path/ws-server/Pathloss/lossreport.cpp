@@ -1,6 +1,7 @@
 #include "lossreport.hpp"
+#include "common.h"
 
-double LossReport(struct site source, struct site destination, std::string propmodel, std::string pmenv, float freq){
+double LossReport(struct site source, struct site destination, float freq, std::string pm, std::string pmenv){
     
     double dkm = 0.0;
     double loss = 0.0;
@@ -11,11 +12,11 @@ double LossReport(struct site source, struct site destination, std::string propm
     else if(pmenv == "SUBURBAN") pmenv_int = 2;
     else if(pmenv == "OPEN") pmenv_int = 3;
 
-    if(propmodel == "hata"){	
+    if(pm == "hata"){	
         //HATA 
         loss = HATApathLoss(freq, source.alt, destination.alt, dkm, pmenv_int);
     }
-    else if(propmodel == "fspl"){
+    else if(pm == "fspl"){
         // ITU-R P.525 Free space path loss
         loss = FSPLpathLoss(freq, dkm);
     }

@@ -1,15 +1,26 @@
 
 #include "distance.hh"
 
+double lat_res;
+double lng_res;
+
+void set_res(std::string resolution){
+
 /* Resolution (point-to-point distance) 
 * 0.00208333333 -> 225m
 * 0.0002777778 -> 30m (1 arcsec)
 * 0.000458333 -> 50m
 * 0.000808333 -> 90m (3 arcsec)
 */
-
-double lat_res = 0.000808333;
-double lng_res = 0.000808333;
+    if(resolution == "90m"){
+        lat_res = 0.000808333;
+        lng_res = 0.000808333;
+    }
+    else if(resolution == "30m"){
+        lat_res = 0.0002777778;
+        lng_res = 0.0002777778;
+    }
+}
 
 std::vector<Eigen::Matrix<double, 1, 2>> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){
 
@@ -70,7 +81,7 @@ int get_dimension_lat(double line_start_lat, double line_end_lat){
     return round(inc_lat/lat_res);
 }
 
-std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, double bot_lng, float Height){
+std::vector<double> get_arealoss(double top_lat , double top_lng, double bot_lat, double bot_lng, struct site tx, float frequency, std::string pm, std::string pmenv){
     
     //get lat and lng dimension
     int amount_lat = 0;
@@ -78,8 +89,9 @@ std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, dou
     amount_lat = get_dimension_lat(top_lat, bot_lat);
     amount_lng = get_dimension_lng(top_lng, bot_lng);
 
+    double loss;
+    std::vector<double> pathloss;
     std::vector<Coord> varea;
-    varea.reserve(amount_lat*amount_lng);
     Coord p;
     std::vector<double> start_point;
     std::vector<double> current_point;
@@ -97,10 +109,12 @@ std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, dou
             else if(current_point.at(1) > 0 && current_point.at(1) < 180){
                 current_point.at(1) *= -1;
             }
-            
-            p.assignCoord(current_point.at(0), current_point.at(1), 1);
-            //p.setAlt();
-            varea.emplace_back(p);
+
+            /*CALCULO DE LA PERDIDA*/
+            p.assignCoord(current_point.at(0), current_point.at(1), 1); //Función candidata para devolver altura SRTM
+            loss = LossReport(tx, p.getStruct(), frequency, pm, pmenv);
+            pathloss.emplace_back(loss);
+
             current_point.at(0) -= lat_res;
         }
         current_point.at(0) = current_point.at(0);
@@ -108,6 +122,5 @@ std::vector<Coord> get_area(double top_lat , double top_lng, double bot_lat, dou
     }
     current_point.shrink_to_fit();
     start_point.shrink_to_fit();
-    // varea.shrink_to_fit();
-    return varea;
+    return pathloss;
 }
