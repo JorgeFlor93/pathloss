@@ -4,7 +4,7 @@
 double lat_res;
 double lng_res;
 
-void set_res(std::string resolution){
+void distance::set_res(std::string resolution){
 
 /* Resolution (point-to-point distance) 
 * 0.00208333333 -> 225m
@@ -20,49 +20,6 @@ void set_res(std::string resolution){
         lat_res = 0.0002777778;
         lng_res = 0.0002777778;
     }
-}
-
-std::vector<Eigen::Matrix<double, 1, 2>> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){
-
-    int end = 0;
-    double module = 0.0;
-
-    Eigen::Matrix<double, 1, 2> start_point; // Matrix(type, rows, col)
-    start_point(0,0) = line_start_lat;
-    start_point(0,1) = line_start_lng;
-
-    Eigen::Matrix<double, 1, 2> end_point;
-    end_point(0,0) = line_end_lat;
-    end_point(0,1) = line_end_lng;
-
-    Eigen::Matrix<double, 1, 2> full_vector;
-    full_vector (0, 0) =  line_end_lat - line_start_lat; 
-    full_vector (0, 1) =  line_end_lng -line_start_lng; 
-
-    module = full_vector.norm();
-
-    Eigen::Matrix<double, 1, 2> res_vector;
-    res_vector(0,0) = lat_res;
-    res_vector(0,1) = lng_res;
-
-
-    Eigen::Matrix<double, 1, 2> unit_vector;
-    unit_vector(0,0) = (full_vector(0,0) / module) * lat_res;
-    unit_vector(0,1) = (full_vector(0,1) / module) * lng_res;
-
-    Eigen::Matrix<double, 1, 2> current_point = start_point;
-
-    end = round((module)/(lat_res));
-
-    std::vector<Eigen::Matrix<double, 1, 2>> point_list;
-    point_list.push_back(current_point);
-
-    for(int i=0;i<end;i++){
-        current_point = current_point + unit_vector;
-        point_list.push_back(current_point);
-    }
-    
-   return point_list;
 }
 
 int get_dimension_lng(double line_start_lng, double line_end_lng){
@@ -81,46 +38,104 @@ int get_dimension_lat(double line_start_lat, double line_end_lat){
     return round(inc_lat/lat_res);
 }
 
-std::vector<double> get_arealoss(double top_lat , double top_lng, double bot_lat, double bot_lng, struct site tx, float frequency, std::string pm, std::string pmenv){
+int distance::getTotalpoints(std::vector<double> tl, std::vector<double> br){
+    return (get_dimension_lat(tl[0], br[0]) * get_dimension_lng(tl[1], br[1])); // amount_lat * amount_lng;
+}
+
+std::vector<double> distance::get_arealoss(double top_lat , double top_lng, double bot_lat, double bot_lng, 
+                                struct site tx, 
+                                float frequency,
+                                std::string pm, 
+                                std::string pmenv,
+                                int progress){
     
     //get lat and lng dimension
     int amount_lat = 0;
     int amount_lng = 0;
     amount_lat = get_dimension_lat(top_lat, bot_lat);
     amount_lng = get_dimension_lng(top_lng, bot_lng);
-
+    // Notificador* n = new Notificador{};
     double loss;
     std::vector<double> pathloss;
     std::vector<Coord> varea;
     Coord p;
     std::vector<double> start_point;
     std::vector<double> current_point;
-
     start_point.emplace_back(top_lat - lat_res/2);
-    current_point.emplace_back(start_point.at(0));
+    current_point.emplace_back(start_point[0]);
     current_point.emplace_back(top_lng + lng_res/2);
 
     for(int i = 0; i < amount_lng; i++){
         for(int j = 0; j < amount_lat; j++){
-            if(current_point.at(1) >= 180 && current_point.at(1) < 360){
-                current_point.at(1) = 360 - current_point.at(1);
-                current_point.at(1) *= -1;
-            }
-            else if(current_point.at(1) > 0 && current_point.at(1) < 180){
-                current_point.at(1) *= -1;
-            }
+            // if(c == progress){
+            //     n->Notify(td, totalp);
+            //     c = 0;
+            // }
 
+            /*Para leer los SRTM */
+            // if(current_point[1] >= 180 && current_point[1] < 360){
+            //     current_point[1] = 360 - current_point[1];
+            //     current_point[1] *= -1;
+            // }
+            // else if(current_point[1] > 0 && current_point[1] < 180){
+            //     current_point[1] *= -1;
+            // }
+            
             /*CALCULO DE LA PERDIDA*/
-            p.assignCoord(current_point.at(0), current_point.at(1), 1); //Función candidata para devolver altura SRTM
+            p.assignCoord(current_point[0], current_point[1], 1); //Función candidata para devolver altura SRTM
             loss = LossReport(tx, p.getStruct(), frequency, pm, pmenv);
             pathloss.emplace_back(loss);
-
-            current_point.at(0) -= lat_res;
+            current_point[0] -= lat_res;
         }
-        current_point.at(0) = current_point.at(0);
-       current_point.at(1) += lng_res;
+        current_point[0] = current_point[0];
+       current_point[1] += lng_res;
     }
+    // delete[] n;
     current_point.shrink_to_fit();
     start_point.shrink_to_fit();
     return pathloss;
 }
+
+
+// std::vector<Eigen::Matrix<double, 1, 2>> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){
+
+//     int end = 0;
+//     double module = 0.0;
+
+//     Eigen::Matrix<double, 1, 2> start_point; // Matrix(type, rows, col)
+//     start_point(0,0) = line_start_lat;
+//     start_point(0,1) = line_start_lng;
+
+//     Eigen::Matrix<double, 1, 2> end_point;
+//     end_point(0,0) = line_end_lat;
+//     end_point(0,1) = line_end_lng;
+
+//     Eigen::Matrix<double, 1, 2> full_vector;
+//     full_vector (0, 0) =  line_end_lat - line_start_lat; 
+//     full_vector (0, 1) =  line_end_lng -line_start_lng; 
+
+//     module = full_vector.norm();
+
+//     Eigen::Matrix<double, 1, 2> res_vector;
+//     res_vector(0,0) = lat_res;
+//     res_vector(0,1) = lng_res;
+
+
+//     Eigen::Matrix<double, 1, 2> unit_vector;
+//     unit_vector(0,0) = (full_vector(0,0) / module) * lat_res;
+//     unit_vector(0,1) = (full_vector(0,1) / module) * lng_res;
+
+//     Eigen::Matrix<double, 1, 2> current_point = start_point;
+
+//     end = round((module)/(lat_res));
+
+//     std::vector<Eigen::Matrix<double, 1, 2>> point_list;
+//     point_list.push_back(current_point);
+
+//     for(int i=0;i<end;i++){
+//         current_point = current_point + unit_vector;
+//         point_list.push_back(current_point);
+//     }
+    
+//    return point_list;
+// }

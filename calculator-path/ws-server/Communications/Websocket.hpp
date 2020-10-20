@@ -8,7 +8,8 @@ class Websocket {
   public:
     Websocket (std::shared_ptr<ix::WebSocket> ws);
     void sendPartial (nlohmann::json out);
-    void sendFinal ();
+    void sendFinal();
+    void sendNotification(int count, int total);
   private:
     std::shared_ptr<ix::WebSocket> ws;
     std::vector<nlohmann::json> acc;

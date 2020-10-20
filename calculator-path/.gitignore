@@ -2,4 +2,6 @@
 **/build/*
 */package-lock.json
 */yarn.lock
-
+**/ws-server/Pathloss/tests
+/ws-server/Pathloss/models/test*
+**/ws-lib

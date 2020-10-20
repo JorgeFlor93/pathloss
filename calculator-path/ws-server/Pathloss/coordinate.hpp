@@ -3,19 +3,16 @@
 #include <vector>
 
 class Coord{
-    public:
-    ~Coord(){};
-    Coord(){}; // Constructor sin parámetros
+    public: 
     bool assignCoord(double lat, double lon, float txalt);
     bool validCoord(double lat, double lon, float alt);
     double getLat();
-    double getdisLon(); //Verdadera Longitude    
-    double getLon(); // Longitud para encontrar el DEM del punto
+    double getdisLon(); //Verdadera Longitud    
+    double getLon(); // Longitud para encontrar la altura del punto
     float setAlt(); // Calcular Altura total 
     float getAlt(); // Obtener Altura_Tx + Altura_DEM
     float getTxalt(); // Altura_Tx
     struct site getStruct();
     private:
     struct site point; // lat, lon, alt , loss , dislon del punto
-    double loss;
 };

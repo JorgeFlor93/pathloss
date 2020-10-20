@@ -11,7 +11,6 @@ class antenna: public Coord{
     std::string id;
 
     public:
-    ~antenna(){};
     Coord coord;
     std::string getType();
     std::string getId();

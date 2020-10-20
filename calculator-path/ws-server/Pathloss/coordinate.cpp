@@ -30,7 +30,6 @@ float Coord::getTxalt(){
 //     return this->point.alt = this->point.txalt + float(GetElevation(this->point)* METERS_PER_FOOT); // altura q introduzco + altura elevacion del terreno
 // }
 
-
 bool Coord::assignCoord(double lat, double lon, float txalt){
     if(!validCoord(lat, lon, txalt)){
         std::cout << "Incorrect coordinate" << "\n";
@@ -43,9 +42,6 @@ bool Coord::assignCoord(double lat, double lon, float txalt){
     if (lon < 0.0)
         lon += 360.0; //Necesario para leer las longitudes ESTE y cargar su sdf.
     this->point.lon = lon;
-
-    //this->point.alt = this->point.txalt + float(GetElevation(this->point)* METERS_PER_FOOT); //altura total, elev + antena
-
     return true;
 }
 
@@ -57,10 +53,3 @@ bool Coord::validCoord(double lat, double lon, float alt){
     return correctalt && correctlon && correctalt;
 }
 
-// bool Coord::setTx(double minloss, struct site tx){
-//     bool correctloss;
-//     this->loss = minloss;
-//     this->btx = tx;
-//     correctloss = (minloss > 0);
-//     return correctloss;  
-// }

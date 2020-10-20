@@ -4,6 +4,7 @@
 #include "Executable.hpp"
 #include "../Communications/Websocket.hpp"
 #include "../json.hpp"
+#include "../Pathloss/notificador.hpp"
 
 class Executor {
   public:

@@ -19,3 +19,13 @@ void Websocket::sendFinal () {
   std::string s_out = j_out.dump();
   this->ws->send(s_out);
 }
+
+void Websocket::sendNotification(int count, int total){
+  nlohmann::json out;
+  out["type"] = "progress-notification";
+  out["data"] = {{"progress", count},
+                {"total", total}
+                };
+  std::string s_out = out.dump();
+  this->ws->send(s_out);
+}

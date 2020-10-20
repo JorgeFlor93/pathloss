@@ -17,12 +17,6 @@ void ExecutablePathloss::execute(nlohmann::json work) {  //ejecutar
   if(work["id"].get<std::string>() == "A3000"){   
     this->sresult = this->setAreaLoss();  
   }
-  // if(work["id"].get<std::string>() == "A1000"){
-  //   this->sresult = this->getBestTx(this->points);
-  // }
-  // else if(work["id"].get<std::string>() == "A2000"){
-  //   this->sresult = this->getAllTxLoss(this->points);
-  // }
 }
 
 void ExecutablePathloss::setPathloss(Pathloss pathloss){ //decorar
@@ -35,14 +29,6 @@ nlohmann::json ExecutablePathloss::result(nlohmann::json f){ //enviar
   return j_out;
 }
 
-
-// std::vector<std::vector<double>> ExecutablePathloss::getAllTxLoss(std::vector<std::vector<double>> vTx, std::vector<double> points){
-//   return this->pathloss.getAllTxLoss(vTx, points);
-// }
-
-// std::vector<double> ExecutablePathloss::getBestTx(std::vector<double> points){
-//   return this->pathloss.getBestTx(points);
-// }
 
 
 

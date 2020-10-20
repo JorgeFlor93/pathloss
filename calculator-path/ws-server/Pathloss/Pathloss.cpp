@@ -6,7 +6,8 @@ void Pathloss::setAtributes(nlohmann::json atributes)
     this->propagationModel = atributes["propagation_mode"].get<std::string>();
     this->resolution = atributes["resolution"].get<std::string>();
     this->location = atributes["location"][0].get<nlohmann::json>();
-
+    this->progress = atributes["progress"].get<int>();
+    
     antenna aux;
     for(nlohmann::json::iterator it = atributes["antennas"].begin(); it != atributes["antennas"].end(); ++it)
     {
@@ -23,25 +24,25 @@ void Pathloss::setAtributes(nlohmann::json atributes)
 
 nlohmann::json Pathloss::setAreaLoss(){
 
-    int amount_lat = 0;
-    int amount_lng = 0;
+    distance* d = new distance{}; 
+
     int area_points = 0;
+    std::vector<double> propagation;
     nlohmann::json jout;
     nlohmann::json aux;
     std::vector<double> tl = this->location["topleft"].get<std::vector<double>>();
     std::vector<double> br = this->location["botright"].get<std::vector<double>>();
 
-    set_res(this->resolution); // Input Resolution (30m, 90m)
+    d->set_res(this->resolution); // Input Resolution (30m, 90m)
 
-    amount_lat = get_dimension_lat(tl[0], br[0]); 
-    amount_lng = get_dimension_lng(tl[1], br[1]);
-    area_points = amount_lat * amount_lng;
+    area_points = d->getTotalpoints(tl, br); // TotalPoints
 
-    for(auto itx = this->vectorTx.begin(); itx != this->vectorTx.end(); ++itx){    
-        this->propagation = get_arealoss(tl[0], tl[1], br[0], br[1], //Area Corners
+    for(auto itx = this->vectorTx.begin(); itx != this->vectorTx.end(); ++itx){   
+        propagation = d->get_arealoss(tl[0], tl[1], br[0], br[1], //Area Corners
                                         itx->getStruct(), itx->getFrequency(), //struct site tx(lat, lon), freq tx
                                         this->propagationMethod, 
-                                        this->propagationModel);
+                                        this->propagationModel,
+                                        this->progress);
         aux["antenna"] = { 
                         {"id", itx->getId()}, 
                         {"type", itx->getType()},
@@ -50,10 +51,11 @@ nlohmann::json Pathloss::setAreaLoss(){
                         {"height", itx->getHeight()},
                         {"frequency", itx->getFrequency()},
                         {"Area points", area_points},
-                        {"Area Loss", this->propagation}
+                        {"Area Loss", propagation}
                     };       
         jout.emplace_back(aux);     
     }
+    delete[] d;
     tl.shrink_to_fit();
     br.shrink_to_fit();
     return jout;

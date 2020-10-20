@@ -42,7 +42,6 @@ struct site {
 	double lon; 
 	float txalt;
 	float alt; // Altura respecto del nivel del mar, txalt+GetElevation	
-	double loss; // lon modificada para ser coherente con los archivos de lectura del terreno
 	double dislon; //Lon verdadera
 };
 

@@ -23,6 +23,7 @@
         "propagationMethod":"fspl",
         "propagation_mode":"RURAL",
         "resolution":"90m",
+        "progress":1000,
         "location": [
           {
             "type":"area",
@@ -40,9 +41,13 @@
   ],
   "operands":[
     {
-      "name":"vOperands",
-      "Points": [51.452000,-2.289900]
+      "point:":[
+        {  
+          "name":"vOperands",
+          "Points": [51.452000,-2.289900]
+        }   
+      ]
     }
-  ] 
+  ]
 }
   

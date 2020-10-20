@@ -8,6 +8,7 @@
 #include "distance.hh"
 #include "classAntenna.hpp"
 #include "lossreport.hpp"
+#include <memory>
 
 class Pathloss{
 public:
@@ -16,14 +17,13 @@ public:
   // std::vector<double> getBestTx(std::vector<double> point);
   // std::vector<std::vector<double>> getAllTxLoss(std::vector<double> points);
 private:
-  std::vector<Coord> varea;
   float freq;
   std::string type;
   std::string propagationMethod;
   std::string propagationModel;
   std::string resolution;
   nlohmann::json location;
-  std::vector<double> propagation;
+  int progress;
   std::vector<antenna> vectorTx;
 };
 

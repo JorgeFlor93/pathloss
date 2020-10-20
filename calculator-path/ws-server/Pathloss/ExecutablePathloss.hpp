@@ -16,12 +16,9 @@ public:
   void execute(nlohmann::json work);
   nlohmann::json result(nlohmann::json f);
   nlohmann::json setAreaLoss();
-  // std::vector<double> getBestTx(std::vector<double> point);
-  // std::vector<std::vector<double>> getAllTxLoss(std::vector<double> points);
+
 private:
   Pathloss pathloss;
-  std::vector<antenna> vAntennas;
-  std::vector<double> points;
   nlohmann::json sresult;
 };
 
