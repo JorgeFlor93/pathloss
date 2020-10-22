@@ -9,9 +9,9 @@ COMMUNICATIONS=Communications/
 LOSS=Pathloss/
 MODEL=Pathloss/models/
 
-main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}notificador.o ${BUILD}Websocket.o ${BUILD}classAntenna.o ${BUILD}Pathloss.o ${BUILD}lossreport.o ${BUILD}fspl.o ${BUILD}hata.o \
+main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}notificador.o ${BUILD}Websocket.o ${BUILD}Antenna.o ${BUILD}Pathloss.o ${BUILD}lossreport.o ${BUILD}fspl.o ${BUILD}hata.o \
 ${BUILD}distance.o ${BUILD}coordinate.o ${BUILD}ExecutablePathloss.o
-	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}classAntenna.o ${BUILD}lossreport.o ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
+	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}Antenna.o ${BUILD}lossreport.o ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
 	${BUILD}coordinate.o ${BUILD}fspl.o ${BUILD}hata.o ${BUILD}distance.o ${BUILD}notificador.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp ${LOSS}common.h
@@ -38,8 +38,8 @@ ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp
 ${BUILD}lossreport.o: ${LOSS}lossreport.cpp ${LOSS}common.h
 	${CC} ${CF} -c  ${LOSS}lossreport.cpp -o ${BUILD}lossreport.o
 
-${BUILD}classAntenna.o: ${LOSS}classAntenna.cpp  ${LOSS}classAntenna.hpp ${LOSS}common.h
-	${CC} ${CF} -c  ${LOSS}classAntenna.cpp -o ${BUILD}classAntenna.o
+${BUILD}Antenna.o: ${LOSS}Antenna.cpp  ${LOSS}Antenna.hpp ${LOSS}common.h
+	${CC} ${CF} -c  ${LOSS}Antenna.cpp -o ${BUILD}Antenna.o
 
 ${BUILD}notificador.o: ${LOSS}notificador.cpp  ${LOSS}notificador.hpp
 	${CC} ${CF} -c  ${LOSS}notificador.cpp -o ${BUILD}notificador.o

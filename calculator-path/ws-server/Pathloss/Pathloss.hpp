@@ -6,7 +6,7 @@
 #include <vector> 
 #include "../json.hpp"
 #include "distance.hh"
-#include "classAntenna.hpp"
+#include "Antenna.hpp"
 #include "lossreport.hpp"
 #include <memory>
 
@@ -24,7 +24,7 @@ private:
   std::string resolution;
   nlohmann::json location;
   int progress;
-  std::vector<antenna> vectorTx;
+  std::vector<Antenna> vectorTx;
 };
 
 

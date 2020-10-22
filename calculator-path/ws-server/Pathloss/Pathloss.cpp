@@ -7,57 +7,64 @@ void Pathloss::setAtributes(nlohmann::json atributes)
     this->resolution = atributes["resolution"].get<std::string>();
     this->location = atributes["location"][0].get<nlohmann::json>();
     this->progress = atributes["progress"].get<int>();
-    
-    antenna aux;
-    for(nlohmann::json::iterator it = atributes["antennas"].begin(); it != atributes["antennas"].end(); ++it)
+ 
+    for(nlohmann::json& it : atributes["antennas"])
     {
-        aux.setParameters((*it)["lat"].get<double>(), 
-                          (*it)["lon"].get<double>(), 
-                          (*it)["height"].get<float>(),
-                          (*it)["type"].get<std::string>(),
-                          (*it)["id"].get<std::string>(),
-                          (*it)["frequency"].get<float>()
-                          );
-        this->vectorTx.emplace_back(aux);
+        this->vectorTx.emplace_back(Antenna{
+                                    (it)["lat"].get<double>(), 
+                                    (it)["lon"].get<double>(), 
+                                    (it)["height"].get<float>(),
+                                    (it)["type"].get<std::string>(),
+                                    (it)["id"].get<std::string>(),
+                                    (it)["frequency"].get<float>()
+                                });
     }
 }
 
 nlohmann::json Pathloss::setAreaLoss(){
-
-    distance* d = new distance{}; 
-
+// std::vecctor<double> height = servidor.pedir();
+// std::vector<double> tipo_terreno;
+// std::function<double (const double lat, const double lng, const int pos) accion;
+// switch (algoritmo)
+// {
+// case HATA:
+// accion = [height,tipo_terreno](const double lat, const double lng, const int pos)
+// {
+//     calcularPerdida(lat, lng,height[pos], tipo_terreno[pos])
+// };
+// case EIBERT_KULMAN:
+// accion = [height](constdouble lat, const double lng, const int pos){
+// calcularPerdida2(lat, lng, height[pos],)
+// };
+// }
+// get_arealoss(..., );
+// }
+    distance d;
     int area_points = 0;
     std::vector<double> propagation;
     nlohmann::json jout;
-    nlohmann::json aux;
     std::vector<double> tl = this->location["topleft"].get<std::vector<double>>();
     std::vector<double> br = this->location["botright"].get<std::vector<double>>();
-
-    d->set_res(this->resolution); // Input Resolution (30m, 90m)
-
-    area_points = d->getTotalpoints(tl, br); // TotalPoints
-
-    for(auto itx = this->vectorTx.begin(); itx != this->vectorTx.end(); ++itx){   
-        propagation = d->get_arealoss(tl[0], tl[1], br[0], br[1], //Area Corners
-                                        itx->getStruct(), itx->getFrequency(), //struct site tx(lat, lon), freq tx
-                                        this->propagationMethod, 
-                                        this->propagationModel,
-                                        this->progress);
-        aux["antenna"] = { 
-                        {"id", itx->getId()}, 
-                        {"type", itx->getType()},
-                        {"lat", itx->getLat()},
-                        {"lon", itx->getLon()},
-                        {"height", itx->getHeight()},
-                        {"frequency", itx->getFrequency()},
+    d.set_res(this->resolution); // Input Resolution (30m, 90m)
+    area_points = d.getTotalpoints(tl, br); // TotalPoints
+    
+    for(Antenna& itx : this->vectorTx){   
+        propagation = d.get_arealoss(tl[0], tl[1], br[0], br[1], //Area Corners
+                                    itx.getStruct(), itx.getFrequency(), //struct site tx(lat, lon), freq tx
+                                    this->propagationMethod, 
+                                    this->propagationModel,
+                                    this->progress);           
+        jout.emplace_back(nlohmann::json::array({"antenna", {
+                        {"id", itx.getId()}, 
+                        {"type", itx.getType()},
+                        {"lat", itx.getLat()},
+                        {"lon", itx.getLon()},
+                        {"height", itx.getHeight()},
+                        {"frequency", itx.getFrequency()},
                         {"Area points", area_points},
-                        {"Area Loss", propagation}
-                    };       
-        jout.emplace_back(aux);     
+                        {"Area Loss", propagation}}
+                    }));     
     }
-    delete[] d;
-    tl.shrink_to_fit();
-    br.shrink_to_fit();
     return jout;
 }
 

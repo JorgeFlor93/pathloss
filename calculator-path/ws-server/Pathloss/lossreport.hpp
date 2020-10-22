@@ -8,6 +8,6 @@
 #include "models/fspl.hh"
 #include "models/hata.hh"
 
-double LossReport(struct site source, struct site destination, float freq, std::string pm, std::string pmenv);
-double Distance(struct site site1, struct site site2);
+double LossReport(struct site source,  double lat, double lon, double height, float freq, std::string pm, std::string pmenv);
+double Distance(struct site site1, double lat, double lon);
 double miles_to_km(double miles);

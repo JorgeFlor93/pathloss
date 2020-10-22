@@ -5,7 +5,6 @@
 #include "../json.hpp"
 #include <vector>
 #include "coordinate.hpp"
-#include "classAntenna.hpp"
 
 class ExecutablePathloss: public Executable, public Pathloss{
 public:

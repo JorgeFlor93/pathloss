@@ -47,18 +47,15 @@ std::vector<double> distance::get_arealoss(double top_lat , double top_lng, doub
                                 float frequency,
                                 std::string pm, 
                                 std::string pmenv,
-                                int progress){
-    
-    //get lat and lng dimension
-    int amount_lat = 0;
-    int amount_lng = 0;
-    amount_lat = get_dimension_lat(top_lat, bot_lat);
-    amount_lng = get_dimension_lng(top_lng, bot_lng);
-    // Notificador* n = new Notificador{};
+                                int progress)
+{
+    int amount_lat = get_dimension_lat(top_lat, bot_lat);
+    int amount_lng = get_dimension_lng(top_lng, bot_lng);
+    int total_points = amount_lat * amount_lng;
     double loss;
     std::vector<double> pathloss;
-    std::vector<Coord> varea;
-    Coord p;
+    pathloss.reserve(sizeof(double)*total_points);
+    
     std::vector<double> start_point;
     std::vector<double> current_point;
     start_point.emplace_back(top_lat - lat_res/2);
@@ -67,32 +64,16 @@ std::vector<double> distance::get_arealoss(double top_lat , double top_lng, doub
 
     for(int i = 0; i < amount_lng; i++){
         for(int j = 0; j < amount_lat; j++){
-            // if(c == progress){
-            //     n->Notify(td, totalp);
-            //     c = 0;
-            // }
-
-            /*Para leer los SRTM */
-            // if(current_point[1] >= 180 && current_point[1] < 360){
-            //     current_point[1] = 360 - current_point[1];
-            //     current_point[1] *= -1;
-            // }
-            // else if(current_point[1] > 0 && current_point[1] < 180){
-            //     current_point[1] *= -1;
-            // }
             
             /*CALCULO DE LA PERDIDA*/
-            p.assignCoord(current_point[0], current_point[1], 1); //Función candidata para devolver altura SRTM
-            loss = LossReport(tx, p.getStruct(), frequency, pm, pmenv);
+            loss = LossReport(tx, current_point[0], current_point[1], 1,  frequency, pm, pmenv);
             pathloss.emplace_back(loss);
+            
             current_point[0] -= lat_res;
         }
         current_point[0] = current_point[0];
        current_point[1] += lng_res;
     }
-    // delete[] n;
-    current_point.shrink_to_fit();
-    start_point.shrink_to_fit();
     return pathloss;
 }
 
