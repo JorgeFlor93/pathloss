@@ -1,7 +1,7 @@
 #include "lossreport.hpp"
 #include "common.h"
 
-double LossReport(struct site source, double lat, double lon, double height, float freq, std::string pm, std::string pmenv){
+double LossReport(struct site source, double lat, double lon, float height, float freq, std::string pm, std::string pmenv){
     
     double dkm = 0.0;
     double loss = 0.0;

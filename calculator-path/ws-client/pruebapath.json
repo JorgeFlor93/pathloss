@@ -6,29 +6,39 @@
           {
             "type":"antenna",
             "id":"A101",
-            "frequency":2500,
-            "lat":51.349,
-            "lon":-2.2299,
+            "frequency":50000,
+            "lat":51.692859,
+            "lon":1,
             "height": 20
           },
           {
             "type":"antenna",
             "id":"A102",
-            "frequency":5000,
-            "lat":51.379,
-            "lon":-2.2300,
+            "frequency":500,
+            "lat":51.692859,
+            "lon":0.5,
             "height": 30
           }
         ],
-        "propagationMethod":"fspl",
+        "propagationMethod":"hata",
         "propagation_mode":"RURAL",
         "resolution":"90m",
         "progress":1000,
         "location": [
           {
             "type":"area",
-            "topleft":[51.692869, 1],
-            "botright":[51.662439, 1.1]
+            "topleft":[
+              {
+                "lat":51.692869,
+                "lon":1
+              }
+            ],
+            "botright":[
+              {
+                "lat":51.662439,
+                "lon":0.5
+              }
+            ]
           }
         ]
       }

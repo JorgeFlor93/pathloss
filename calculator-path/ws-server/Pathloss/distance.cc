@@ -4,7 +4,29 @@
 double lat_res;
 double lng_res;
 
-void distance::set_res(std::string resolution){
+double miles_to_km(const double miles){   
+    return miles*1.60934;
+}
+
+double pDistance(const double tlat, const double tlon, const double lat, const double lon)
+{
+
+	double lat1, lon1, lat2, lon2, distance;
+
+	lat1 = tlat * DEG2RAD;
+	lon1 = tlon * DEG2RAD;
+	lat2 = lat * DEG2RAD;
+	lon2 = lon * DEG2RAD;
+
+	distance =
+	    3959.0 * acos(sin(lat1) * sin(lat2) +
+			  cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
+
+	distance = miles_to_km(distance);
+	return distance;
+}
+
+void Distance::set_res(std::string resolution){
 
 /* Resolution (point-to-point distance) 
 * 0.00208333333 -> 225m
@@ -22,7 +44,7 @@ void distance::set_res(std::string resolution){
     }
 }
 
-int get_dimension_lng(double line_start_lng, double line_end_lng){
+int get_dimension_lng(const double line_start_lng, const double line_end_lng){
     double inc_lng = 0.0;
 
     inc_lng = abs(line_start_lng - line_end_lng);
@@ -30,7 +52,7 @@ int get_dimension_lng(double line_start_lng, double line_end_lng){
     return round(inc_lng/lng_res);
 }
 
-int get_dimension_lat(double line_start_lat, double line_end_lat){
+int get_dimension_lat(const double line_start_lat, const double line_end_lat){
     double inc_lat = 0.0;
 
     inc_lat = abs(line_start_lat - line_end_lat);
@@ -38,79 +60,76 @@ int get_dimension_lat(double line_start_lat, double line_end_lat){
     return round(inc_lat/lat_res);
 }
 
-int distance::getTotalpoints(std::vector<double> tl, std::vector<double> br){
-    return (get_dimension_lat(tl[0], br[0]) * get_dimension_lng(tl[1], br[1])); // amount_lat * amount_lng;
+int Distance::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){
+    return (get_dimension_lat(tl_lat, br_lat) * get_dimension_lng(tl_lon, br_lon)); // amount_lat * amount_lng;
 }
 
-std::vector<double> distance::get_arealoss(double top_lat , double top_lng, double bot_lat, double bot_lng, 
-                                struct site tx, 
-                                float frequency,
-                                std::string pm, 
-                                std::string pmenv,
-                                int progress)
+std::vector<double> Distance::get_arealoss(const double top_lat , const double top_lng, const double bot_lat, const double bot_lng, 
+                                        const double tlat, const double tlon, const float theight, const float frequency,
+                                        std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> getLoss)
 {
     int amount_lat = get_dimension_lat(top_lat, bot_lat);
     int amount_lng = get_dimension_lng(top_lng, bot_lng);
     int total_points = amount_lat * amount_lng;
-    double loss;
+    double loss = 0;
     std::vector<double> pathloss;
     pathloss.reserve(sizeof(double)*total_points);
-    
-    std::vector<double> start_point;
-    std::vector<double> current_point;
-    start_point.emplace_back(top_lat - lat_res/2);
-    current_point.emplace_back(start_point[0]);
-    current_point.emplace_back(top_lng + lng_res/2);
+    double start_point_lat = top_lat - lat_res/2;
+    double current_point_lat = start_point_lat;
+    double current_point_lon = top_lng + lng_res/2;
 
     for(int i = 0; i < amount_lng; i++){
         for(int j = 0; j < amount_lat; j++){
             
             /*CALCULO DE LA PERDIDA*/
-            loss = LossReport(tx, current_point[0], current_point[1], 1,  frequency, pm, pmenv);
+            loss = getLoss(current_point_lat, current_point_lon, i + (j*amount_lat), tlat, tlon, theight, frequency);
+            
             pathloss.emplace_back(loss);
             
-            current_point[0] -= lat_res;
+            current_point_lat -= lat_res;
         }
-        current_point[0] = current_point[0];
-       current_point[1] += lng_res;
+        current_point_lat = start_point_lat;
+       current_point_lon += lng_res;
     }
     return pathloss;
 }
 
+double calcHata(const double lat,const double lon, const float height, const double tlat, const double tlon, const float theight, const float frequency, const int tipo_terreno){
+    return HATApathLoss(frequency, theight, height, pDistance(tlat, tlon, lat, lon), tipo_terreno);
+}
+double calcFSPL(const double lat,const double lon, const double tlat, const double tlon, const float theight, const float frequency){
+   return FSPLpathLoss(frequency, pDistance(tlat, tlon, lat, lon));
+}
 
-// std::vector<Eigen::Matrix<double, 1, 2>> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){
+// std::vector<double> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){
 
 //     int end = 0;
 //     double module = 0.0;
+//  // Matrix(type, rows, col)
+//     double start_point_lat = line_start_lat;
+//     double start_point_lon = line_start_lng;
 
-//     Eigen::Matrix<double, 1, 2> start_point; // Matrix(type, rows, col)
-//     start_point(0,0) = line_start_lat;
-//     start_point(0,1) = line_start_lng;
+//     double end_point_lat = line_end_lat;
+//     double end_point_lon = line_end_lng;
 
-//     Eigen::Matrix<double, 1, 2> end_point;
-//     end_point(0,0) = line_end_lat;
-//     end_point(0,1) = line_end_lng;
+//     double full_vector_lat =  line_end_lat - line_start_lat; 
+//     double full_vector_lon =  line_end_lng -line_start_lng; 
 
-//     Eigen::Matrix<double, 1, 2> full_vector;
-//     full_vector (0, 0) =  line_end_lat - line_start_lat; 
-//     full_vector (0, 1) =  line_end_lng -line_start_lng; 
+//     module = full_vector_lat * full_vector_lat + full_vector_lon * full_vector_lon;
 
-//     module = full_vector.norm();
+//     double res_vector_lat = lat_res;
+//     double res_vector_lon = lng_res;
 
-//     Eigen::Matrix<double, 1, 2> res_vector;
-//     res_vector(0,0) = lat_res;
-//     res_vector(0,1) = lng_res;
+//     double unit_vector_lat = (full_vector_lat / module) * lat_res;
+//     double unit_vector_lon = (full_vector_lon / module) * lng_res;
 
-
-//     Eigen::Matrix<double, 1, 2> unit_vector;
-//     unit_vector(0,0) = (full_vector(0,0) / module) * lat_res;
-//     unit_vector(0,1) = (full_vector(0,1) / module) * lng_res;
-
-//     Eigen::Matrix<double, 1, 2> current_point = start_point;
+//     double current_point_lat = start_point_lat;
+//     double current_point_lon = start_point_lon;
 
 //     end = round((module)/(lat_res));
 
-//     std::vector<Eigen::Matrix<double, 1, 2>> point_list;
+//     std::vector<double> point_list;
+//     point_list.reserve(sizeof(double)*end);
 //     point_list.push_back(current_point);
 
 //     for(int i=0;i<end;i++){

@@ -4,7 +4,6 @@
 #include <iostream>
 #include "../json.hpp"
 #include <vector>
-#include "coordinate.hpp"
 
 class ExecutablePathloss: public Executable, public Pathloss{
 public:
