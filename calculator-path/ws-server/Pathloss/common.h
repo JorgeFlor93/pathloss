@@ -40,9 +40,7 @@
 struct site {
 	double lat;
 	double lon; 
-	float txalt;
-	float alt; // Altura respecto del nivel del mar, txalt+GetElevation	
-	double dislon; //Lon verdadera
+	float alt; 
 };
 
 // struct path {

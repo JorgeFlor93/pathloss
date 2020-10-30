@@ -4,6 +4,6 @@ BUILD=build/
 
 
 main: clienthttp.cpp  
-	${CC} ${CF} clienthttp.cpp  -L/home/jorge/git/pathloss/calculator-path/ws-lib -o main
+	${CC} ${CF} clienthttp.cpp  -L/usr/local/include -o main
 
 

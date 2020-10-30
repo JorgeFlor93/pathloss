@@ -4,28 +4,6 @@
 double lat_res;
 double lng_res;
 
-double miles_to_km(const double miles){   
-    return miles*1.60934;
-}
-
-double pDistance(const double tlat, const double tlon, const double lat, const double lon)
-{
-
-	double lat1, lon1, lat2, lon2, distance;
-
-	lat1 = tlat * DEG2RAD;
-	lon1 = tlon * DEG2RAD;
-	lat2 = lat * DEG2RAD;
-	lon2 = lon * DEG2RAD;
-
-	distance =
-	    3959.0 * acos(sin(lat1) * sin(lat2) +
-			  cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
-
-	distance = miles_to_km(distance);
-	return distance;
-}
-
 void Distance::set_res(std::string resolution){
 
 /* Resolution (point-to-point distance) 
@@ -42,22 +20,6 @@ void Distance::set_res(std::string resolution){
         lat_res = 0.0002777778;
         lng_res = 0.0002777778;
     }
-}
-
-int get_dimension_lng(const double line_start_lng, const double line_end_lng){
-    double inc_lng = 0.0;
-
-    inc_lng = abs(line_start_lng - line_end_lng);
-
-    return round(inc_lng/lng_res);
-}
-
-int get_dimension_lat(const double line_start_lat, const double line_end_lat){
-    double inc_lat = 0.0;
-
-    inc_lat = abs(line_start_lat - line_end_lat);
-
-    return round(inc_lat/lat_res);
 }
 
 int Distance::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){
@@ -92,6 +54,45 @@ std::vector<double> Distance::get_arealoss(const double top_lat , const double t
        current_point_lon += lng_res;
     }
     return pathloss;
+}
+
+
+double miles_to_km(const double miles){   
+    return miles * KM_PER_MILE;
+}
+
+double pDistance(const double tlat, const double tlon, const double lat, const double lon)
+{
+
+	double lat1, lon1, lat2, lon2, distance;
+
+	lat1 = tlat * DEG2RAD;
+	lon1 = tlon * DEG2RAD;
+	lat2 = lat * DEG2RAD;
+	lon2 = lon * DEG2RAD;
+
+	distance =
+	    3959.0 * acos(sin(lat1) * sin(lat2) +
+			  cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
+
+	distance = miles_to_km(distance);
+	return distance;
+}
+
+int get_dimension_lng(const double line_start_lng, const double line_end_lng){
+    double inc_lng = 0.0;
+
+    inc_lng = abs(line_start_lng - line_end_lng);
+
+    return round(inc_lng/lng_res);
+}
+
+int get_dimension_lat(const double line_start_lat, const double line_end_lat){
+    double inc_lat = 0.0;
+
+    inc_lat = abs(line_start_lat - line_end_lat);
+
+    return round(inc_lat/lat_res);
 }
 
 double calcHata(const double lat,const double lon, const float height, const double tlat, const double tlon, const float theight, const float frequency, const int tipo_terreno){
@@ -130,7 +131,7 @@ double calcFSPL(const double lat,const double lon, const double tlat, const doub
 
 //     std::vector<double> point_list;
 //     point_list.reserve(sizeof(double)*end);
-//     point_list.push_back(current_point);
+//     point_list.emplace_back(current_point);
 
 //     for(int i=0;i<end;i++){
 //         current_point = current_point + unit_vector;
