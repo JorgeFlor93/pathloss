@@ -1,26 +1,25 @@
 #include "ExecutablePathloss.hpp"
 
-nlohmann::json ExecutablePathloss::setAreaLoss(){
-  return this->pathloss.setAreaLoss();
+
+
+void ExecutablePathloss::setAtributes(nlohmann::json atributes){//crear
+  //return this->atribute.setAtributes(atributes);
+  //FactoryAntenna worker{};
+  IPathloss* this->calcpath = createPathloss(atributes["caclType"][0]["type"], atributes["propagationMethod"]); //param1 line area or point; param2 egli, hata, cost...
 }
 
-void ExecutablePathloss::setAtributes(nlohmann::json atributes){
-  return this->pathloss.setAtributes(atributes);
+void ExecutablePathloss::addFixedPathloss(nlohmann::json atributes){ //crear 
+  this->setAtributes(atributes); // Se establece tipo(area, linea, punto), antenas y atributos.
 }
 
-void ExecutablePathloss::addFixedPathloss(nlohmann::json atributes, nlohmann::json operands){ //crear 
-  this->setAtributes(atributes); // Se establece location, antenas y atributos.
-  // this->points = operands["Points"].get<std::vector<double>>();
-}
+void ExecutablePathloss::execute() {  //ejecutar
 
-void ExecutablePathloss::execute(nlohmann::json work) {  //ejecutar
-  if(work["id"].get<std::string>() == "A3000"){   
-    this->sresult = this->setAreaLoss();  
-  }
-}
-
-void ExecutablePathloss::setPathloss(Pathloss pathloss){ //decorar
-    this->pathloss = pathloss;
+  //for (vector antennas )
+  this->calcpath->calcPath();
+  
+  // if(work["id"].get<std::string>() == "A3000"){   
+  //   this->sresult = this->setAreaLoss();  
+  // }
 }
 
 nlohmann::json ExecutablePathloss::result(nlohmann::json f){ //enviar

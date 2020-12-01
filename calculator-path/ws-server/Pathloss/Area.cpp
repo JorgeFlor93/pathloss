@@ -1,10 +1,10 @@
 
-#include "distance.hh"
+#include "Area.hh"
 
 double lat_res;
 double lng_res;
 
-void Distance::set_res(std::string resolution){
+void Area::setRes(std::string resolution){
 
 /* Resolution (point-to-point distance) 
 * 0.00208333333 -> 225m
@@ -22,16 +22,18 @@ void Distance::set_res(std::string resolution){
     }
 }
 
-int Distance::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){
-    return (get_dimension_lat(tl_lat, br_lat) * get_dimension_lng(tl_lon, br_lon)); // amount_lat * amount_lng;
+int Area::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){
+    return (getDimensionLat(tl_lat, br_lat) * getDimensionLng(tl_lon, br_lon)); // amount_lat * amount_lng;
 }
 
-std::vector<double> Distance::get_arealoss(const double top_lat , const double top_lng, const double bot_lat, const double bot_lng, 
+std::vector<double> Area::getArealoss(const double top_lat , const double top_lng, const double bot_lat, const double bot_lng, 
                                         const double tlat, const double tlon, const float theight, const float frequency,
-                                        std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> getLoss)
+                                        std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> getLoss,
+                                        int progress)
 {
-    int amount_lat = get_dimension_lat(top_lat, bot_lat);
-    int amount_lng = get_dimension_lng(top_lng, bot_lng);
+
+    int amount_lat = getDimensionLat(top_lat, bot_lat);
+    int amount_lng = getDimensionLng(top_lng, bot_lng);
     int total_points = amount_lat * amount_lng;
     double loss = 0;
     std::vector<double> pathloss;
@@ -39,16 +41,19 @@ std::vector<double> Distance::get_arealoss(const double top_lat , const double t
     double start_point_lat = top_lat - lat_res/2;
     double current_point_lat = start_point_lat;
     double current_point_lon = top_lng + lng_res/2;
+    int c = 0; //contador de iteraciones
+    nlohmann::json partial;
 
     for(int i = 0; i < amount_lng; i++){
         for(int j = 0; j < amount_lat; j++){
-            
+                       
             /*CALCULO DE LA PERDIDA*/
             loss = getLoss(current_point_lat, current_point_lon, i + (j*amount_lat), tlat, tlon, theight, frequency);
             
             pathloss.emplace_back(loss);
             
             current_point_lat -= lat_res;
+            ++c;
         }
         current_point_lat = start_point_lat;
        current_point_lon += lng_res;
@@ -56,12 +61,7 @@ std::vector<double> Distance::get_arealoss(const double top_lat , const double t
     return pathloss;
 }
 
-
-double miles_to_km(const double miles){   
-    return miles * KM_PER_MILE;
-}
-
-double pDistance(const double tlat, const double tlon, const double lat, const double lon)
+double calcDistance(const double tlat, const double tlon, const double lat, const double lon)
 {
 
 	double lat1, lon1, lat2, lon2, distance;
@@ -75,11 +75,10 @@ double pDistance(const double tlat, const double tlon, const double lat, const d
 	    3959.0 * acos(sin(lat1) * sin(lat2) +
 			  cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
 
-	distance = miles_to_km(distance);
-	return distance;
+	return distance * KM_PER_MILE;
 }
 
-int get_dimension_lng(const double line_start_lng, const double line_end_lng){
+int getDimensionLng(const double line_start_lng, const double line_end_lng){
     double inc_lng = 0.0;
 
     inc_lng = abs(line_start_lng - line_end_lng);
@@ -87,7 +86,7 @@ int get_dimension_lng(const double line_start_lng, const double line_end_lng){
     return round(inc_lng/lng_res);
 }
 
-int get_dimension_lat(const double line_start_lat, const double line_end_lat){
+int getDimensionLat(const double line_start_lat, const double line_end_lat){
     double inc_lat = 0.0;
 
     inc_lat = abs(line_start_lat - line_end_lat);
@@ -96,10 +95,14 @@ int get_dimension_lat(const double line_start_lat, const double line_end_lat){
 }
 
 double calcHata(const double lat,const double lon, const float height, const double tlat, const double tlon, const float theight, const float frequency, const int tipo_terreno){
-    return HATApathLoss(frequency, theight, height, pDistance(tlat, tlon, lat, lon), tipo_terreno);
+    return HATApathLoss(frequency, theight, height, calcDistance(tlat, tlon, lat, lon), tipo_terreno);
 }
 double calcFSPL(const double lat,const double lon, const double tlat, const double tlon, const float theight, const float frequency){
-   return FSPLpathLoss(frequency, pDistance(tlat, tlon, lat, lon));
+   return FSPLpathLoss(frequency, calcDistance(tlat, tlon, lat, lon));
+}
+
+double calcEgli(const double lat,const double lon, const float height, const double tlat, const double tlon, const float theight, const float frequency){
+   return EgliPathLoss(frequency, theight, height, calcDistance(tlat, tlon, lat, lon));
 }
 
 // std::vector<double> get_line(double line_start_lat , double line_start_lng, double line_end_lat, double line_end_lng){

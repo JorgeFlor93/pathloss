@@ -1,12 +1,10 @@
 
 #include "ExecutableFactory.hpp"
 
-Executable* ExecutableFactory::create (std::string executable, nlohmann::json atributes, nlohmann::json operands) {
+Executable* ExecutableFactory::create(std::string executable, nlohmann::json atributes) {
   if(executable == "pathloss"){
-    Pathloss pathloss{};
-    ExecutablePathloss* executablePathloss = new ExecutablePathloss{};
-    executablePathloss->setPathloss(pathloss);
-    executablePathloss->addFixedPathloss(atributes, operands);
+    ExecutablePathloss* executablePathloss = new ExecutablePathloss{}; //creo decorador
+    executablePathloss->addFixedPathloss(atributes); //lanzo los atributos
     return executablePathloss;
   }
   else {

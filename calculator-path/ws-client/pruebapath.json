@@ -2,6 +2,10 @@
   "executable":"pathloss",
   "atributes": [
       { 
+        "propagationMethod":"hata",
+        "propagationMode":"RURAL",
+        "resolution":"90m",
+        "progress":500,
         "antennas":[
           {
             "type":"antenna",
@@ -20,11 +24,7 @@
             "height": 30
           }
         ],
-        "propagationMethod":"hata",
-        "propagation_mode":"RURAL",
-        "resolution":"90m",
-        "progress":1000,
-        "location": [
+        "calcType": [
           {
             "type":"area",
             "topleft":[
@@ -35,29 +35,19 @@
             ],
             "botright":[
               {
-                "lat":51.662439,
+                "lat":51.69439,
                 "lon":0.5
               }
             ]
           }
         ]
       }
-    ],
+  ],
   "actions": [
     {
       "id":"A3000",
       "function":"AreaLoss"
     } 
-  ],
-  "operands":[
-    {
-      "point:":[
-        {  
-          "name":"vOperands",
-          "Points": [51.452000,-2.289900]
-        }   
-      ]
-    }
   ]
 }
   

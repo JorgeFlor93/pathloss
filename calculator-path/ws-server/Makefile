@@ -10,9 +10,9 @@ LOSS=Pathloss/
 MODEL=Pathloss/models/
 
 main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}Antenna.o ${BUILD}Pathloss.o  ${BUILD}fspl.o ${BUILD}hata.o \
-${BUILD}distance.o ${BUILD}ExecutablePathloss.o
+${BUILD}Area.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o
 	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}Antenna.o  ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}distance.o  -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Area.o  -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp ${LOSS}common.h
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
@@ -23,8 +23,8 @@ ${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutableP
 ${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp json.hpp
 	${CC} ${CF} -c ${COMMUNICATIONS}Websocket.cpp -o ${BUILD}Websocket.o
 
-${BUILD}distance.o: ${LOSS}distance.cc  ${LOSS}distance.hh ${LOSS}common.h
-	${CC} ${CF} -c  ${LOSS}distance.cc -o ${BUILD}distance.o
+${BUILD}Area.o: ${LOSS}Area.cc  ${LOSS}Area.hpp ${LOSS}common.h
+	${CC} ${CF} -c  ${LOSS}Area.cc -o ${BUILD}Area.o
 
 ${BUILD}Pathloss.o: ${LOSS}Pathloss.cpp ${LOSS}Pathloss.hpp ${LOSS}common.h
 	${CC} ${CF} -c ${LOSS}Pathloss.cpp -o ${BUILD}Pathloss.o
@@ -40,4 +40,7 @@ ${BUILD}fspl.o: ${MODEL}fspl.cc ${MODEL}fspl.hh
 
 ${BUILD}hata.o: ${MODEL}hata.cc ${MODEL}hata.hh
 	${CC} ${CF} -c ${MODEL}hata.cc -o ${BUILD}hata.o
+
+${BUILD}egli.o: ${MODEL}egli.cc ${MODEL}egli.hh
+	${CC} ${CF} -c ${MODEL}egli.cc -o ${BUILD}egli.o
 

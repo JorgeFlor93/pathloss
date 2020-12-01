@@ -3,6 +3,7 @@
 #include <vector>
 #include "../json.hpp"
 #include <ixwebsocket/IXWebSocketServer.h>
+#include "../Communications/Websocket.hpp"
 
 class Executable {
   public:

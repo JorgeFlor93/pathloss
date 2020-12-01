@@ -1,12 +1,11 @@
 #pragma once
 #include "common.h"
-#include "coordinate.hpp"
 #include <string>
 
 class Antenna{
 public:
 Antenna(double lat, double lon, float height, std::string type, std::string id, float frequency);
-Coord coord;
+virtual void calcPathloss() override;
 std::string getType();
 std::string getId();
 float getFrequency();
