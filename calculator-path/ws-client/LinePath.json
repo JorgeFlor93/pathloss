@@ -1,0 +1,47 @@
+{
+  "executable":"pathloss",
+  "atributes": [
+    { 
+      "propagationModel":"hata",
+      "propagationEnvironment":"RURAL",
+      "resolution":"90m",
+      "progress":500,
+      "antennas":[
+        {
+          "type":"antenna",
+          "id":"A101",
+          "frequency":50000,
+          "lat":51.692859,
+          "lon":1,
+          "height": 20
+        },
+        {
+          "type":"antenna",
+          "id":"A102",
+          "frequency":500,
+          "lat":51.692859,
+          "lon":0.5,
+          "height": 30
+        }
+      ],
+      "calcType": [
+        {
+          "type":"line",
+          "startPoint":[
+            {
+              "lat":51.692869,
+              "lon":1
+            }
+          ],
+          "endPoint":[
+            {
+              "lat":51.69439,
+              "lon":0.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+  

@@ -1,23 +1,22 @@
 #pragma once
-#include "../Executor/Executable.hpp"
-#include "Pathloss.hpp"
 #include <iostream>
-#include "../json.hpp"
 #include <vector>
+#include "../json.hpp"
+#include "../Executor/Executable.hpp"
+#include "AbsPathloss.hpp"
+#include "PathlossArea.hpp"
 #include "../Communications/Websocket.hpp"
-#include "PathlossFactory.hpp"
 #include "IPathloss.hpp"
-#include "Atributes.hpp"
+#include "../common.h"
+#include "SingletonPathloss.hpp"
 
 class ExecutablePathloss: public Executable{
 public:
-  void addFixedPathloss(nlohmann::json atributes);
-  void setAtributes(nlohmann::json atributes);
+  void addFixedPathloss();
   void execute();
-  nlohmann::json result(nlohmann::json f);
+  nlohmann::json result();
 private:
-  IPathloss* calcpath;
-  nlohmann::json sresult;
+  IPathloss* pathloss;
 };
 
 

@@ -1,17 +1,2 @@
 PUNTOS:
 
-MODIFICAR EL CALCULO DE LA PERDIDA, LOSSREPORT, ES REDUNDANTE
-
-1. métodos de cálculo
-
-2. Crear el resto de funciones:
-  Show height point
-  Best antenna coord
-  Best prop
-  All antennas PathLoss
-  Show AreaLoss
-
-3. Profundizar en el código, crear funciones más genéricas y terminar el diagrama de clases
-
-4. Estudiar la parte de la librería WS. peticiones http, dónde se envía/recibe, lectura alturas SRTM. Repasar los 4 puntos dados por Juan
- 

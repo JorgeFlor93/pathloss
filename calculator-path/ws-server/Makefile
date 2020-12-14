@@ -9,31 +9,34 @@ COMMUNICATIONS=Communications/
 LOSS=Pathloss/
 MODEL=Pathloss/models/
 
-main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}Antenna.o ${BUILD}Pathloss.o  ${BUILD}fspl.o ${BUILD}hata.o \
-${BUILD}Area.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o
-	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}Antenna.o  ${BUILD}Pathloss.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Area.o  -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
+main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o  ${BUILD}fspl.o ${BUILD}hata.o \
+${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}Algorithm.o common.h json.hpp
+	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}SingletonPathloss.o  ${BUILD}PathlossArea.o ${BUILD}ExecutablePathloss.o \
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Emisor.o ${BUILD}Algorithm.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
-${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp json.hpp ${LOSS}common.h
+${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp 
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
 
-${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp  ${EXECUTOR}ExecutableFactory.hpp ${LOSS}Pathloss.hpp json.hpp ${LOSS}common.h
+${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutablePathloss.hpp ${EXECUTOR}Executor.hpp  ${EXECUTOR}ExecutableFactory.hpp 
 	${CC} ${CF} -c ${EXECUTOR}ExecutableFactory.cpp -o ${BUILD}ExecutableFactory.o
 
-${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp json.hpp
+${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp 
 	${CC} ${CF} -c ${COMMUNICATIONS}Websocket.cpp -o ${BUILD}Websocket.o
 
-${BUILD}Area.o: ${LOSS}Area.cc  ${LOSS}Area.hpp ${LOSS}common.h
-	${CC} ${CF} -c  ${LOSS}Area.cc -o ${BUILD}Area.o
+${BUILD}Emisor.o: ${LOSS}Emisor.cpp  ${LOSS}Emisor.hpp ${LOSS}AbsPathloss.hpp 
+	${CC} ${CF} -c  ${LOSS}Emisor.cpp -o ${BUILD}Emisor.o
 
-${BUILD}Pathloss.o: ${LOSS}Pathloss.cpp ${LOSS}Pathloss.hpp ${LOSS}common.h
-	${CC} ${CF} -c ${LOSS}Pathloss.cpp -o ${BUILD}Pathloss.o
+${BUILD}PathlossArea.o: ${LOSS}PathlossArea.cpp ${LOSS}PathlossArea.hpp ${LOSS}IPathloss.hpp 
+	${CC} ${CF} -c ${LOSS}PathlossArea.cpp -o ${BUILD}PathlossArea.o
 
 ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp 
 	${CC} ${CF} -c ${LOSS}ExecutablePathloss.cpp -o ${BUILD}ExecutablePathloss.o
 
-${BUILD}Antenna.o: ${LOSS}Antenna.cpp  ${LOSS}Antenna.hpp ${LOSS}common.h
-	${CC} ${CF} -c  ${LOSS}Antenna.cpp -o ${BUILD}Antenna.o
+${BUILD}SingletonPathloss.o: ${LOSS}SingletonPathloss.cpp  ${LOSS}SingletonPathloss.hpp
+	${CC} ${CF} -c  ${LOSS}SingletonPathloss.cpp -o ${BUILD}SingletonPathloss.o
+
+${BUILD}Algorithm.o: ${LOSS}Algorithm.cpp  ${LOSS}Algorithm.hpp ${LOSS}AbsPathloss.hpp 
+	${CC} ${CF} -c  ${LOSS}Algorithm.cpp -o ${BUILD}Algorithm.o
 
 ${BUILD}fspl.o: ${MODEL}fspl.cc ${MODEL}fspl.hh
 	${CC} ${CF} -c ${MODEL}fspl.cc -o ${BUILD}fspl.o

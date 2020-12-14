@@ -2,8 +2,8 @@
   "executable":"pathloss",
   "atributes": [
       { 
-        "propagationMethod":"hata",
-        "propagationMode":"RURAL",
+        "propagationModel":"hata",
+        "propagationEnvironment":"RURAL",
         "resolution":"90m",
         "progress":500,
         "antennas":[
@@ -42,12 +42,6 @@
           }
         ]
       }
-  ],
-  "actions": [
-    {
-      "id":"A3000",
-      "function":"AreaLoss"
-    } 
   ]
 }
   

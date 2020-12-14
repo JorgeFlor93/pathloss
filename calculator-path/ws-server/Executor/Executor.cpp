@@ -13,10 +13,9 @@ void Executor::setActions(std::string actions) {
 void Executor::execute() {
   ExecutableFactory executableFactory{};
   Executable* executable = executableFactory.create(this->actions["executable"].get<std::string>(), this->actions["atributes"][0]); //CREAR
-  for (nlohmann::json::iterator action = this->actions["actions"].begin(); action != this->actions["actions"].end(); ++action) {
-      executable->execute(); //EJECUTAR
-      //this->ws->sendPartial(executable->result()); //ENVIAR  
-  }
+  executable->execute(); //EJECUTAR
+  this->ws->sendPartial(executable->result()); //ENVIAR  
+  // fflush function
   //this->ws->sendFinal();
 }
 

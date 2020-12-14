@@ -4,8 +4,18 @@
 #include <ixwebsocket/IXWebSocketServer.h>
 #include "Executor/Executor.hpp"
 #include "Communications/Websocket.hpp"
+#include "common.h"
 
 using namespace ix;
+
+nlohmann::json sresult;
+struct pathPath corner;
+struct pathAtributes atributes;
+std::vector<antenna> vAntennas;
+double lat_res;
+double lng_res;
+std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> model;
+
 
 int main (int argc, char** argv){
 
