@@ -5,6 +5,7 @@
 #include "../Executor/Executable.hpp"
 #include "AbsPathloss.hpp"
 #include "PathlossArea.hpp"
+#include "Algorithm.hpp"
 #include "../Communications/Websocket.hpp"
 #include "IPathloss.hpp"
 #include "../common.h"
@@ -17,6 +18,8 @@ public:
   nlohmann::json result();
 private:
   IPathloss* pathloss;
+  nlohmann::json aux;
+  std::vector<double> loss;
 };
 
 

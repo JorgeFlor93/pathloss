@@ -8,7 +8,7 @@
 // };
 
 IPathloss* SingletonPathloss::InternalGetPathloss(){ 
-    if(atributes.type == "Area"){
+    if(atributes.type == "area"){
         /* Corners */
         corner.lat1 = atributes.calcType["topleft"][0]["lat"].get<double>();
         corner.lon1 = atributes.calcType["topleft"][0]["lon"].get<double>();
@@ -18,8 +18,8 @@ IPathloss* SingletonPathloss::InternalGetPathloss(){
         PathlossArea* pathlossarea = new PathlossArea{};
         return pathlossarea;
     }
-    else if(atributes.type == "Point"){}
-    else if(atributes.type == "Line"){}
+    // else if(atributes.type == "point"){}
+    // else if(atributes.type == "line"){}
     
     // switch (atributes.type) {
     //     case ("Area"):
@@ -32,7 +32,9 @@ IPathloss* SingletonPathloss::InternalGetPathloss(){
         // case (type  == "Point"):
         // break;
     // }
-    return nullptr;
+    else{    
+        return nullptr;
+    }
 }
 
 

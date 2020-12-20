@@ -3,10 +3,12 @@
 #include "PathlossArea.hpp"
 #include "IPathloss.hpp"
 #include "../common.h"
+#include "../json.hpp"
 
 class SingletonPathloss{
 public:
     SingletonPathloss(const SingletonPathloss&) = delete;
+    void operator=(const SingletonPathloss&) = delete;
     static SingletonPathloss& Get(){
         static SingletonPathloss instance; 
         return instance;

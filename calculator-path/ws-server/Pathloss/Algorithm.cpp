@@ -2,13 +2,9 @@
 #include "Algorithm.hpp"
 
 void Algorithm::lambdaFunction(){
-    // std::vector<double> propagation;
-    // nlohmann::json jout;
-    //int area_points = a.getTotalpoints(tl_lat, tl_lon, br_lat, br_lon); // TotalPoints
+
     int tipo_terreno = atributes.propagationEnv;
     float height = 100;
-
-    // std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> model;
     if(atributes.propagationModel == "hata")
     {
         model = [&tipo_terreno, &height](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)

@@ -6,13 +6,13 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
   if(executable == "pathloss"){
     /* Asigno atributos */
     atributes.propagationModel = njatributes["propagationModel"].get<std::string>();
-    atributes.calcType = njatributes["caclType"][0].get<nlohmann::json>();
-    atributes.type = njatributes["caclType"][0]["type"].get<std::string>();
+    atributes.type = njatributes["type"].get<std::string>();
     atributes.progress = njatributes["progress"].get<int>();
+    atributes.calcType = njatributes["caclType"][0].get<nlohmann::json>();
     std::string pmenv = njatributes["propagationEnvironment"].get<std::string>();
-    if(pmenv == "URBAN") atributes.propagationEnv = 1;
-    else if(pmenv == "SUBURBAN") atributes.propagationEnv = 2;
-    else if(pmenv == "RURAL") atributes.propagationEnv = 3; 
+    if(pmenv == "urban") atributes.propagationEnv = 1;
+    else if(pmenv == "suburban") atributes.propagationEnv = 2;
+    else if(pmenv == "rural") atributes.propagationEnv = 3; 
     atributes.resolution = njatributes["resolution"].get<std::string>();
     setResolution(atributes.resolution);
 
@@ -62,16 +62,3 @@ void setResolution(std::string resolution){
         lng_res = 0.0002777778;
     }
 }
-
-/*
-for (nlohmann::json::iterator action = this->actions["actions"].begin(); action != this->actions["actions"].end(); ++action) {
-    std::string operation = (*action)["operation"].get<std::string>();
-    double out = executable->execute(operation); //Se llama a execute
-
-std::string s = j.dump();    // {"happy":true,"pi":3.141}
-
-// serialization with pretty printing
-// pass in the amount of spaces to indent
-std::cout << j.dump(4) << std::endl;
-    
-*/

@@ -1,5 +1,6 @@
 
 #pragma once
+#include <string>
 #include "ExecutableFactory.hpp"
 #include "Executable.hpp"
 #include "../Communications/Websocket.hpp"

@@ -6,7 +6,7 @@
 #include "../json.hpp"
 #include "../common.h"
 
-class Algorithm : public AbsPathloss{
+class Algorithm{
 public:
     void lambdaFunction();
 };

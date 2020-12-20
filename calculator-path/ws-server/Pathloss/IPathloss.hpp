@@ -1,8 +1,8 @@
 #pragma once
+#include <vector>
 
 class IPathloss{
 public:
 virtual ~IPathloss(){};
-virtual void calcPathloss() = 0; 
-virtual void lambdaFunction() = 0;
+virtual std::vector<double> calcPathloss() = 0; 
 };

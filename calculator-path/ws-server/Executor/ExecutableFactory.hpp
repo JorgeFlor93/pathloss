@@ -9,7 +9,6 @@
 #include "../common.h"
 
 class ExecutableFactory {
-
 public:
   Executable* create(std::string executable, nlohmann::json njatributes);
 };

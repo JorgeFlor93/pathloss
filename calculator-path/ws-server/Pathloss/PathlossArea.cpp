@@ -1,14 +1,16 @@
 #include "PathlossArea.hpp"
 
-void PathlossArea::calcPathloss(){
+std::vector<double> PathlossArea::calcPathloss(){
+    std::vector<double> loss;
     for(antenna& it : vAntennas){
-        areaPathloss(corner.lat1, corner.lon1, corner.lat2, corner.lon2, it.lat, it.lon, it.height, it.freq, model, 0);
+         loss = areaPathloss(corner.lat1, corner.lon1, corner.lat2, corner.lon2, it.lat, it.lon, it.height, it.freq, model, 0);
     }
+    return loss;
 }
 
-void PathlossArea::areaPathloss(const double top_lat , const double top_lng, const double bot_lat, const double bot_lng, 
+std::vector<double> PathlossArea::areaPathloss(const double top_lat , const double top_lng, const double bot_lat, const double bot_lng, 
                                         const double tlat, const double tlon, const float theight, const float frequency,
-                                        std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> getLoss,
+                                        std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> alg,
                                         int progress)
 {
     int amount_lat = getDimensionLat(top_lat, bot_lat);
@@ -27,7 +29,7 @@ void PathlossArea::areaPathloss(const double top_lat , const double top_lng, con
         for(int j = 0; j < amount_lat; j++){
                        
             /*CALCULO DE LA PERDIDA*/
-            loss = getLoss(current_point_lat, current_point_lon, i + (j*amount_lat), tlat, tlon, theight, frequency);
+            loss = i + j * amount_lat;/* alg(current_point_lat, current_point_lon, i + (j*amount_lat), tlat, tlon, theight, frequency); */
             
             pathlossarea.emplace_back(loss);
             
@@ -38,8 +40,10 @@ void PathlossArea::areaPathloss(const double top_lat , const double top_lng, con
        current_point_lon += lng_res;
     }
 
-    send(pathlossarea);
+    return pathlossarea;
 }
+
+void PathlossArea::send(std::vector<double> loss){}
 
 int getDimensionLng(const double line_start_lng, const double line_end_lng){
     double inc_lng = 0.0;
