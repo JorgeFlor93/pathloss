@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "PathlossArea.hpp"
+#include "PathlossLine.hpp"
 #include "IPathloss.hpp"
 #include "../common.h"
 #include "../json.hpp"
@@ -13,7 +14,9 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(){ return Get().InternalGetPathloss(); }
+    static IPathloss* getPathloss(){ 
+        return Get().InternalGetPathloss(); 
+    }
 private:
     IPathloss* InternalGetPathloss();
     SingletonPathloss(){};

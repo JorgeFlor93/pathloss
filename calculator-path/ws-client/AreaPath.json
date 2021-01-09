@@ -1,39 +1,38 @@
 {
   "executable":"pathloss",
   "atributes": [
-      { 
-        "propagationModel":"hata",
-        "propagationEnvironment":"rural",
-        "resolution":"90m",
-        "progress":500,
-        "type":"area",
-        "antennas":[
-          {
-            "type":"antenna",
-            "id":"A101",
-            "frequency":50000,
-            "lat":51.692859,
-            "lon":1,
-            "height": 20
-          }
-        ],
-        "calcType": [
-          {
-            "topleft":[
-              {
-                "lat":51.692869,
-                "lon":1.0
-              }
-            ],
-            "botright":[
-              {
-                "lat":51.69439,
-                "lon":0.5
-              }
-            ]
-          }
-        ]
-      }
+    { 
+      "propagationModel":"hata",
+      "propagationEnvironment":"rural",
+      "resolution":"30m",
+      "progress":500,
+      "type":"area",
+      "antennas":[
+        {
+          "id":"A101",
+          "frequency":50000,
+          "lat":51.692859,
+          "lon":1.0,
+          "height":20.5
+        }
+      ],
+      "corners": [
+        {
+          "topleft":[
+            {
+              "lat":40.4067646,
+              "lon":-3.7116194
+            }
+          ],
+          "botright":[
+            {
+              "lat":40.4053433,
+              "lon":-3.7103948
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
   

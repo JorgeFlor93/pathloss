@@ -10,34 +10,31 @@
 IPathloss* SingletonPathloss::InternalGetPathloss(){ 
     if(atributes.type == "area"){
         /* Corners */
-        corner.lat1 = atributes.calcType["topleft"][0]["lat"].get<double>();
-        corner.lon1 = atributes.calcType["topleft"][0]["lon"].get<double>();
-        corner.lat2 = atributes.calcType["botright"][0]["lat"].get<double>();
-        corner.lon2 = atributes.calcType["botright"][0]["lon"].get<double>();
+        corner.lat1 = atributes.edges["topleft"][0]["lat"].get<double>();
+        corner.lon1 = atributes.edges["topleft"][0]["lon"].get<double>();
+        corner.lat2 = atributes.edges["botright"][0]["lat"].get<double>();
+        corner.lon2 = atributes.edges["botright"][0]["lon"].get<double>();
         
         PathlossArea* pathlossarea = new PathlossArea{};
         return pathlossarea;
     }
-    // else if(atributes.type == "point"){}
-    // else if(atributes.type == "line"){}
-    
-    // switch (atributes.type) {
-    //     case ("Area"):
+    else if(atributes.type == "line"){
+        corner.lat1 = atributes.edges["startPoint"][0]["lat"].get<double>();
+        corner.lon1 = atributes.edges["startPoint"][0]["lon"].get<double>();
+        corner.lat2 = atributes.edges["endPoint"][0]["lat"].get<double>();
+        corner.lon2 = atributes.edges["endPoint"][0]["lon"].get<double>();
+
+        PathlossLine* pathlossline = new PathlossLine{};
+        return pathlossline;
         
-    //     break;
+    }
+    else if(atributes.type == "point"){
 
-        // case (type  == "Line"):
-        // break;
-
-        // case (type  == "Point"):
-        // break;
-    // }
+    }
     else{    
         return nullptr;
     }
 }
-
-
 /* 
 
 ExecutablePathloss* executablePathloss = new ExecutablePathloss{}; 
@@ -52,4 +49,17 @@ switch(r)
     case green: std::cout << "green\n"; break;
     case blue : std::cout << "blue\n";  break;
 }
+
+
+switch (atributes.type) {
+        case ("Area"):
+        
+        break;
+
+        case (type  == "Line"):
+        break;
+
+        case (type  == "Point"):
+        break;
+    }
 */

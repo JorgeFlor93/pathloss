@@ -5,6 +5,7 @@
 #include "../Executor/Executable.hpp"
 #include "AbsPathloss.hpp"
 #include "PathlossArea.hpp"
+#include "PathlossLine.hpp"
 #include "Algorithm.hpp"
 #include "../Communications/Websocket.hpp"
 #include "IPathloss.hpp"
@@ -14,11 +15,11 @@
 class ExecutablePathloss: public Executable{
 public:
   void addFixedPathloss();
-  void execute();
+  virtual void execute() override final;
   nlohmann::json result();
 private:
   IPathloss* pathloss;
-  nlohmann::json aux;
+  nlohmann::json res;
   std::vector<double> loss;
 };
 

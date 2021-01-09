@@ -11,7 +11,7 @@ class Executor {
   public:
     void setWebSocket(Websocket* ws);
     void setActions(std::string actions);
-    void execute();
+    virtual void execute();
   private:
     Websocket* ws;
     nlohmann::json actions;

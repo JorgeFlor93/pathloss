@@ -8,24 +8,25 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
     atributes.propagationModel = njatributes["propagationModel"].get<std::string>();
     atributes.type = njatributes["type"].get<std::string>();
     atributes.progress = njatributes["progress"].get<int>();
-    atributes.calcType = njatributes["caclType"][0].get<nlohmann::json>();
+    atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
+
     std::string pmenv = njatributes["propagationEnvironment"].get<std::string>();
     if(pmenv == "urban") atributes.propagationEnv = 1;
     else if(pmenv == "suburban") atributes.propagationEnv = 2;
     else if(pmenv == "rural") atributes.propagationEnv = 3; 
+
     atributes.resolution = njatributes["resolution"].get<std::string>();
     setResolution(atributes.resolution);
 
-    antenna typeAnt;
+    antenna ant;
     for(nlohmann::json& it : njatributes["antennas"])
     {
-        typeAnt.lat = it["lat"].get<double>(); 
-        typeAnt.lon = it["lon"].get<double>();
-        typeAnt.height = it["height"].get<float>();
-        typeAnt.type = it["type"].get<std::string>();
-        typeAnt.id = it["id"].get<std::string>();
-        typeAnt.freq = it["frequency"].get<float>();
-        vAntennas.emplace_back(typeAnt);
+        ant.lat = it["lat"].get<double>(); 
+        ant.lon = it["lon"].get<double>();
+        ant.height = it["height"].get<float>();
+        ant.id = it["id"].get<std::string>();
+        ant.freq = it["frequency"].get<float>();
+        vAntennas.emplace_back(ant);
         // vAntennas.emplace_back(typeAnt_t{
         //                             (it)["lat"].get<double>(), 
         //                             (it)["lon"].get<double>(), 

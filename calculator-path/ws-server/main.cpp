@@ -8,10 +8,11 @@
 
 using namespace ix;
 
+/* Extern variables */
 nlohmann::json sresult;
-struct pathPath corner;
-struct pathAtributes atributes;
-std::vector<antenna> vAntennas;
+struct path corner;
+struct ptAtributes atributes;
+std::vector<struct antenna> vAntennas;
 double lat_res;
 double lng_res;
 std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> model;

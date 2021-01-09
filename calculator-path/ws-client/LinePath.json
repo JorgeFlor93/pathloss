@@ -3,20 +3,12 @@
   "atributes": [
     { 
       "propagationModel":"hata",
-      "propagationEnvironment":"RURAL",
+      "propagationEnvironment":"rural",
       "resolution":"90m",
       "progress":500,
+      "type":"line",
       "antennas":[
         {
-          "type":"antenna",
-          "id":"A101",
-          "frequency":50000,
-          "lat":51.692859,
-          "lon":1,
-          "height": 20
-        },
-        {
-          "type":"antenna",
           "id":"A102",
           "frequency":500,
           "lat":51.692859,
@@ -24,9 +16,8 @@
           "height": 30
         }
       ],
-      "calcType": [
+      "corners": [
         {
-          "type":"line",
           "startPoint":[
             {
               "lat":51.692869,

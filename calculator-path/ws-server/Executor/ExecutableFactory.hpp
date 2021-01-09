@@ -13,4 +13,4 @@ public:
   Executable* create(std::string executable, nlohmann::json njatributes);
 };
 
-void setResolution(std::string resolution);
+void setResolution(std::string resolution); 
