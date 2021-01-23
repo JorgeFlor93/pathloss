@@ -8,16 +8,6 @@
 
 using namespace ix;
 
-/* Extern variables */
-nlohmann::json sresult;
-struct path corner;
-struct ptAtributes atributes;
-std::vector<struct antenna> vAntennas;
-double lat_res;
-double lng_res;
-std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> model;
-
-
 int main (int argc, char** argv){
 
   WebSocketServer server{

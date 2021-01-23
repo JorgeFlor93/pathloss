@@ -6,6 +6,7 @@
 #include <vector> 
 #include <functional>
 #include <algorithm>
+#include "Algorithm.hpp"
 #include "AbsPathloss.hpp"
 #include "Emisor.hpp"
 #include "../common.h"
@@ -14,9 +15,13 @@
 
 class PathlossLine : public AbsPathloss{
 public:
-  virtual std::vector<double> calcPathloss(const double tlat, const double tlon, const float theight, const float frequency) override final;
-  //std::vector<double> linePathloss(const double tlat, const double tlon, const float theight, const float frequency); 
+  PathlossLine(Algorithm* m, ptAtributes a) : model(m), atributes(a){};
+  virtual std::vector<double> calcPathloss(std::vector<antenna> vantenna) override final;
   virtual void send(std::vector<double> pathloss);
+private:
+  Algorithm* model;
+  ptAtributes atributes;
+  std::vector<double> resolution;
 };
 
 /* NORM */

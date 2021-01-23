@@ -5,39 +5,35 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
 
   if(executable == "pathloss"){
     /* Asigno atributos */
-    atributes.propagationModel = njatributes["propagationModel"].get<std::string>();
-    atributes.type = njatributes["type"].get<std::string>();
-    atributes.progress = njatributes["progress"].get<int>();
-    atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
+    //this->atributes.propagationModel = njatributes["propagationModel"].get<std::string>();
+    if(njatributes["propagationModel"].get<std::string>() == "fspl") this->atributes.propagationmodel = pmodel::fspl; 
+    else if(njatributes["propagationModel"].get<std::string>() == "hata") this->atributes.propagationmodel = pmodel::hata;
+    else if(njatributes["propagationModel"].get<std::string>() == "egli") this->atributes.propagationmodel = pmodel::egli;
+    
+    this->atributes.progress = njatributes["progress"].get<int>();
+    this->atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
 
-    std::string pmenv = njatributes["propagationEnvironment"].get<std::string>();
-    if(pmenv == "urban") atributes.propagationEnv = 1;
-    else if(pmenv == "suburban") atributes.propagationEnv = 2;
-    else if(pmenv == "rural") atributes.propagationEnv = 3; 
+    if(njatributes["type"].get<std::string>() == "area") this->atributes.enumtype = ptype::Area;
+    else if(njatributes["type"].get<std::string>() == "line") this->atributes.enumtype = ptype::Line;
+    else if(njatributes["type"].get<std::string>() == "point") this->atributes.enumtype = ptype::Point;
+    
+    if(njatributes["propagationEnvironment"].get<std::string>() == "urban") this->atributes.propagationEnvironment = penv::urban;
+    else if(njatributes["propagationEnvironment"].get<std::string>() == "suburban") this->atributes.propagationEnvironment = penv::suburban;
+    else if(njatributes["propagationEnvironment"].get<std::string>() == "rural") this->atributes.propagationEnvironment = penv::rural; 
 
-    atributes.resolution = njatributes["resolution"].get<std::string>();
-    setResolution(atributes.resolution);
+    this->atributes.resolution = setResolution(njatributes["resolution"].get<std::string>());
 
-    antenna ant;
-    for(nlohmann::json& it : njatributes["antennas"])
-    {
-        ant.lat = it["lat"].get<double>(); 
-        ant.lon = it["lon"].get<double>();
-        ant.height = it["height"].get<float>();
-        ant.id = it["id"].get<std::string>();
-        ant.freq = it["frequency"].get<float>();
-        vAntennas.emplace_back(ant);
-        // vAntennas.emplace_back(typeAnt_t{
-        //                             (it)["lat"].get<double>(), 
-        //                             (it)["lon"].get<double>(), 
-        //                             (it)["height"].get<float>(),
-        //                             (it)["type"].get<std::string>(),
-        //                             (it)["id"].get<std::string>(),
-        //                             (it)["frequency"].get<float>()
-        //                         });
+    for(nlohmann::json& it : njatributes["antennas"]){
+      antenna a;
+      a.id = it["id"].get<std::string>();
+      a.lat = it["lat"].get<double>(); 
+      a.lon = it["lon"].get<double>();
+      a.height = it["height"].get<float>();
+      a.freq = it["frequency"].get<float>();
+      this->vectorantennas.emplace_back(a);
     }
 
-    ExecutablePathloss* executablePathloss = new ExecutablePathloss{}; //decorador
+    ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas}; //decorador
     executablePathloss->addFixedPathloss(); 
     return executablePathloss;
   }
@@ -46,20 +42,27 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
   }
 }
 
-void setResolution(std::string resolution){
+std::vector<double> ExecutableFactory::setResolution(std::string resolution){
 
-/* Resolution (point-to-point distance) 
+/* Resolution
 * 0.00208333333 -> 225m
 * 0.0002777778 -> 30m (1 arcsec)
 * 0.000458333 -> 50m
 * 0.000808333 -> 90m (3 arcsec)
-*/
-    if(resolution == "90m"){
-        lat_res = 0.000808333;
-        lng_res = 0.000808333;
-    }
-    else if(resolution == "30m"){
-        lat_res = 0.0002777778;
-        lng_res = 0.0002777778;
-    }
+*/  
+
+  std::vector<double> rv;
+  if(resolution == "90m"){
+    rv.emplace_back(0.000808333);
+    rv.emplace_back(0.000808333);
+    return rv;
+  }
+  else if(resolution == "30m"){
+    rv.emplace_back(0.0002777778);
+    rv.emplace_back(0.0002777778);
+    return rv;
+  }
+  else{
+    return{};
+  }
 }

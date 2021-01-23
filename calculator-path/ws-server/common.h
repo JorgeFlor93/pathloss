@@ -7,25 +7,26 @@
 #include <functional>
 
 #define	KM_PER_MILE	1.609344
-#define DEG2RAD		1.74532925199e-02
+#define	METERS_PER_MILE 1609.344
+#define DEG2RAD	1.74532925199e-02
 
-struct ptAtributes {
-	float freq;
-    std::string propagationModel;
-    int propagationEnv;
-    std::string resolution;
-    std::string type; // Area, Line, Point
-    nlohmann::json edges; // Area Corners, Line points start-end, or Point position
-    int progress;
+
+enum class ptype {
+    Area,
+    Line,
+    Point
 };
 
-struct antenna{
-    double lat;
-    double lon;
-    float height;
-    std::string id;
-    float freq;
-    /* antenna(double lat, double lon, float height, std::string id, float freq) : lat(lat), lon(lon), height(height), id(id), freq(freq){} */
+enum class pmodel{
+    fspl,
+    hata,
+    egli
+};
+
+enum class penv{
+    urban,
+    suburban,
+    rural
 };
 
 struct path{ // Line or Area(corners or start-end points)
@@ -35,12 +36,23 @@ struct path{ // Line or Area(corners or start-end points)
     double lon2;
 };
 
-extern nlohmann::json sresult;
-extern double lat_res; /* resolution */
-extern double lng_res;
-extern ptAtributes atributes;
-extern std::vector<antenna> vAntennas; 
-extern path corner; //Area corners, start-end line, point position
-extern std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> model;
+struct ptAtributes {
+    //std::string propagationModel;
+    pmodel propagationmodel;
+    penv propagationEnvironment;
+    ptype enumtype; 
+    std::vector<double> resolution;
+    int progress;
+    nlohmann::json edges; // Area Corners, Line points start-end, or Point position
+    path corners;
+};
+
+struct antenna{
+    std::string id;
+    double lat;
+    double lon;
+    float height;
+    float freq;
+};
 
 #endif /* _COMMON_H_ */

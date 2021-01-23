@@ -1,41 +1,47 @@
 #include "PathlossArea.hpp"
 
-std::vector<double> PathlossArea::calcPathloss(const double tlat, const double tlon, const float theight, const float frequency)
+std::vector<double> PathlossArea::calcPathloss(std::vector<antenna> vantenna)
 {
-    int amount_lat = getDimensionLat(corner.lat1, corner.lat2);
-    int amount_lng = getDimensionLng(corner.lon1, corner.lon2);
-    int total_points = amount_lat * amount_lng;
+    int amount_lat = getDimensionLat(this->atributes.corners.lat1, this->atributes.corners.lat2);
+    int amount_lng = getDimensionLng(this->atributes.corners.lon1, this->atributes.corners.lon2);
     std::vector<double> pathlossarea;
-    pathlossarea.reserve(sizeof(double)*total_points);   
-    double start_point_lat = corner.lat1 - lat_res/2;
+    pathlossarea.reserve(sizeof(double)* (amount_lat * amount_lng));
+    double start_point_lat = this->atributes.corners.lat1 - this->atributes.resolution[0]/2;
     double current_point_lat = start_point_lat;
-    double current_point_lon = corner.lon1 + lng_res/2;
-    double loss = 0;
+    double current_point_lon = this->atributes.corners.lon1 + this->atributes.resolution[1]/2;
+    // pathlossarea.emplace_back(amount_lat);
+    // pathlossarea.emplace_back(amount_lng);
+    this->algorithm = this->model->getAlg();
     for(int i = 0; i < amount_lng; i++){
-        for(int j = 0; j < amount_lat; j++){                      
-            
+        for(int j = 0; j < amount_lat; j++){
+            for(auto& antenna : vantenna){
+            /* current_point_lon *= -1;                      
+            if(current_point_lon < 0.0) current_point_lon += 360.0; */
             /*CALCULO DE LA PERDIDA*/
-            loss = model(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, tlat, tlon, theight, frequency);
-            
+            double loss;
+            loss = this->algorithm(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, 
+                                    antenna.lat, antenna.lon, antenna.height, antenna.freq);
             pathlossarea.emplace_back(loss);
-            current_point_lat -= lat_res;
+            //pathlossarea.emplace_back(1);
+            current_point_lat -= this->atributes.resolution[0];
+            }
         }
         current_point_lat = start_point_lat;
-       current_point_lon += lng_res;
+       current_point_lon += this->atributes.resolution[1];
     }
     return pathlossarea;
 }
 
 void PathlossArea::send(std::vector<double> loss){}
 
-int getDimensionLng(double line_start_lng, double line_end_lng){
+int PathlossArea::getDimensionLng(double line_start_lng, double line_end_lng){
     double inc_lng = abs(line_start_lng - line_end_lng);
-    return round(inc_lng/lng_res);
+    return round(inc_lng/this->atributes.resolution[1]);
 }
 
-int getDimensionLat(double line_start_lat, double line_end_lat){
+int PathlossArea::getDimensionLat(double line_start_lat, double line_end_lat){
     double inc_lat = abs(line_start_lat - line_end_lat);    
-    return round(inc_lat/lat_res);
+    return round(inc_lat/this->atributes.resolution[0]);
 }
 
 // int PathlossArea::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){

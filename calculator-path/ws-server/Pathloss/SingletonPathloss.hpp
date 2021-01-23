@@ -5,6 +5,8 @@
 #include "IPathloss.hpp"
 #include "../common.h"
 #include "../json.hpp"
+#include "Algorithm.hpp"
+#include <stdlib.h>
 
 class SingletonPathloss{
 public:
@@ -14,10 +16,10 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(){ 
-        return Get().InternalGetPathloss(); 
+    static IPathloss* getPathloss(Algorithm* model, ptAtributes atributes){ 
+        return Get().InternalGetPathloss(model, atributes); 
     }
 private:
-    IPathloss* InternalGetPathloss();
+    IPathloss* InternalGetPathloss(Algorithm* model, ptAtributes atributes);
     SingletonPathloss(){};
 };

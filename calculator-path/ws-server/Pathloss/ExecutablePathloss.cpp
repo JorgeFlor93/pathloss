@@ -2,14 +2,17 @@
 #include "ExecutablePathloss.hpp"
 
 void ExecutablePathloss::addFixedPathloss(){ //crear 
-  this->pathloss = SingletonPathloss::getPathloss();
-  Algorithm exc;  
-  exc.lambdaFunction();
+  ModelFactory modelfactory;
+  this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment), this->atributes);
 }
 
 void ExecutablePathloss::execute() {  //ejecutar
-
-  this->res = this->pathloss->calcPathloss(vAntennas.front().lat, vAntennas.front().lon, vAntennas.front().height, vAntennas.front().freq);
+  if(this->pathloss == nullptr){
+    this->res = "Objeto a nullptr";
+  }
+  else{
+    this->res = this->pathloss->calcPathloss(this->vantenna);
+  }
 }
 
 nlohmann::json ExecutablePathloss::result(){ //enviar
@@ -21,3 +24,4 @@ nlohmann::json ExecutablePathloss::result(){ //enviar
 
 
 
+ 

@@ -1,26 +1,17 @@
 #include "PathlossLine.hpp"
 
-/* std::vector<double> PathlossLine::calcPathloss(){
-    std::vector<double> loss;
-    for(antenna& it : vAntennas){
-         loss = linePathloss(it.lat, it.lon, it.height, it.freq);
-         break;
-    }
-    return loss;
-} */
-
-std::vector<double> PathlossLine::calcPathloss(const double tlat, const double tlon, const float theight, const float frequency)
+std::vector<double> PathlossLine::calcPathloss(std::vector<antenna> vantenna)
 {
   
-    std::vector<double> fv(corner.lat2 - corner.lat1, corner.lon2 - corner.lon1);
+    std::vector<double> fv(this->atributes.corners.lat2 - this->atributes.corners.lat1, this->atributes.corners.lon2 - this->atributes.corners.lon1);
     
     double modul = modulo(fv); 
 
-    std::vector<double> unitvector((fv.front() / modul) * lat_res, (fv.back() / modul) * lng_res);
+    std::vector<double> unitvector((fv.front() / modul) * this->atributes.resolution[0], (fv.back() / modul) * this->atributes.resolution[1]);
 
-    std::vector<double> currentpoint(corner.lat1, corner.lon1);
+    std::vector<double> currentpoint(this->atributes.corners.lat1, this->atributes.corners.lon1);
 
-    int end = round((modul)/(lat_res));
+    int end = round((modul)/(atributes.resolution[0]));
 
     std::vector<double> point_list;
     point_list = currentpoint;
@@ -40,3 +31,4 @@ std::vector<double> PathlossLine::calcPathloss(const double tlat, const double t
 } 
 
 void PathlossLine::send(std::vector<double> loss){}
+
