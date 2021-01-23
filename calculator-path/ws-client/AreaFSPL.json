@@ -5,7 +5,7 @@
         "propagationModel":"fspl",
         "propagationEnvironment":"rural",
         "resolution":"30m",
-        "progress":500,
+        "progress":5,
         "type":"area",
         "antennas":[
           {

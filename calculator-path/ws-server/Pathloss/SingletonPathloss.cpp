@@ -1,7 +1,7 @@
 
 #include "SingletonPathloss.hpp"
 
-IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, ptAtributes atributes){ 
+IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, Emisor* emisor, ptAtributes atributes){ 
     switch (atributes.enumtype){
         case (ptype::Area):
             {
@@ -10,7 +10,7 @@ IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, ptAtributes 
             atributes.corners.lon1 = atributes.edges["topleft"][0]["lon"].get<double>();
             atributes.corners.lat2 = atributes.edges["botright"][0]["lat"].get<double>();
             atributes.corners.lon2 = atributes.edges["botright"][0]["lon"].get<double>();      
-            PathlossArea* pathlossarea = new PathlossArea(model, atributes);
+            PathlossArea* pathlossarea = new PathlossArea(model, emisor, atributes);
             return pathlossarea;
             }
             break;

@@ -1,7 +1,7 @@
 
 #include "ExecutableFactory.hpp"
 
-Executable* ExecutableFactory::create(std::string executable, nlohmann::json njatributes) {
+Executable* ExecutableFactory::create(std::string executable, nlohmann::json njatributes, Websocket* ws) {
 
   if(executable == "pathloss"){
     /* Asigno atributos */
@@ -34,7 +34,7 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
     }
 
     ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas}; //decorador
-    executablePathloss->addFixedPathloss(); 
+    executablePathloss->addFixedPathloss(ws); 
     return executablePathloss;
   }
   else {

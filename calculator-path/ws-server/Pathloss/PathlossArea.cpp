@@ -21,7 +21,8 @@ std::vector<double> PathlossArea::calcPathloss(std::vector<antenna> vantenna)
             double loss;
             loss = this->algorithm(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, 
                                     antenna.lat, antenna.lon, antenna.height, antenna.freq);
-            pathlossarea.emplace_back(loss);
+            this->emisor->collectLoss(loss);
+            //pathlossarea.emplace_back(loss);
             //pathlossarea.emplace_back(1);
             current_point_lat -= this->atributes.resolution[0];
             }
@@ -31,8 +32,6 @@ std::vector<double> PathlossArea::calcPathloss(std::vector<antenna> vantenna)
     }
     return pathlossarea;
 }
-
-void PathlossArea::send(std::vector<double> loss){}
 
 int PathlossArea::getDimensionLng(double line_start_lng, double line_end_lng){
     double inc_lng = abs(line_start_lng - line_end_lng);

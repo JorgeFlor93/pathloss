@@ -30,5 +30,3 @@ std::vector<double> PathlossLine::calcPathloss(std::vector<antenna> vantenna)
     return pathloss;
 } 
 
-void PathlossLine::send(std::vector<double> loss){}
-

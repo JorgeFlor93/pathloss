@@ -6,6 +6,8 @@
 #include "../common.h"
 #include "../json.hpp"
 #include "Algorithm.hpp"
+#include "Emisor.hpp"
+
 #include <stdlib.h>
 
 class SingletonPathloss{
@@ -16,10 +18,10 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(Algorithm* model, ptAtributes atributes){ 
-        return Get().InternalGetPathloss(model, atributes); 
+    static IPathloss* getPathloss(Algorithm* model, Emisor* emisor, ptAtributes atributes){ 
+        return Get().InternalGetPathloss(model, emisor, atributes); 
     }
 private:
-    IPathloss* InternalGetPathloss(Algorithm* model, ptAtributes atributes);
+    IPathloss* InternalGetPathloss(Algorithm* model, Emisor* emisor, ptAtributes atributes);
     SingletonPathloss(){};
 };

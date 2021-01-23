@@ -9,5 +9,4 @@ public:
     virtual std::vector<double> calcPathloss(std::vector<antenna> vantenna) override{
         return {};
     }
-    virtual void send(std::vector<double> pathloss) = 0;
 };

@@ -1,9 +1,11 @@
 
 #include "ExecutablePathloss.hpp"
 
-void ExecutablePathloss::addFixedPathloss(){ //crear 
+void ExecutablePathloss::addFixedPathloss(Websocket* ws){ //crear 
   ModelFactory modelfactory;
-  this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment), this->atributes);
+  EmisorFactory emisorfactory;
+  this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment), 
+                                                    emisorfactory.createEmisor(ws, this->atributes.progress), this->atributes);
 }
 
 void ExecutablePathloss::execute() {  //ejecutar
@@ -24,4 +26,3 @@ nlohmann::json ExecutablePathloss::result(){ //enviar
 
 
 
- 
