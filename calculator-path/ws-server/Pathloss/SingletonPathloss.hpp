@@ -18,10 +18,10 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(Algorithm* model, Emisor* emisor, ptAtributes atributes){ 
-        return Get().InternalGetPathloss(model, emisor, atributes); 
+    static IPathloss* getPathloss(Algorithm* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
+        return Get().InternalGetPathloss(model, emisor, res, corners, type); 
     }
 private:
-    IPathloss* InternalGetPathloss(Algorithm* model, Emisor* emisor, ptAtributes atributes);
+    IPathloss* InternalGetPathloss(Algorithm* model, Emisor* emisor, std::vector<double> res, path corners, ptype type);
     SingletonPathloss(){};
 };

@@ -5,5 +5,5 @@
 class IPathloss{
 public:
 virtual ~IPathloss(){};
-virtual std::vector<double> calcPathloss(std::vector<antenna> vantenna) = 0; 
+virtual void calcPathloss(std::vector<antenna> vantenna) = 0; 
 };

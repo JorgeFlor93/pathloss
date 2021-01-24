@@ -16,7 +16,7 @@
 class PathlossLine : public AbsPathloss{
 public:
   PathlossLine(Algorithm* m, ptAtributes a) : model(m), atributes(a){};
-  virtual std::vector<double> calcPathloss(std::vector<antenna> vantenna) override final;
+  virtual void calcPathloss(std::vector<antenna> vantenna) override final;
 private:
   Algorithm* model;
   ptAtributes atributes;

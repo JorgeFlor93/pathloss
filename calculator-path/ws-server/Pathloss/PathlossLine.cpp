@@ -1,6 +1,6 @@
 #include "PathlossLine.hpp"
 
-std::vector<double> PathlossLine::calcPathloss(std::vector<antenna> vantenna)
+void PathlossLine::calcPathloss(std::vector<antenna> vantenna)
 {
   
     std::vector<double> fv(this->atributes.corners.lat2 - this->atributes.corners.lat1, this->atributes.corners.lon2 - this->atributes.corners.lon1);
@@ -27,6 +27,5 @@ std::vector<double> PathlossLine::calcPathloss(std::vector<antenna> vantenna)
         currentpoint[0] = currentpoint.front() + unitvector.front();
         currentpoint[1] = currentpoint.back() + unitvector.back();;
     }
-    return pathloss;
 } 
 

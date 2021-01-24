@@ -4,25 +4,46 @@
 Executable* ExecutableFactory::create(std::string executable, nlohmann::json njatributes, Websocket* ws) {
 
   if(executable == "pathloss"){
-    /* Asigno atributos */
-    //this->atributes.propagationModel = njatributes["propagationModel"].get<std::string>();
+    /* 
+    *  Asigno 
+    * atributos 
+    */
+    
+    /* Model */
     if(njatributes["propagationModel"].get<std::string>() == "fspl") this->atributes.propagationmodel = pmodel::fspl; 
     else if(njatributes["propagationModel"].get<std::string>() == "hata") this->atributes.propagationmodel = pmodel::hata;
     else if(njatributes["propagationModel"].get<std::string>() == "egli") this->atributes.propagationmodel = pmodel::egli;
     
+    /* progress */
     this->atributes.progress = njatributes["progress"].get<int>();
-    this->atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
 
-    if(njatributes["type"].get<std::string>() == "area") this->atributes.enumtype = ptype::Area;
-    else if(njatributes["type"].get<std::string>() == "line") this->atributes.enumtype = ptype::Line;
+    /* Corners */ 
+    this->atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
+    if(njatributes["type"].get<std::string>() == "area") {
+      atributes.corners.lat1 = atributes.edges["topleft"][0]["lat"].get<double>();
+      atributes.corners.lon1 = atributes.edges["topleft"][0]["lon"].get<double>();
+      atributes.corners.lat2 = atributes.edges["botright"][0]["lat"].get<double>();
+      atributes.corners.lon2 = atributes.edges["botright"][0]["lon"].get<double>(); 
+      this->atributes.enumtype = ptype::Area;
+    }
+    else if(njatributes["type"].get<std::string>() == "line") {
+      this->atributes.enumtype = ptype::Line;
+      atributes.corners.lat1 = atributes.edges["startPoint"][0]["lat"].get<double>();
+      atributes.corners.lon1 = atributes.edges["startPoint"][0]["lon"].get<double>();
+      atributes.corners.lat2 = atributes.edges["endPoint"][0]["lat"].get<double>();
+      atributes.corners.lon2 = atributes.edges["endPoint"][0]["lon"].get<double>();
+    }
     else if(njatributes["type"].get<std::string>() == "point") this->atributes.enumtype = ptype::Point;
     
+    /* Environment */
     if(njatributes["propagationEnvironment"].get<std::string>() == "urban") this->atributes.propagationEnvironment = penv::urban;
     else if(njatributes["propagationEnvironment"].get<std::string>() == "suburban") this->atributes.propagationEnvironment = penv::suburban;
     else if(njatributes["propagationEnvironment"].get<std::string>() == "rural") this->atributes.propagationEnvironment = penv::rural; 
 
+    /* Resolution */
     this->atributes.resolution = setResolution(njatributes["resolution"].get<std::string>());
 
+    /* Antennas */
     for(nlohmann::json& it : njatributes["antennas"]){
       antenna a;
       a.id = it["id"].get<std::string>();

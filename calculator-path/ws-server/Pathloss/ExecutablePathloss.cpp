@@ -5,7 +5,8 @@ void ExecutablePathloss::addFixedPathloss(Websocket* ws){ //crear
   ModelFactory modelfactory;
   EmisorFactory emisorfactory;
   this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment), 
-                                                    emisorfactory.createEmisor(ws, this->atributes.progress), this->atributes);
+                                                    emisorfactory.createEmisor(ws, this->atributes.progress), 
+                                                      this->atributes.resolution, this->atributes.corners, this->atributes.enumtype);
 }
 
 void ExecutablePathloss::execute() {  //ejecutar
@@ -13,7 +14,7 @@ void ExecutablePathloss::execute() {  //ejecutar
     this->res = "Objeto a nullptr";
   }
   else{
-    this->res = this->pathloss->calcPathloss(this->vantenna);
+    this->pathloss->calcPathloss(this->vantenna);
   }
 }
 

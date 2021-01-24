@@ -1,5 +1,10 @@
 #include "Emisor.hpp"
 
+
+void Emisor::reservePathloss(double amount_lat, double amount_lng){
+    this->pathloss.reserve(sizeof(double) * amount_lat * amount_lng);
+}
+
 void Emisor::collectLoss(double loss){
     ++(this->cont);
     if(this->cont == this->progress){

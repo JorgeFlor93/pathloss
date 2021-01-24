@@ -8,6 +8,7 @@ class Emisor{
 public:
     Emisor(Websocket* ws, int progress): ws(ws), progress(progress){}; 
     void collectLoss(double loss);
+    void reservePathloss(double amount_lat, double amount_lng);
 private:
     Websocket* ws;
     int progress; 

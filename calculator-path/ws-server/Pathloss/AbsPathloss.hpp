@@ -6,7 +6,5 @@
 class AbsPathloss : public IPathloss{
 public:
     virtual ~AbsPathloss(){};
-    virtual std::vector<double> calcPathloss(std::vector<antenna> vantenna) override{
-        return {};
-    }
+    virtual void calcPathloss(std::vector<antenna> vantenna) override{}
 };
