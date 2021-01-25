@@ -5,7 +5,7 @@
 #include "IPathloss.hpp"
 #include "../common.h"
 #include "../json.hpp"
-#include "Algorithm.hpp"
+#include "Model.hpp"
 #include "Emisor.hpp"
 
 #include <stdlib.h>
@@ -18,10 +18,10 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(Algorithm* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
+    static IPathloss* getPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
         return Get().InternalGetPathloss(model, emisor, res, corners, type); 
     }
 private:
-    IPathloss* InternalGetPathloss(Algorithm* model, Emisor* emisor, std::vector<double> res, path corners, ptype type);
+    IPathloss* InternalGetPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type);
     SingletonPathloss(){};
 };

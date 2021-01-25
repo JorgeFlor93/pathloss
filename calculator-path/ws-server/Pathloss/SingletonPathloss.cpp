@@ -1,7 +1,7 @@
 
 #include "SingletonPathloss.hpp"
 
-IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
+IPathloss* SingletonPathloss::InternalGetPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
     switch (type){
         case (ptype::Area):
             {   
@@ -11,8 +11,8 @@ IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, Emisor* emis
             break;
         case (ptype::Line):
             {
-            //PathlossLine* pathlossline = new PathlossLine{model};
-            //return pathlossline;
+            PathlossLine* pathlossline = new PathlossLine{model, emisor, res, corners};
+            return pathlossline;
             }
             break;
         case (ptype::Point):
@@ -26,5 +26,6 @@ IPathloss* SingletonPathloss::InternalGetPathloss(Algorithm* model, Emisor* emis
             return nullptr;
             break;
     }
+    return nullptr;
 }
 

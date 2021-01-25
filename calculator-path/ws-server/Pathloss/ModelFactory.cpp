@@ -1,6 +1,6 @@
 #include "ModelFactory.hpp"
 
-Algorithm* ModelFactory::createModel(pmodel pm, penv pe){
+Model* ModelFactory::createModel(pmodel pm, penv pe){
     int propagationEnvironment;
     switch(pe){
         case(penv::urban):
@@ -15,7 +15,7 @@ Algorithm* ModelFactory::createModel(pmodel pm, penv pe){
         default:
             break;
     }
-    Algorithm* model = new Algorithm{pm, propagationEnvironment};
+    Model* model = new Model{pm, propagationEnvironment};
     model->lambdaFunction();
     return model;
 }

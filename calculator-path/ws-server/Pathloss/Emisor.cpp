@@ -1,7 +1,7 @@
 #include "Emisor.hpp"
 
 
-void Emisor::reservePathloss(double amount_lat, double amount_lng){
+void Emisor::reservePathloss(int amount_lat, int amount_lng){
     this->pathloss.reserve(sizeof(double) * amount_lat * amount_lng);
 }
 

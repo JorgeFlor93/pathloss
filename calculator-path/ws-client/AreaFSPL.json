@@ -6,7 +6,7 @@
         "propagationEnvironment":"rural",
         "resolution":"30m",
         "progress":5,
-        "type":"area",
+        "type":"line",
         "antennas":[
           {
             "id":"A101",

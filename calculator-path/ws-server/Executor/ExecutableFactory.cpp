@@ -19,21 +19,13 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
 
     /* Corners */ 
     this->atributes.edges = njatributes["corners"][0].get<nlohmann::json>();
-    if(njatributes["type"].get<std::string>() == "area") {
-      atributes.corners.lat1 = atributes.edges["topleft"][0]["lat"].get<double>();
-      atributes.corners.lon1 = atributes.edges["topleft"][0]["lon"].get<double>();
-      atributes.corners.lat2 = atributes.edges["botright"][0]["lat"].get<double>();
-      atributes.corners.lon2 = atributes.edges["botright"][0]["lon"].get<double>(); 
-      this->atributes.enumtype = ptype::Area;
-    }
-    else if(njatributes["type"].get<std::string>() == "line") {
-      this->atributes.enumtype = ptype::Line;
-      atributes.corners.lat1 = atributes.edges["startPoint"][0]["lat"].get<double>();
-      atributes.corners.lon1 = atributes.edges["startPoint"][0]["lon"].get<double>();
-      atributes.corners.lat2 = atributes.edges["endPoint"][0]["lat"].get<double>();
-      atributes.corners.lon2 = atributes.edges["endPoint"][0]["lon"].get<double>();
-    }
+    if(njatributes["type"].get<std::string>() == "area") this->atributes.enumtype = ptype::Area;
+    else if(njatributes["type"].get<std::string>() == "line") this->atributes.enumtype = ptype::Line;
     else if(njatributes["type"].get<std::string>() == "point") this->atributes.enumtype = ptype::Point;
+    atributes.corners.lat1 = atributes.edges["topleft"][0]["lat"].get<double>();
+    atributes.corners.lon1 = atributes.edges["topleft"][0]["lon"].get<double>();
+    atributes.corners.lat2 = atributes.edges["botright"][0]["lat"].get<double>();
+    atributes.corners.lon2 = atributes.edges["botright"][0]["lon"].get<double>();
     
     /* Environment */
     if(njatributes["propagationEnvironment"].get<std::string>() == "urban") this->atributes.propagationEnvironment = penv::urban;

@@ -10,9 +10,9 @@ LOSS=Pathloss/
 MODEL=Pathloss/models/
 
 main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o  ${BUILD}PathlossLine.o ${BUILD}fspl.o ${BUILD}hata.o \
-${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}Algorithm.o common.h json.hpp
+${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}Model.o common.h json.hpp
 	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o  ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Emisor.o ${BUILD}Algorithm.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Emisor.o ${BUILD}Model.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp 
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
@@ -38,8 +38,8 @@ ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp
 ${BUILD}SingletonPathloss.o: ${LOSS}SingletonPathloss.cpp  ${LOSS}SingletonPathloss.hpp
 	${CC} ${CF} -c  ${LOSS}SingletonPathloss.cpp -o ${BUILD}SingletonPathloss.o
 
-${BUILD}Algorithm.o: ${LOSS}Algorithm.cpp  ${LOSS}Algorithm.hpp ${LOSS}AbsPathloss.hpp 
-	${CC} ${CF} -c  ${LOSS}Algorithm.cpp -o ${BUILD}Algorithm.o
+${BUILD}Model.o: ${LOSS}Model.cpp  ${LOSS}Model.hpp ${LOSS}AbsPathloss.hpp 
+	${CC} ${CF} -c  ${LOSS}Model.cpp -o ${BUILD}Model.o
 
 ${BUILD}ModelFactory.o: ${LOSS}ModelFactory.cpp  ${LOSS}ModelFactory.hpp
 	${CC} ${CF} -c  ${LOSS}ModelFactory.cpp -o ${BUILD}ModelFactory.o

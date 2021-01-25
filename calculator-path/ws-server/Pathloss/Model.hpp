@@ -11,9 +11,9 @@
 #include "../json.hpp"
 #include "../common.h"
 
-class Algorithm{
+class Model{
 public:
-    Algorithm(pmodel pm, int pe) : pm(pm), propagationEnvironment(pe){}; 
+    Model(pmodel pm, int pe) : pm(pm), propagationEnvironment(pe){}; 
     void lambdaFunction();
     double calcDistance(const double tlat, const double tlon, const double lat, const double lon);
     std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> getAlg();

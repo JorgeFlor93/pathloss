@@ -1,7 +1,7 @@
 
-#include "Algorithm.hpp"
+#include "Model.hpp"
 
-void Algorithm::lambdaFunction(){
+void Model::lambdaFunction(){
 
     float rxheight = 100; // server http get area heights
     switch(this->pm){
@@ -29,7 +29,7 @@ void Algorithm::lambdaFunction(){
 }
 
 
-double Algorithm::calcDistance(const double tlat, const double tlon, const double lat, const double lon){
+double Model::calcDistance(const double tlat, const double tlon, const double lat, const double lon){
 
 	double lat1 = tlat * DEG2RAD;
 	double lon1 = tlon * DEG2RAD;
@@ -41,6 +41,6 @@ double Algorithm::calcDistance(const double tlat, const double tlon, const doubl
 	return distance * KM_PER_MILE;
 }
 
-std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Algorithm::getAlg(){
+std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::getAlg(){
     return this->algorithm;
 }
