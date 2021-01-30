@@ -5,7 +5,7 @@
       "propagationModel":"hata",
       "propagationEnvironment":"rural",
       "resolution":"30m",
-      "progress":100000,
+      "progress":4,
       "type":"area",
       "antennas":[
         {
@@ -13,7 +13,7 @@
           "frequency":1200,
           "lat":40.4087646,
           "lon":-3.7136194,
-          "height":20.5
+          "height":110.5
         }
       ],
       "corners": [

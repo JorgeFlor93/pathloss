@@ -19,7 +19,7 @@ void PathlossLine::calcPathloss(std::vector<antenna> vantenna)
     
     int end = round((modul)/(resolution[0]));
     this->emisor->reservePathloss(end, 1);
-    this->algorithm = this->model->getAlg();
+    this->algorithm = this->model->lambdaFunction();
     for(int i=0;i<end;i++){
         for(auto& antenna : vantenna){
         double loss = 0;

@@ -9,6 +9,7 @@ public:
     Emisor(Websocket* ws, int progress): ws(ws), progress(progress){}; 
     void collectLoss(double loss);
     void reservePathloss(int amount_lat, int amount_lng);
+    void sendfflush();
 private:
     Websocket* ws;
     int progress; 

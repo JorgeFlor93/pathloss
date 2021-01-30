@@ -6,18 +6,27 @@ void Emisor::reservePathloss(int amount_lat, int amount_lng){
 }
 
 void Emisor::collectLoss(double loss){
+    /* collect */
+    this->pathloss.emplace_back(loss);
     ++(this->cont);
     if(this->cont == this->progress){
         /* send */
-        this->cont = 0;
         this->data = this->pathloss;
-        this->pathloss.clear();
         nlohmann::json j_out;
         j_out["Partial"] = this->data;
         this->ws->sendPartial(j_out);
+        this->cont = 0;
+        this->pathloss.clear();
     }   
     else{
         /* collect */
-        this->pathloss.emplace_back(loss);
+        //this->pathloss.emplace_back(loss);
     }
+}
+
+void Emisor::sendfflush(){
+    this->data = this->pathloss;
+    nlohmann::json j_out;
+    j_out["fflush"] = this->data;
+    this->ws->sendPartial(j_out);
 }

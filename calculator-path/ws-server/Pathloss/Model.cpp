@@ -1,24 +1,24 @@
 
 #include "Model.hpp"
 
-void Model::lambdaFunction(){
+std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::lambdaFunction(){
 
-    float rxheight = 100; // server http get area heights
+    float rxheight = 10; // server http get area heights
     switch(this->pm){
         case(pmodel::fspl):
             this->algorithm = [this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
-                {
-                    return FSPLpathLoss(frequency, calcDistance(tlat, tlon, lat, lon));
-                };
+            {
+                return FSPLpathLoss(frequency, calcDistance(tlat, tlon, lat, lon));
+            };
             break;
         case(pmodel::hata):
-            this->algorithm = [&rxheight, this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
-            {
+            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            {  
                 return HATApathLoss(frequency, theight, rxheight, calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
             };
             break;
         case(pmodel::egli):
-            this->algorithm = [&rxheight, this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            this->algorithm = [=/* &rxheight, this */](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
                 return EgliPathLoss(frequency, theight, rxheight, calcDistance(tlat, tlon, lat, lon));
             };
@@ -26,6 +26,7 @@ void Model::lambdaFunction(){
         default:
             break;
     }
+    return this->algorithm;
 }
 
 
@@ -39,8 +40,4 @@ double Model::calcDistance(const double tlat, const double tlon, const double la
 	double distance = 3959.0 * acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos((lon1) - (lon2)));
 
 	return distance * KM_PER_MILE;
-}
-
-std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::getAlg(){
-    return this->algorithm;
 }

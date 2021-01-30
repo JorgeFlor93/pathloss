@@ -16,6 +16,6 @@ Model* ModelFactory::createModel(pmodel pm, penv pe){
             break;
     }
     Model* model = new Model{pm, propagationEnvironment};
-    model->lambdaFunction();
+    // model->lambdaFunction();
     return model;
 }
