@@ -23,6 +23,12 @@ std::function<double(const double lat, const double lon, const int pos, const do
                 return EgliPathLoss(frequency, theight, rxheight, calcDistance(tlat, tlon, lat, lon));
             };
             break; 
+        case(pmodel::pel):
+            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            {
+                return PlaneEarthLoss(calcDistance(tlat, tlon, lat, lon), theight, rxheight);
+            };
+            break;
         default:
             break;
     }

@@ -2,32 +2,32 @@
   "executable":"pathloss",
   "atributes": [
     { 
-      "propagationModel":"hata",
+      "propagationModel":"fspl",
       "propagationEnvironment":"rural",
-      "resolution":"90m",
-      "progress":500,
+      "resolution":"30m",
+      "progress":7,
       "type":"line",
       "antennas":[
         {
-          "id":"A102",
-          "frequency":500,
-          "lat":51.692859,
-          "lon":0.5,
-          "height": 30
+          "id":"1",
+          "frequency":1200,
+          "lat":40.4087646,
+          "lon":-3.7136194,
+          "height":110.5
         }
       ],
       "corners": [
         {
-          "startPoint":[
+          "startpoint":[
             {
-              "lat":51.692869,
-              "lon":1
+              "lat":40.406662,
+              "lon":-3.711253
             }
           ],
-          "endPoint":[
+          "endpoint":[
             {
-              "lat":51.69439,
-              "lon":0.5
+              "lat":40.405131,
+              "lon":-3.703121
             }
           ]
         }
@@ -35,4 +35,4 @@
     }
   ]
 }
-  
+   

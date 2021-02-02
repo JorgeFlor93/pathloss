@@ -20,7 +20,8 @@ enum class ptype {
 enum class pmodel{
     fspl,
     hata,
-    egli
+    egli,
+    pel
 };
 
 enum class penv{

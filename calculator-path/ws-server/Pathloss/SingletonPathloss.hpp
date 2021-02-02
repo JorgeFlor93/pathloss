@@ -2,6 +2,7 @@
 #include <string>
 #include "PathlossArea.hpp"
 #include "PathlossLine.hpp"
+#include "PathlossPoint.hpp"
 #include "IPathloss.hpp"
 #include "../common.h"
 #include "../json.hpp"

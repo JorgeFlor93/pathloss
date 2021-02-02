@@ -9,10 +9,10 @@ COMMUNICATIONS=Communications/
 LOSS=Pathloss/
 MODEL=Pathloss/models/
 
-main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o  ${BUILD}PathlossLine.o ${BUILD}fspl.o ${BUILD}hata.o \
-${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}Model.o common.h json.hpp
-	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o  ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}Emisor.o ${BUILD}Model.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
+main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o  ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}fspl.o ${BUILD}hata.o \
+${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Model.o common.h json.hpp
+	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o  ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}ExecutablePathloss.o \
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Emisor.o ${BUILD}Model.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp 
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
@@ -31,6 +31,9 @@ ${BUILD}PathlossArea.o: ${LOSS}PathlossArea.cpp ${LOSS}PathlossArea.hpp ${LOSS}I
 
 ${BUILD}PathlossLine.o: ${LOSS}PathlossLine.cpp ${LOSS}PathlossLine.hpp ${LOSS}IPathloss.hpp 
 	${CC} ${CF} -c ${LOSS}PathlossLine.cpp -o ${BUILD}PathlossLine.o
+
+${BUILD}PathlossPoint.o: ${LOSS}PathlossPoint.cpp ${LOSS}PathlossPoint.hpp ${LOSS}IPathloss.hpp 
+	${CC} ${CF} -c ${LOSS}PathlossPoint.cpp -o ${BUILD}PathlossPoint.o
 
 ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp 
 	${CC} ${CF} -c ${LOSS}ExecutablePathloss.cpp -o ${BUILD}ExecutablePathloss.o
@@ -55,4 +58,7 @@ ${BUILD}hata.o: ${MODEL}hata.cc ${MODEL}hata.hh
 
 ${BUILD}egli.o: ${MODEL}egli.cc ${MODEL}egli.hh
 	${CC} ${CF} -c ${MODEL}egli.cc -o ${BUILD}egli.o
+
+${BUILD}pel.o: ${MODEL}pel.cc ${MODEL}pel.hh
+	${CC} ${CF} -c ${MODEL}pel.cc -o ${BUILD}pel.o
 

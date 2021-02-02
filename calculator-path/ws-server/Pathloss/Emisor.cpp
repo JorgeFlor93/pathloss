@@ -18,10 +18,27 @@ void Emisor::collectLoss(double loss){
         this->cont = 0;
         this->pathloss.clear();
     }   
-    else{
-        /* collect */
-        //this->pathloss.emplace_back(loss);
-    }
+}
+
+void Emisor::bestLoss(double loss){
+    nlohmann::json d;
+    d = loss;
+    nlohmann::json j_out;
+    j_out["Best Loss"] = d;
+    this->ws->sendPartial(j_out);
+}
+
+void Emisor::bestAntenna(antenna a){
+    nlohmann::json d = {
+        {"id", a.id},
+        {"frequency", a.freq},
+        {"latitude", a.lat},
+        {"longitude", a.lon},
+        {"height", a.height}
+    };
+    nlohmann::json j_out;
+    j_out["Best Antenna"] = d;
+    this->ws->sendPartial(j_out);
 }
 
 void Emisor::sendfflush(){

@@ -2,10 +2,10 @@
   "executable":"pathloss",
   "atributes": [
     { 
-      "propagationModel":"fspl",
+      "propagationModel":"pel",
       "propagationEnvironment":"rural",
       "resolution":"30m",
-      "progress":4,
+      "progress":100,
       "type":"area",
       "antennas":[
         {
@@ -14,6 +14,13 @@
           "lat":40.4087646,
           "lon":-3.7136194,
           "height":110.5
+        }, 
+        {
+          "id":"2",
+          "frequency":1300,
+          "lat":40.403563,
+          "lon":-3.707962,
+          "height":150.5
         }
       ],
       "corners": [

@@ -17,9 +17,9 @@ IPathloss* SingletonPathloss::InternalGetPathloss(Model* model, Emisor* emisor, 
             break;
         case (ptype::Point):
             {
-            
+            PathlossPoint* pathlosspoint = new PathlossPoint(model, emisor, res, corners);
+            return pathlosspoint;
             }
-            return nullptr;
             break;
         
         default:

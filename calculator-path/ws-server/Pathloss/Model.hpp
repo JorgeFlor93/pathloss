@@ -8,6 +8,7 @@
 #include "models/fspl.hh"
 #include "models/hata.hh"
 #include "models/egli.hh"
+#include "models/pel.hh"
 #include "../json.hpp"
 #include "../common.h"
 
