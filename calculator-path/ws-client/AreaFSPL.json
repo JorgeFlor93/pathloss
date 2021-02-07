@@ -5,20 +5,20 @@
       "propagationModel":"pel",
       "propagationEnvironment":"rural",
       "resolution":"30m",
-      "progress":100,
+      "progress":40,
       "type":"area",
       "antennas":[
         {
           "id":"1",
           "frequency":1200,
-          "lat":40.4087646,
+          "lat":42.4087646,
           "lon":-3.7136194,
           "height":110.5
         }, 
         {
           "id":"2",
           "frequency":1300,
-          "lat":40.403563,
+          "lat":39.403563,
           "lon":-3.707962,
           "height":150.5
         }

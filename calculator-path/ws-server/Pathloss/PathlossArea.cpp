@@ -12,32 +12,30 @@ void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
     this->algorithm = this->model->lambdaFunction();
     std::string id;
     this->bestloss = 999.9;
-    for(int i = 0; i < amount_lng; i++){
-        for(int j = 0; j < amount_lat; j++){
-            for(auto& antenna : vantenna){
-            /* current_point_lon *= -1;                      
-            if(current_point_lon < 0.0) current_point_lon += 360.0; */
-            /*CALCULO DE LA PERDIDA*/ 
-            double loss;
-            loss = this->algorithm(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, 
-                                    antenna.lat, antenna.lon, antenna.height, antenna.freq);
-            if(loss < this->bestloss){
-                this->bestloss = loss;
-                id = antenna.id;
-            }
-            // this->emisor->collectLoss(loss);            
-
-            current_point_lat -= this->resolution[0];
-            }
-        }
-        current_point_lat = start_point_lat;
-       current_point_lon += this->resolution[1];
-    }
-    this->emisor->bestLoss(this->bestloss);
-    //this->emisor->sendfflush();
     for(auto& antenna : vantenna){
-        if(id == antenna.id) this->emisor->bestAntenna(antenna);
+        for(int i = 0; i < amount_lng; i++){
+            for(int j = 0; j < amount_lat; j++){
+                /*CALCULO DE LA PERDIDA*/ 
+                double loss;
+                loss = this->algorithm(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, 
+                                        antenna.lat, antenna.lon, antenna.height, antenna.freq);
+                // if(loss < this->bestloss){
+                //     this->bestloss = loss;
+                //     id = antenna.id;
+                // }
+                this->emisor->collectLoss(loss);            
+                current_point_lat -= this->resolution[0];
+            }
+            current_point_lat = start_point_lat;
+            current_point_lon += this->resolution[1];
+        }
+        //this->emisor->antennafflush(antenna.id);   
     }
+    //this->emisor->bestLoss(this->bestloss);
+    this->emisor->sendfflush();
+    // for(auto& antenna : vantenna){
+    //     if(id == antenna.id) this->emisor->bestAntenna(antenna);
+    // }
 }
 
 int PathlossArea::getDimensionLng(double line_start_lng, double line_end_lng){
