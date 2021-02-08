@@ -2,7 +2,7 @@
   "executable":"pathloss",
   "atributes": [
     { 
-      "propagationModel":"pel",
+      "propagationModel":"fspl",
       "propagationEnvironment":"rural",
       "resolution":"30m",
       "progress":40,
@@ -14,13 +14,6 @@
           "lat":42.4087646,
           "lon":-3.7136194,
           "height":110.5
-        }, 
-        {
-          "id":"2",
-          "frequency":1300,
-          "lat":39.403563,
-          "lon":-3.707962,
-          "height":150.5
         }
       ],
       "corners": [
