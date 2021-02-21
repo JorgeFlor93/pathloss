@@ -4,16 +4,7 @@
 void Emisor::reservePathloss(int amount_lat, int amount_lng){
     this->totalpoints = amount_lat * amount_lng;
     this->pathloss.reserve(sizeof(double) * amount_lat * amount_lng);
-}
-
-void Emisor::antennafflush(std::string id){
-    this->data = this->pathloss;
-    nlohmann::json j_out;
-    j_out["fflush"] = this->data;
-    // j_out["Antenna"] = {{"id", id}, {"freq", 10}};
-    this->ws->sendPartial(j_out);
-    this->pathloss.clear();
-    this->cont = 0;
+    this->ws->sendDimensions(this->totalpoints, amount_lat, amount_lng, this->vantennas.size(), this->progress);
 }
 
 void Emisor::collectLoss(double loss){
@@ -29,6 +20,17 @@ void Emisor::collectLoss(double loss){
         this->pathloss.clear();
     }   
 }
+
+void Emisor::sendfflush(){
+    this->data = this->pathloss;
+    nlohmann::json j_out;
+    j_out["result"] = this->data;
+    j_out["Progress"] = "fflush";
+    this->ws->sendPartial(j_out);
+}
+
+
+/* Para depurar */
 
 void Emisor::bestLoss(double loss){
     nlohmann::json d;
@@ -51,9 +53,12 @@ void Emisor::bestAntenna(antenna a){
     this->ws->sendPartial(j_out);
 }
 
-void Emisor::sendfflush(){
+void Emisor::antennafflush(std::string id){
     this->data = this->pathloss;
     nlohmann::json j_out;
     j_out["fflush"] = this->data;
+    // j_out["Antenna"] = {{"id", id}, {"freq", 10}};
     this->ws->sendPartial(j_out);
+    this->pathloss.clear();
+    this->cont = 0;
 }

@@ -5,13 +5,13 @@
       "propagationModel":"fspl",
       "propagationEnvironment":"rural",
       "resolution":"30m",
-      "progress":40,
+      "progress":35,
       "type":"area",
       "antennas":[
         {
           "id":"1",
           "frequency":1200,
-          "lat":42.4087646,
+          "lat":40.4087646,
           "lon":-3.7136194,
           "height":110.5
         }
@@ -20,14 +20,14 @@
         {
           "topleft":[
             {
-              "lat":40.406662,
-              "lon":-3.711253
+              "lat":40.41062,
+              "lon":-3.721253
             }
           ],
           "botright":[
             {
-              "lat":40.405131,
-              "lon":-3.703121
+              "lat":40.402624,
+              "lon":-3.7086151
             }
           ]
         }

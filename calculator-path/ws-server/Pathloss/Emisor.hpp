@@ -6,7 +6,7 @@
 
 class Emisor{
 public:
-    Emisor(Websocket* ws, int progress): ws(ws), progress(progress){
+    Emisor(Websocket* ws, int progress, std::vector<antenna> vantennas): ws(ws), progress(progress), vantennas(vantennas){
         cont = 0;
     }; 
     void collectLoss(double loss);
@@ -18,6 +18,7 @@ public:
 private:
     Websocket* ws;
     int progress; 
+    std::vector<antenna> vantennas;
     int cont;
     std::vector<double> pathloss;
     nlohmann::json data;

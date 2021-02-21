@@ -19,3 +19,16 @@ void Websocket::sendFinal () {
   std::string s_out = j_out.dump();
   this->ws->send(s_out);
 }
+
+void Websocket::sendDimensions(int tp, int height, int width, int vsize, int progress){
+  nlohmann::json j_out;
+  j_out["parameters"] = {
+    {"total_points", tp},
+    {"height", height},
+    {"width", width},
+    {"Nº Antennas", vsize},
+    {"Progress (%)", progress}
+  };
+  j_out["type"] = "dimensions";
+  this->ws->send(j_out.dump());
+}
