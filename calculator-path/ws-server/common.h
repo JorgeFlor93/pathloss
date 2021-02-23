@@ -38,7 +38,6 @@ struct path{ // Line or Area(corners or start-end points)
 };
 
 struct ptAtributes {
-    //std::string propagationModel;
     pmodel propagationmodel;
     penv propagationEnvironment;
     ptype enumtype; 

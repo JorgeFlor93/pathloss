@@ -7,5 +7,5 @@
 
 class EmisorFactory{
     public:
-    Emisor* createEmisor(Websocket* ws, int progress, std::vector<antenna> vantennas);
+    Emisor* createEmisor(Websocket* ws, int progress, std::vector<antenna> vantennas, path corners);
 };

@@ -5,7 +5,6 @@
 import asyncio
 import websockets
 import json
-from image.image import OImage
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -23,7 +22,7 @@ async def recvPathloss():
             data = json.loads(greeting) # Dictionary
             if data["type"] == "dimensions":
                 for key, value in data["parameters"].items():
-                    parameters.append(value) # [antennas, percentage, height, total_points, width]
+                    parameters.append(value) # [corners, height, antennas, percentage,  total_points, width]
             if data["type"] == "partial":
                 store_array.extend(data["result"]) # extend function instead of append or insert.
             if data["type"] == "final":
@@ -31,26 +30,24 @@ async def recvPathloss():
                 break
         return store_array, final_array, parameters
 
-async def drawImage(st, p):
+async def heatmapImage(st, p):
+   
     arr = np.array(st)
-    img = arr.reshape((p[2], p[4]))
-    plt.imshow(img)
+    img = arr.reshape((p[1], p[5]))
+    topleft = [p[0]["topleft"]["lat"], p[0]["topleft"]["lon"]]
+    botright = [p[0]["botright"]["lan"], p[0]["botright"]["lon"]]
+    plt.imshow(img, cmap='inferno_r', extent=(topleft[1],botright[1], botright[0], topleft[0]))
+    cbar = plt.colorbar()
+    cbar.ax.set_ylabel('decibels [dB]', rotation = 270, labelpad=10)
     plt.show()
 
 async def main():
     st, fa, p = await recvPathloss()  # fire and forget
+    # print(p)
+    # print(p[0]["topleft"]["lat"])
     # print(st)
-    await drawImage(st, p)
+    await heatmapImage(st, p)
     # print(final_array)
-    # image1 = OImage(store_array, parameters)
-    # image1.printImg()
+   
 
 asyncio.get_event_loop().run_until_complete(main())
-
-
-
-""" Apuntes """
-
-# print(json.dumps(data, indent=3, sort_keys=True)) # print JSON string. param1 espaciado, param2 ordenación.
-
-# asyncio.get_event_loop().run_until_complete(hello()) # Crea un bucle hasta que se termine la función hello

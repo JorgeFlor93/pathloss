@@ -20,14 +20,24 @@ void Websocket::sendFinal () {
   this->ws->send(s_out);
 }
 
-void Websocket::sendDimensions(int tp, int height, int width, int vsize, int progress){
+void Websocket::sendDimensions(int tp, int height, int width, int vsize, int progress, path corners){
   nlohmann::json j_out;
   j_out["parameters"] = {
-    {"total_points", tp},
+    {"totalpoints", tp},
     {"height", height},
     {"width", width},
-    {"Nº Antennas", vsize},
-    {"Progress (%)", progress}
+    {"numantennas", vsize},
+    {"progress", progress},
+    {"corners", {
+      {"topleft", {
+        {"lat", corners.lat1},
+        {"lon", corners.lon1}
+      }},
+      {"botright", {
+        {"lan", corners.lat2},
+        {"lon", corners.lon2}
+      }}
+    }}
   };
   j_out["type"] = "dimensions";
   this->ws->send(j_out.dump());
