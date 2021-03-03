@@ -12,15 +12,16 @@ void Websocket::sendPartial (nlohmann::json out) {
   this->ws->send(s_out);
 }
 
-void Websocket::sendFinal () {
+void Websocket::sendFinal(nlohmann::json parameters) {
   nlohmann::json j_out;
   j_out["Final"] = this->acc;
+  j_out["Parameters"] = parameters;
   j_out["type"] = "final";
   std::string s_out = j_out.dump();
   this->ws->send(s_out);
 }
 
-void Websocket::sendDimensions(int tp, int height, int width, int vsize, int progress, path corners){
+void Websocket::sendParameters(int tp, int height, int width, int vsize, int progress, path corners){
   nlohmann::json j_out;
   j_out["parameters"] = {
     {"totalpoints", tp},

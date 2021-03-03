@@ -8,9 +8,9 @@
 class Websocket {
   public:
     Websocket (std::shared_ptr<ix::WebSocket> ws);
-    void sendDimensions(int tp, int height, int width, int vsize, int progress, path corners);
+    void sendParameters(int tp, int height, int width, int vsize, int progress, path corners);
     void sendPartial(nlohmann::json out);
-    void sendFinal();
+    void sendFinal(nlohmann::json parameters);
   private:
     std::shared_ptr<ix::WebSocket> ws;
     std::vector<nlohmann::json> acc;

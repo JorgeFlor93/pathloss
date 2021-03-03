@@ -13,6 +13,7 @@ void Executor::execute(){
   ExecutableFactory executableFactory;
   Executable* executable = executableFactory.create(this->actions["executable"].get<std::string>(), this->actions["atributes"][0], this->ws); //CREAR
   executable->execute(); //EJECUTAR
-  this->ws->sendFinal();
+  this->ws->sendFinal(executable->result()); //ENVIAR
+  // this->ws->sendFinal();
 }
 

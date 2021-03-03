@@ -4,7 +4,6 @@
 void Emisor::reservePathloss(int amount_lat, int amount_lng){
     this->totalpoints = amount_lat * amount_lng;
     this->pathloss.reserve(sizeof(double) * amount_lat * amount_lng);
-    this->ws->sendDimensions(this->totalpoints, amount_lat, amount_lng, this->vantennas.size(), this->progress, this->corners);
 }
 
 void Emisor::collectLoss(double loss){

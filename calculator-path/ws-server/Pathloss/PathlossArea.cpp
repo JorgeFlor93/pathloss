@@ -1,20 +1,16 @@
 #include "PathlossArea.hpp"
 
 void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
-{
-    int amount_lat = getDimensionLat(this->corners.lat1, this->corners.lat2);
-    int amount_lng = getDimensionLng(this->corners.lon1, this->corners.lon2);
-    this->emisor->reservePathloss(amount_lat, amount_lng);
-
+{ 
+    this->emisor->reservePathloss(this->dimensions[1], this->dimensions[0]);
+    
     double start_point_lat = this->corners.lat1 - this->resolution[0]/2;
     double current_point_lat = start_point_lat;
     double current_point_lon = this->corners.lon1 + this->resolution[1]/2;
     double start_point_lon = current_point_lon;
     this->algorithm = this->model->lambdaFunction();
-   
-    
-    for(int i = 0; i < amount_lat; i++){
-        for(int j = 0; j < amount_lng; j++){
+    for(int i = 0; i < dimensions[1]; i++){
+        for(int j = 0; j < dimensions[0]; j++){
             double bestloss;
             for(auto& antenna : vantenna){
                 /*CALCULO DE LA PERDIDA*/ 
@@ -33,19 +29,43 @@ void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
     this->emisor->sendfflush();
 }
 
-int PathlossArea::getDimensionLng(double line_start_lng, double line_end_lng){
-    double inc_lng = abs(line_start_lng - line_end_lng);
-    return round(inc_lng/this->resolution[1]);
+std::vector<int> PathlossArea::setgetDimensions(path corners, std::vector<double> resolution){
+    double inc_lng = abs(corners.lon1 - corners.lon2);
+    double width = round(inc_lng/resolution[1]);
+
+    double inc_lat = abs(corners.lat1 - corners.lat2);    
+    double height = round(inc_lat/resolution[0]);
+    
+    std::vector<int> dimensions;
+    dimensions.emplace_back(width);
+    dimensions.emplace_back(height);
+    this->dimensions = dimensions;
+    return dimensions;
 }
 
-int PathlossArea::getDimensionLat(double line_start_lat, double line_end_lat){
-    double inc_lat = abs(line_start_lat - line_end_lat);    
-    return round(inc_lat/this->resolution[0]);
+nlohmann::json PathlossArea::getParameters(std::vector<antenna> vantennas, std::vector<int> dimensions, ptAtributes atributes){
+    //Crear JSON con los parámetros
+    nlohmann::json j_out;
+    j_out = {
+    {"totalpoints", dimensions[0]*dimensions[1]},
+    {"height", dimensions[1]},
+    {"width", dimensions[0]},
+    {"numantennas", vantennas.size()},
+    {"progress", atributes.progress},
+    {"corners", {
+        {"topleft", {
+        {"lat", atributes.corners.lat1},
+        {"lon", atributes.corners.lon1}
+        }},
+        {"botright", {
+        {"lat", atributes.corners.lat2},
+        {"lon", atributes.corners.lon2}
+        }}
+    }}
+    };
+    // j_out["type"] = "dimensions";
+    return j_out;
 }
-
-// int PathlossArea::getTotalpoints(const double tl_lat, const double tl_lon, const double br_lat, const double br_lon){
-//     return (getDimensionLat(tl_lat, br_lat) * getDimensionLng(tl_lon, br_lon)); // amount_lat * amount_lng;
-// }
 
 // for(auto& antenna : vantenna){
     //     this->emisor->collectLoss(this->model->calcDistance(antenna.lat, antenna.lon, current_point_lat, current_point_lon));

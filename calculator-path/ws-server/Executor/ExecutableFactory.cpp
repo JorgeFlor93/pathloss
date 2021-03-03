@@ -5,8 +5,8 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
 
   if(executable == "pathloss"){
     /* 
-    *   Asigno 
-    *  atributos 
+    *   Leer JSON y 
+    *   Asignar atributos
     */
     
     /* Model */

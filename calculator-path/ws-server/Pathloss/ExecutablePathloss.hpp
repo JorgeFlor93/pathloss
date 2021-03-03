@@ -19,12 +19,13 @@ public:
   ExecutablePathloss(ptAtributes atributes, std::vector<antenna> vantenna) : atributes(atributes), vantenna(vantenna){};
   void addFixedPathloss(Websocket* ws);
   virtual void execute() override final;
-  nlohmann::json result();
+  virtual nlohmann::json result();
 private:
   ptAtributes atributes;
   std::vector<antenna> vantenna;
   IPathloss* pathloss;
   nlohmann::json res;
+  std::vector<int> dimensions;
 };
 
 

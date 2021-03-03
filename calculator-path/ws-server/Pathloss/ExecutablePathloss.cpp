@@ -14,14 +14,14 @@ void ExecutablePathloss::execute() {  //ejecutar
     this->res = "Objeto a nullptr";
   }
   else{
-    this->pathloss->calcPathloss(this->vantenna);
+    this->dimensions = this->pathloss->setgetDimensions(this->atributes.corners, this->atributes.resolution);
+    this->pathloss->calcPathloss(this->vantenna); //Calcular Pathloss
   }
 }
 
 nlohmann::json ExecutablePathloss::result(){ //enviar
-  nlohmann::json j_out;
-  j_out["Partial"] = this->res;
-  return j_out;
+  // sendParameters
+  return this->pathloss->getParameters(this->vantenna, this->dimensions, this->atributes);
 }
 
 
