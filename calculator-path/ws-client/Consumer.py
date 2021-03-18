@@ -6,19 +6,26 @@ import asyncio
 import websockets
 import json
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import warnings
+import logging
+logger = logging.getLogger('websockets')
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
 
 async def recvPathloss():
     uri = "ws://0.0.0.0:8080"
-    async with websockets.connect(uri) as websocket:
-        with open('/home/jorge/git/pathloss/calculator-path/ws-client/AreaFSPL.json') as f:
-           data = json.loads(f.read())
-        await websocket.send(json.dumps(data))
-        store_array = []
-        parameters = []
-        final_array = []
+    store_array = []
+    parameters = []
+    final_array = []
+    async with websockets.connect(uri, max_size=1_000_000_000, ping_interval=40, ping_timeout=25, close_timeout=50) as websocket:
+        with open('/home/fpjorge/pathloss/calculator-path/ws-client/AreaFSPL.json') as f:
+            data = json.loads(f.read())
+        await websocket.send(json.dumps(data)) 
         while True:
-            greeting = await websocket.recv()       
+            greeting = await websocket.recv()              
             data = json.loads(greeting) # Dictionary
             # if data["type"] == "partial":
                 # store_array.extend(data["result"]) # extend function instead of append or insert.     
@@ -43,10 +50,10 @@ async def heatmapImage(st, p):
     plt.show()
 
 async def main():
-    st, fa, p = await recvPathloss() 
+    st, fa, p = await recvPathloss()  
     # print(p) # print parameters
     # print(st) # print array 
-    # print(fa)
+    # print(fa) # print final array
     await heatmapImage(fa, p)
 
 asyncio.get_event_loop().run_until_complete(main())

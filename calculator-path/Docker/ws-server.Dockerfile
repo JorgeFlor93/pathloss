@@ -21,7 +21,7 @@ COPY ws-server .
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
 RUN mkdir ./build 
-COPY ./build ./build
+
 RUN make 
  
 USER app

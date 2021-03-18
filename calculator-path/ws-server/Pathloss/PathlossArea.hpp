@@ -10,7 +10,6 @@
 #include "../common.h"
 #include "../Communications/Websocket.hpp"
 #include "../json.hpp"
-#include "ParametersSender.hpp"
 
 class PathlossArea : public AbsPathloss{
 public:

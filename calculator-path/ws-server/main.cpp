@@ -15,9 +15,10 @@ int main (int argc, char** argv){
     "0.0.0.0",   //SocketServer::kDefaultHost,
     20,          //SocketServer::kDefaultTcpBacklog,
     1000,        //SocketServer::kDefaultMaxConnections,
-    5,           //WebSocketServer::kDefaultHandShakeTimeoutSecs,
+    50,           //WebSocketServer::kDefaultHandShakeTimeoutSecs,
     SocketServer::kDefaultAddressFamily
   };
+  server.enablePong();
 
   server.setOnConnectionCallback( [&server] (std::shared_ptr<WebSocket> webSocket, std::shared_ptr<ConnectionState> connectionState) {
     webSocket->setOnMessageCallback( [webSocket, connectionState, &server] (const WebSocketMessagePtr msg) {

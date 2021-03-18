@@ -5,44 +5,92 @@
       "propagationModel":"hata",
       "propagationEnvironment":"rural",
       "resolution":"30m",
-      "progress":20,
+      "progress":8,
       "type":"area",
       "antennas":[
         {
           "id":"1",
           "frequency":550,
           "lat":45.4087646,
-          "lon":-3.6936194,
+          "lon":-3.6996194,
           "height":110.5
         },
         {
           "id":"2",
           "frequency":1500,
-          "lat":46.02062,
+          "lat":45.992062,
           "lon":-3.716194,
           "height":110.5
         },
         {
-          "id":"2",
+          "id":"3",
           "frequency":2500,
-          "lat":46.4155646,
-          "lon":-3.659194,
+          "lat":45.3055646,
+          "lon":-3.409194,
+          "height":110.5
+        },
+        {
+          "id":"4",
+          "frequency":2500,
+          "lat":46.005646,
+          "lon":-3.309194,
+          "height":110.5
+        },
+        {
+          "id":"5",
+          "frequency":1000,
+          "lat":45.7055646,
+          "lon":-3.609194,
+          "height":110.5
+        },
+        {
+          "id":"6",
+          "frequency":700,
+          "lat":45.686646,
+          "lon":-3.343194,
+          "height":110.5
+        },
+        {
+          "id":"7",
+          "frequency":5000,
+          "lat":45.5035646,
+          "lon":-3.239194,
+          "height":110.5
+        },
+        {
+          "id":"8",
+          "frequency":600,
+          "lat":45.8405646,
+          "lon":-3.17194,
+          "height":110.5
+        },
+        {
+          "id":"9",
+          "frequency":400,
+          "lat":45.7055646,
+          "lon":-2.999194,
+          "height":110.5
+        },
+        {
+          "id":"10",
+          "frequency":400,
+          "lat":45.67855646,
+          "lon":-2.999194,
           "height":110.5
         }
-
       ],
       "corners": [
         {
           "topleft":[
             {
-              "lat":46.42062,
-              "lon":-3.741253
+              "lat":46.02062,
+              "lon":-3.71253
             }
           ],
           "botright":[
             {
-              "lat":45.408624,
-              "lon":-3.6345532
+              "lat":45.288624,
+              "lon":-2.6545532
             }
           ]
         }
