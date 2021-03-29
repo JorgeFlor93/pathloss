@@ -12,11 +12,13 @@ std::function<double(const double lat, const double lon, const int pos, const do
             };
             break;
         case(pmodel::hata):
+        {  
             this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {  
-                return HATApathLoss(frequency, theight, rxheight, calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
+                return HATApathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
             };
             break;
+        }
         case(pmodel::egli):
             this->algorithm = [=/* &rxheight, this */](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {

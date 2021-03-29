@@ -3,19 +3,19 @@
 void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
 { 
     this->emisor->reservePathloss(this->dimensions[1], this->dimensions[0]);
+    this->algorithm = this->model->lambdaFunction();
     
     double start_point_lat = this->corners.lat1 - this->resolution[0]/2;
     double current_point_lat = start_point_lat;
     double current_point_lon = this->corners.lon1 + this->resolution[1]/2;
     double start_point_lon = current_point_lon;
-    this->algorithm = this->model->lambdaFunction();
-    for(int i = 0; i < dimensions[1]; i++){
-        for(int j = 0; j < dimensions[0]; j++){
+    for(int j = 0; j < dimensions[1]; j++){
+        for(int i = 0; i < dimensions[0]; i++){
             double bestloss;
             for(auto& antenna : vantenna){
                 /*CALCULO DE LA PERDIDA*/ 
                 double loss;
-                loss = this->algorithm(current_point_lat, current_point_lon, 1/* i + (j*amount_lat) */, 
+                loss = this->algorithm(current_point_lat, current_point_lon, i + j * dimensions[0], 
                                         antenna.lat, antenna.lon, antenna.height, antenna.freq);
                 if(antenna.id == "1") bestloss = loss;
                 else if (loss <= bestloss) bestloss = loss; 

@@ -3,12 +3,12 @@
 
 void ExecutablePathloss::addFixedPathloss(Websocket* ws){ //crear 
  
+  this->dimensions = this->pathloss->setgetDimensions(this->atributes.corners, this->atributes.resolution);
   ModelFactory modelfactory;
   EmisorFactory emisorfactory;
-  this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment), 
+  this->pathloss = SingletonPathloss::getPathloss(modelfactory.createModel(this->atributes.propagationmodel, this->atributes.propagationEnvironment, dimensions[0]*dimensions[1], this->atributes.corners), 
                                                     emisorfactory.createEmisor(ws, this->atributes.progress, this->vantenna, this->atributes.corners), 
                                                       this->atributes.resolution, this->atributes.corners, this->atributes.enumtype);
-  this->dimensions = this->pathloss->setgetDimensions(this->atributes.corners, this->atributes.resolution);
 }
 
 void ExecutablePathloss::execute() {  //ejecutar

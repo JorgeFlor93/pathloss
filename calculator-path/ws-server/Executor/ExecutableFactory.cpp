@@ -80,14 +80,19 @@ std::vector<double> ExecutableFactory::setResolution(std::string resolution){
 */  
 
   std::vector<double> rv;
-  if(resolution == "90m"){
+  if(resolution == "90m"){ // 3 arc sec
     rv.emplace_back(0.000808333);
     rv.emplace_back(0.000808333);
     return rv;
   }
-  else if(resolution == "30m"){
+  else if(resolution == "30m"){ // 1 arc sec
     rv.emplace_back(0.0002777778);
     rv.emplace_back(0.0002777778);
+    return rv;
+  }
+  else if(resolution == "250m"){  
+    rv.emplace_back(0.00208333333);
+    rv.emplace_back(0.00208333333);
     return rv;
   }
   else{

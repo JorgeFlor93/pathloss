@@ -4,7 +4,7 @@
     { 
       "propagationModel":"egli",
       "propagationEnvironment":"rural",
-      "resolution":"30m",
+      "resolution":"250m",
       "progress":45,
       "type":"area",
       "antennas":[
@@ -27,14 +27,14 @@
         {
           "topleft":[
             {
-              "lat":40.406662,
-              "lon":-3.711253
+              "lat":41.44502,
+              "lon":-3.667345
             }
           ],
           "botright":[
             {
-              "lat":40.405131,
-              "lon":-3.703121
+              "lat":14.42832,
+              "lon":-3.82973
             }
           ]
         }

@@ -8,9 +8,10 @@ RUN chown -R app:app /usr/local
 
 COPY --chown=app:app ws-lib /opt
 
+RUN rm -drf /opt/build
 RUN mkdir /opt/build
 WORKDIR /opt/build
-#RUN cmake -DUSE_TLS=1 -DUSE_WS=1 .. # WILL BUILD WS UTILITY
+RUN cmake -DUSE_TLS=1 -DUSE_WS=1 .. # WILL BUILD WS UTILITY
 RUN cmake -DUSE_TLS=1 ..
 RUN make -j
 RUN make install 

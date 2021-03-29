@@ -4,7 +4,7 @@
     { 
       "propagationModel":"hata",
       "propagationEnvironment":"rural",
-      "resolution":"30m",
+      "resolution":"250m",
       "progress":8,
       "type":"area",
       "antennas":[
@@ -89,8 +89,8 @@
           ],
           "botright":[
             {
-              "lat":45.288624,
-              "lon":-2.6545532
+              "lat":45.588624,
+              "lon":-2.9545532
             }
           ]
         }

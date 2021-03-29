@@ -4,5 +4,5 @@
 
 class ModelFactory {
 public:
-    Model* createModel(pmodel pm , penv pe);
+    Model* createModel(pmodel pm , penv pe, int tp, ptAtributes corners);
 };
