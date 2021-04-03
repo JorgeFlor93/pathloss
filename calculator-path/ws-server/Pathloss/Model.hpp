@@ -15,14 +15,13 @@
 
 class Model{
 public:
-    Model(pmodel pm, int pe, int tp, HttpGet* httpget) : pm(pm), propagationEnvironment(pe), totalpoints(tp), httpget(httpget){}; 
+    Model(pmodel pm, int pe, HttpGet* httpget) : pm(pm), propagationEnvironment(pe), httpget(httpget){}; 
     Model(pmodel pm, int pe) : pm(pm), propagationEnvironment(pe){}; 
     std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> lambdaFunction();
     double calcDistance(const double tlat, const double tlon, const double lat, const double lon);
 private:
     pmodel pm;
     int propagationEnvironment;
-    int totalpoints;
     HttpGet* httpget;
     std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> algorithm;
 };

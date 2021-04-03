@@ -1,10 +1,7 @@
 
-#pragma once;
 #include "ModelFactory.hpp"
-#include "HttpGetFactory.hpp"
-#include "HttpGet.hpp"
 
-Model* ModelFactory::createModel(pmodel pm, penv pe, int tp, path corners){
+Model* ModelFactory::createModel(pmodel pm, penv pe, path corners, Websocket* ws){
     int propagationEnvironment;
     switch(pe){
         case(penv::urban):
@@ -21,11 +18,12 @@ Model* ModelFactory::createModel(pmodel pm, penv pe, int tp, path corners){
     }
     if(pm == pmodel::egli || pm == pmodel::pel || pm == pmodel::hata){    
         HttpGetFactory httpSH;
-        HttpGet* httpget = httpSH.createHttpGet(corners);
-        Model* model = new Model{pm, propagationEnvironment, tp, httpget};
+        Model* model = new Model{pm, propagationEnvironment, httpSH.createHttpGet(corners, ws)};
+        return model;
     }
     else if(pm == pmodel::fspl){
-        Model* model = new Model{pm, propagationEnvironment;
+        Model* model = new Model{pm, propagationEnvironment};
+        return model;
     }
-    return model;
+    return NULL;
 }

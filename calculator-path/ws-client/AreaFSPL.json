@@ -2,7 +2,7 @@
   "executable":"pathloss",
   "atributes": [
     { 
-      "propagationModel":"hata",
+      "propagationModel":"fspl",
       "propagationEnvironment":"rural",
       "resolution":"250m",
       "progress":8,

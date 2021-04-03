@@ -21,7 +21,7 @@ async def recvPathloss():
     parameters = []
     final_array = []
     async with websockets.connect(uri, max_size=1_000_000_000, ping_interval=40, ping_timeout=25, close_timeout=50) as websocket:
-        with open('/home/fpjorge/pathloss/calculator-path/ws-client/AreaFSPL.json') as f:
+        with open('/home/fpjorge/pathloss/calculator-path/ws-client/prueba1.json') as f:
             data = json.loads(f.read())
         await websocket.send(json.dumps(data)) 
         while True:
@@ -30,7 +30,6 @@ async def recvPathloss():
             # if data["type"] == "partial":
                 # store_array.extend(data["result"]) # extend function instead of append or insert.     
             if data["type"] == "final":
-                # print(data["Parameters"]) # {'corners': {'botright': {'lat': 40.408624, 'lon': -3.7186151}, 'topleft': {'lat': 40.42062, 'lon': -3.741253}}, 'height': 43, 'numantennas': 3, 'progress': 35, 'totalpoints': 3483, 'width': 81}
                 parameters = data["Parameters"] 
                 # Almacenamos el array al final
                 for value in data["Final"]:

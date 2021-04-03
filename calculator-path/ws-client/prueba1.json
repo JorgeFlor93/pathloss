@@ -1,0 +1,45 @@
+{
+    "executable":"pathloss",
+    "atributes": [
+      { 
+        "propagationModel":"fspl",
+        "propagationEnvironment":"rural",
+        "resolution":"250m",
+        "progress":40,
+        "type":"area",
+        "antennas":[
+          {
+            "id":"1",
+            "frequency":1000,
+            "lat":51.2,
+            "lon":-10.1,
+            "height":110.5
+          },
+          {
+            "id":"2",
+            "frequency":1500,
+            "lat":51.5,
+            "lon":-9.9,
+            "height":110.5
+          }
+        ],
+        "corners": [
+          {
+            "topleft":[
+              {
+                "lat":51.8,
+                "lon":10.5
+              }
+            ],
+            "botright":[
+              {
+                "lat":51,
+                "lon":11.3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+      

@@ -2,8 +2,6 @@
 #include "Model.hpp"
 
 std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::lambdaFunction(){
-
-    float rxheight = 10; // server http get area heights
     switch(this->pm){
         case(pmodel::fspl):
             this->algorithm = [this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
@@ -13,6 +11,7 @@ std::function<double(const double lat, const double lon, const int pos, const do
             break;
         case(pmodel::hata):
         {  
+            this->httpget->setHeights(); // server http get area heights
             this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {  
                 return HATApathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
@@ -20,17 +19,23 @@ std::function<double(const double lat, const double lon, const int pos, const do
             break;
         }
         case(pmodel::egli):
-            this->algorithm = [=/* &rxheight, this */](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
-            {
-                return EgliPathLoss(frequency, theight, rxheight, calcDistance(tlat, tlon, lat, lon));
-            };
-            break; 
-        case(pmodel::pel):
+        {
+            this->httpget->setHeights(); 
             this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
-                return PlaneEarthLoss(calcDistance(tlat, tlon, lat, lon), theight, rxheight);
+                return EgliPathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon));
+            };
+            break; 
+        }
+        case(pmodel::pel):
+        {
+            this->httpget->setHeights();
+            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            {
+                return PlaneEarthLoss(calcDistance(tlat, tlon, lat, lon), theight, this->httpget->getHeight(pos));
             };
             break;
+        }
         default:
             break;
     }

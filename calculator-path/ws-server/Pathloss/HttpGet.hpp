@@ -7,16 +7,20 @@
 #include "../json.hpp"
 #include <typeinfo>
 #include <sstream>
+#include "../Communications/Websocket.hpp"
+#include <thread>
+#include <chrono>
 
 using namespace ix;
 
 class HttpGet{
     public:
-    HttpGet(path corners) : corners(corners){}; 
+    HttpGet(path corners, Websocket* ws) : corners(corners), ws(ws){}; 
     void setHeights();
     float getHeight(const int pos);
     private:
     path corners;
+    Websocket* ws;
     std::vector<float> heights;
 };
 

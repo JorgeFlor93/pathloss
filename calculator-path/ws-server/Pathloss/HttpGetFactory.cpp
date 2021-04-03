@@ -1,7 +1,7 @@
 
-#include "HttpGetFactory.hpp";
+#include "HttpGetFactory.hpp"
 
-HttpGet* HttpGetFactory::createHttpGet(path corners){
-    HttpGet* httpget = new HttpGet{corners};
+HttpGet* HttpGetFactory::createHttpGet(path corners, Websocket* ws){
+    HttpGet* httpget = new HttpGet{corners, ws};
     return httpget;
 }

@@ -1,5 +1,5 @@
 
-version: '3.7'
+version: '3.9'
 
 services:
 
@@ -28,4 +28,13 @@ services:
     volumes:
       - ./ws-client:/usr/share/nginx/html
     ports:
-      - 80:80
+      - 81:80
+      
+  genetic-server:
+    container_name: genetic-server
+    image: marcosbarranquero/heights-server
+    volumes:
+      - /home/fpjorge/DOCKER_HEIGHTS/data:/genetic-server/data
+      - /home/fpjorge/DOCKER_HEIGHTS/images:/genetic-server/images
+    ports:
+      - 82:80
