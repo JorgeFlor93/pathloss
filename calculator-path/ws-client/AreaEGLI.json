@@ -5,40 +5,40 @@
       "propagationModel":"egli",
       "propagationEnvironment":"rural",
       "resolution":"250m",
-      "progress":45,
+      "progress":8,
       "type":"area",
       "antennas":[
         {
           "id":"1",
-          "frequency":1200,
-          "lat":40.4087646,
-          "lon":-3.7136194,
-          "height":110.5
-        }, 
+          "frequency":800,
+          "lat":42.49280,
+          "lon":1.66546,
+          "height":10
+        },
         {
           "id":"2",
-          "frequency":1300,
-          "lat":39.403563,
-          "lon":-3.707962,
-          "height":150.5
+          "frequency":800,
+          "lat":42.60108,
+          "lon":1.27025,
+          "height":80
         }
       ],
       "corners": [
         {
           "topleft":[
             {
-              "lat":41.44502,
-              "lon":-3.667345
+              "lat":42.71638,
+              "lon":1.08734
             }
           ],
           "botright":[
             {
-              "lat":14.42832,
-              "lon":-3.82973
+              "lat":42.35778,
+              "lon":1.92677
             }
           ]
         }
       ]
     }
   ]
-}  
+}

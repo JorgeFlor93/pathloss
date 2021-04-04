@@ -18,19 +18,16 @@ RUN make install
 
 WORKDIR /home/app
 
-COPY ws-server .
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
 RUN mkdir ./build 
+COPY ws-server .
 
-RUN make 
- 
-USER app
+# USER app
 #FROM centos:8
 
 #RUN groupadd app && useradd -g app app
 #WORKDIR /home/app
 #COPY --chown=app:app --from=build /home/app/main /home/app
 
-CMD ["./main"]
-
+CMD ["./run.sh"]

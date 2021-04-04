@@ -21,7 +21,7 @@ async def recvPathloss():
     parameters = []
     final_array = []
     async with websockets.connect(uri, max_size=1_000_000_000, ping_interval=40, ping_timeout=25, close_timeout=50) as websocket:
-        with open('/home/fpjorge/pathloss/calculator-path/ws-client/prueba1.json') as f:
+        with open('/home/fpjorge/pathloss/calculator-path/ws-client/AreaEGLI.json') as f:
             data = json.loads(f.read())
         await websocket.send(json.dumps(data)) 
         while True:
