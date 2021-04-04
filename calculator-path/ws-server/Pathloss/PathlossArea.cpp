@@ -1,10 +1,37 @@
 #include "PathlossArea.hpp"
 
+void PathlossArea::onReady(std::vector<antenna> vantenna)
+{
+    double start_point_lat = this->corners.lat1 - this->resolution[0]/2;
+    double current_point_lat = start_point_lat;
+    double current_point_lon = this->corners.lon1 + this->resolution[1]/2;
+    double start_point_lon = current_point_lon;
+    for(int j = 0; j < dimensions[1]; j++){
+        for(int i = 0; i < dimensions[0]; i++){
+            double bestloss;
+            for(auto& antenna : vantenna){
+                /*CALCULO DE LA PERDIDA*/ 
+                double loss;
+                loss = this->algorithm(current_point_lat, current_point_lon, i + (j * dimensions[0]), 
+                                        antenna.lat, antenna.lon, antenna.height, antenna.freq);
+                if(antenna.id == "1") bestloss = loss;
+                else if (loss <= bestloss) bestloss = loss; 
+            }
+            this->emisor->collectLoss(bestloss); 
+            current_point_lon += this->resolution[0];
+        } 
+        current_point_lon = start_point_lon;
+        current_point_lat -= this->resolution[1];
+    }
+    this->emisor->sendfflush();
+    // this->emisor->collectLoss(dimensions[0]); 
+}
+
 void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
 { 
     this->emisor->reservePathloss(this->dimensions[1], this->dimensions[0]);
-    this->algorithm = this->model->lambdaFunction();
-    
+    this->algorithm = this->model->lambdaFunction([vantenna, this](){onReady(vantenna);});
+    [vantenna, this](){onReady(vantenna);}();
     // double start_point_lat = this->corners.lat1 - this->resolution[0]/2;
     // double current_point_lat = start_point_lat;
     // double current_point_lon = this->corners.lon1 + this->resolution[1]/2;

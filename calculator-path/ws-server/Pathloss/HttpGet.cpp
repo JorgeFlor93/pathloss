@@ -1,7 +1,27 @@
 
 #include "HttpGet.hpp"
+#include <iostream>
+#include <thread>
+#include <chrono>
 
-void HttpGet::setHeights(){
+// void HttpGet::onReady(/* callback */, const HttpResponsePtr& response)
+// {
+//     std::string payload = out->payload; // All the bytes from the response as an std::string
+//     std::cout << "Body: " << payload << std::endl;
+//     std::cout << "statuscode: " << out->statusCode << std::endl;
+//     std::cout << "error: " << static_cast<int>(out->errorCode) << std::endl;
+//     std::cout << "desc: " << out->description << std::endl;
+//     nlohmann::json d2;
+//     d2["payload"] = payload;
+//     this->ws->sendPartial(d2);
+//     nlohmann::json j_out = nlohmann::json::parse(payload);
+//     this->heights.reserve(sizeof(float) * j_out["image"]["width"].get<int>() * j_out["image"]["height"].get<int>());
+//     this->heights = j_out["data"].get<std::vector<float>>();
+
+//     /* callback */
+// }
+
+void HttpGet::setHeights(/* callback */){
 
     // nlohmann::json d;
     // d["result"] = "Hello";
@@ -37,7 +57,7 @@ void HttpGet::setHeights(){
     std::string botlonscheme ("bot_lng=");
     std::string secondlevel ("height-complete?");
     std::string scheme ("http://");
-    std::string hostname = "0.0.0.0:82";
+    std::string hostname = "genetic-server:80";
     std::string url = scheme + hostname + "/" + secondlevel + 
                       toplatscheme + to_str(toplat) + "&" + toplonscheme + to_str(toplon) + "&" + 
                       botlatscheme + to_str(botlat) + "&" + botlonscheme + to_str(botlon);
@@ -46,25 +66,26 @@ void HttpGet::setHeights(){
     d3["payload"] = url;
     this->ws->sendPartial(d3);
     // GET request
-    HttpResponsePtr out;
-    out = httpClient.get(url, args);
-    std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+    /* http.getasync(url, args, [callback](const HttpResponsePtr& response){onReady(callback, response);}) */ 
+    HttpResponsePtr out = httpClient.get(url, args);
+    // std::this_thread::sleep_for(std::chrono::milliseconds(20000));
     //
     // Result
     //
-    auto payload = out->payload; // All the bytes from the response as an std::string
+    std::string payload = out->payload; // All the bytes from the response as an std::string
+    std::cout << "Body: " << payload << std::endl;
+    std::cout << "statuscode: " << out->statusCode << std::endl;
+    std::cout << "error: " << static_cast<int>(out->errorCode) << std::endl;
+    std::cout << "desc: " << out->description << std::endl;
     nlohmann::json d2;
     d2["payload"] = payload;
     this->ws->sendPartial(d2);
-    // nlohmann::json j_out = nlohmann::json::parse(payload);
-    // nlohmann::json data;
-    // data["result"] = j_out["data"].get<std::vector<float>>();
-    // data["result"] = j_out["image"]["width"].get<int>();
-    // this->ws->sendPartial(j_out);
-    // this->heights.reserve(sizeof(float) * j_out["image"]["width"].get<int>() * j_out["image"]["height"].get<int>());
-    // this->heights = j_out["data"].get<std::vector<float>>();
+    nlohmann::json j_out = nlohmann::json::parse(payload);
+    this->heights.reserve(sizeof(float) * j_out["image"]["width"].get<int>() * j_out["image"]["height"].get<int>());
+    this->heights = j_out["data"].get<std::vector<float>>();
 }
 
 float HttpGet::getHeight(const int pos){
+    //return 10.0f;
     return this->heights[pos];
 }

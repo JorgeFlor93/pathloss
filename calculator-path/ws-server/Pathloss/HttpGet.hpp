@@ -8,8 +8,6 @@
 #include <typeinfo>
 #include <sstream>
 #include "../Communications/Websocket.hpp"
-#include <thread>
-#include <chrono>
 
 using namespace ix;
 

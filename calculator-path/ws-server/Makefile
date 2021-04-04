@@ -9,10 +9,13 @@ COMMUNICATIONS=Communications/
 LOSS=Pathloss/
 MODEL=Pathloss/models/
 
-main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGet.o ${BUILD}HttpGetFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}fspl.o ${BUILD}hata.o \
+main: ${BUILD}main
+	cp ${BUILD}main ./main
+
+${BUILD}main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGet.o ${BUILD}HttpGetFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}fspl.o ${BUILD}hata.o \
 ${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Model.o common.h json.hpp
 	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGetFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Emisor.o ${BUILD}Model.o ${BUILD}HttpGet.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o main
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Emisor.o ${BUILD}Model.o ${BUILD}HttpGet.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o ${BUILD}main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp 
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o

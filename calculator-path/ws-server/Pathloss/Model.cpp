@@ -1,17 +1,18 @@
 
 #include "Model.hpp"
 
-std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::lambdaFunction(){
+std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::lambdaFunction(/* función lambda async (callback) */){
     switch(this->pm){
         case(pmodel::fspl):
             this->algorithm = [this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
                 return FSPLpathLoss(frequency, calcDistance(tlat, tlon, lat, lon));
             };
+            /* llamar  callback*/
             break;
         case(pmodel::hata):
         {  
-            this->httpget->setHeights(); // server http get area heights
+            this->httpget->setHeights(/* funcion callback */); // server http get area heights
             this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {  
                 return HATApathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
