@@ -6,9 +6,8 @@ void PathlossLine::calcPathloss(std::vector<antenna> vantenna)
     currentpoint.emplace_back(this->corners.lat1);
     currentpoint.emplace_back(this->corners.lon1);
     
-   
     this->emisor->reservePathloss(this->longitudeline[0], 1);
-    this->algorithm = this->model->lambdaFunction();
+    this->algorithm = this->model->createAlgorithm([](){});
     for(int i=0;i<this->longitudeline[0];i++){
         for(auto& antenna : vantenna){
         this->emisor->collectLoss(this->algorithm(currentpoint[0], currentpoint[1], 1/* i + (j*amount_lat) */, 

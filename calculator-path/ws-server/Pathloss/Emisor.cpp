@@ -28,6 +28,10 @@ void Emisor::sendfflush(){
     this->ws->sendPartial(j_out);
 }
 
+void Emisor::sendAll(){
+    this->ws->sendFinal();
+}
+
 
 /* Para depurar */
 

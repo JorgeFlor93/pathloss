@@ -10,7 +10,6 @@
 #define	METERS_PER_MILE 1609.344
 #define DEG2RAD	1.74532925199e-02
 
-
 enum class ptype {
     Area,
     Line,

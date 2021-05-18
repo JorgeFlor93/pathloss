@@ -4,11 +4,11 @@
 #include <string>
 #include "../json.hpp"
 #include "../Executor/Executable.hpp"
-#include "AbsPathloss.hpp"
+#include "PathlossAbs.hpp"
 #include "PathlossArea.hpp"
 #include "PathlossLine.hpp"
 #include "../Communications/Websocket.hpp"
-#include "IPathloss.hpp"
+#include "PathlossInterface.hpp"
 #include "../common.h"
 #include "SingletonPathloss.hpp"
 #include "ModelFactory.hpp"
@@ -23,7 +23,8 @@ public:
 private:
   ptAtributes atributes;
   std::vector<antenna> vantenna;
-  IPathloss* pathloss;
+  std::vector<std::vector<double>> vlatlon;
+  PathlossInterface* pathloss;
   nlohmann::json res;
   std::vector<int> dimensions;
 };

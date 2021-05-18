@@ -1,6 +1,6 @@
 
 CC=g++ 
-CF=-Wall -g 
+CF=-Wall -g -rdynamic
 BUILD=build/
 EXECUTOR=Executor/
 CALCULATOR=Calculator/
@@ -12,9 +12,9 @@ MODEL=Pathloss/models/
 main: ${BUILD}main
 	cp ${BUILD}main ./main
 
-${BUILD}main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGet.o ${BUILD}HttpGetFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}fspl.o ${BUILD}hata.o ${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Model.o common.h json.hpp
-	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGetFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}ExecutablePathloss.o \
-	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Emisor.o ${BUILD}Model.o ${BUILD}HttpGet.o -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o ${BUILD}main
+${BUILD}main: main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o  ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}HttpGetAntenna.o ${BUILD}HttpGetArea.o ${BUILD}HttpGetAbs.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}fspl.o ${BUILD}hata.o ${BUILD}Emisor.o ${BUILD}ExecutablePathloss.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Model.o common.h json.hpp
+	${CC} ${CF} main.cpp ${BUILD}Executor.o ${BUILD}ExecutableFactory.o ${BUILD}Websocket.o ${BUILD}EmisorFactory.o ${BUILD}ModelFactory.o ${BUILD}SingletonPathloss.o ${BUILD}HttpGetAbs.o ${BUILD}PathlossArea.o ${BUILD}PathlossLine.o ${BUILD}PathlossPoint.o ${BUILD}ExecutablePathloss.o \
+	${BUILD}fspl.o ${BUILD}hata.o ${BUILD}egli.o ${BUILD}pel.o ${BUILD}Emisor.o ${BUILD}Model.o ${BUILD}HttpGetAntenna.o ${BUILD}HttpGetArea.o  -L/usr/local/lib -lixwebsocket -lssl -lcrypto -lz -lpthread -o ${BUILD}main
 
 ${BUILD}Executor.o: ${EXECUTOR}Executor.cpp ${EXECUTOR}ExecutableFactory.hpp ${EXECUTOR}Executable.hpp ${EXECUTOR}Executor.hpp 
 	${CC} ${CF} -c ${EXECUTOR}Executor.cpp -o ${BUILD}Executor.o
@@ -25,22 +25,25 @@ ${BUILD}ExecutableFactory.o: ${EXECUTOR}ExecutableFactory.cpp ${LOSS}ExecutableP
 ${BUILD}Websocket.o: ${COMMUNICATIONS}Websocket.cpp ${COMMUNICATIONS}Websocket.hpp 
 	${CC} ${CF} -c ${COMMUNICATIONS}Websocket.cpp -o ${BUILD}Websocket.o
 
-${BUILD}Emisor.o: ${LOSS}Emisor.cpp  ${LOSS}Emisor.hpp ${LOSS}AbsPathloss.hpp 
+${BUILD}Emisor.o: ${LOSS}Emisor.cpp  ${LOSS}Emisor.hpp ${LOSS}PathlossAbs.hpp 
 	${CC} ${CF} -c  ${LOSS}Emisor.cpp -o ${BUILD}Emisor.o
 
-${BUILD}HttpGet.o: ${LOSS}HttpGet.cpp  ${LOSS}HttpGet.hpp
-	${CC} ${CF} -c  ${LOSS}HttpGet.cpp -o ${BUILD}HttpGet.o
+${BUILD}HttpGetArea.o: ${LOSS}HttpGetArea.cpp  ${LOSS}HttpGetArea.hpp ${LOSS}HttpGet.hpp 
+	${CC} ${CF} -c  ${LOSS}HttpGetArea.cpp -o ${BUILD}HttpGetArea.o
 
-${BUILD}HttpGetFactory.o: ${LOSS}HttpGetFactory.cpp  ${LOSS}HttpGetFactory.hpp 
-	${CC} ${CF} -c  ${LOSS}HttpGetFactory.cpp -o ${BUILD}HttpGetFactory.o
+${BUILD}HttpGetAbs.o: ${LOSS}HttpGetAbs.cpp  ${LOSS}HttpGetAbs.hpp ${LOSS}HttpGet.hpp 
+	${CC} ${CF} -c  ${LOSS}HttpGetAbs.cpp -o ${BUILD}HttpGetAbs.o
 
-${BUILD}PathlossArea.o: ${LOSS}PathlossArea.cpp ${LOSS}PathlossArea.hpp ${LOSS}IPathloss.hpp 
+${BUILD}HttpGetAntenna.o: ${LOSS}HttpGetAntenna.cpp  ${LOSS}HttpGetAntenna.hpp ${LOSS}HttpGet.hpp 
+	${CC} ${CF} -c  ${LOSS}HttpGetAntenna.cpp -o ${BUILD}HttpGetAntenna.o
+
+${BUILD}PathlossArea.o: ${LOSS}PathlossArea.cpp ${LOSS}PathlossArea.hpp ${LOSS}PathlossInterface.hpp 
 	${CC} ${CF} -c ${LOSS}PathlossArea.cpp -o ${BUILD}PathlossArea.o
 
-${BUILD}PathlossLine.o: ${LOSS}PathlossLine.cpp ${LOSS}PathlossLine.hpp ${LOSS}IPathloss.hpp 
+${BUILD}PathlossLine.o: ${LOSS}PathlossLine.cpp ${LOSS}PathlossLine.hpp ${LOSS}PathlossInterface.hpp 
 	${CC} ${CF} -c ${LOSS}PathlossLine.cpp -o ${BUILD}PathlossLine.o
 
-${BUILD}PathlossPoint.o: ${LOSS}PathlossPoint.cpp ${LOSS}PathlossPoint.hpp ${LOSS}IPathloss.hpp 
+${BUILD}PathlossPoint.o: ${LOSS}PathlossPoint.cpp ${LOSS}PathlossPoint.hpp ${LOSS}PathlossInterface.hpp 
 	${CC} ${CF} -c ${LOSS}PathlossPoint.cpp -o ${BUILD}PathlossPoint.o
 
 ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp 
@@ -49,7 +52,7 @@ ${BUILD}ExecutablePathloss.o: ${LOSS}ExecutablePathloss.cpp
 ${BUILD}SingletonPathloss.o: ${LOSS}SingletonPathloss.cpp  ${LOSS}SingletonPathloss.hpp
 	${CC} ${CF} -c  ${LOSS}SingletonPathloss.cpp -o ${BUILD}SingletonPathloss.o
 
-${BUILD}Model.o: ${LOSS}Model.cpp  ${LOSS}Model.hpp ${LOSS}AbsPathloss.hpp 
+${BUILD}Model.o: ${LOSS}Model.cpp  ${LOSS}Model.hpp ${LOSS}PathlossAbs.hpp 
 	${CC} ${CF} -c  ${LOSS}Model.cpp -o ${BUILD}Model.o
 
 ${BUILD}ModelFactory.o: ${LOSS}ModelFactory.cpp  ${LOSS}ModelFactory.hpp

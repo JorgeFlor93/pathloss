@@ -1,10 +1,7 @@
 #include "PathlossArea.hpp"
 
-void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
-{ 
-    this->emisor->reservePathloss(this->dimensions[1], this->dimensions[0]);
-    this->algorithm = this->model->lambdaFunction();
-    
+void PathlossArea::onReady(std::vector<antenna> vantenna){
+    std::cout << "onready1" << std::endl; 
     double start_point_lat = this->corners.lat1 - this->resolution[0]/2;
     double current_point_lat = start_point_lat;
     double current_point_lon = this->corners.lon1 + this->resolution[1]/2;
@@ -26,7 +23,19 @@ void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
         current_point_lon = start_point_lon;
         current_point_lat -= this->resolution[1];
     }
+    std::cout << "onready" << std::endl; 
     this->emisor->sendfflush();
+    //
+    // SEND ALL COLLECT
+    //
+    this->emisor->sendAll();
+}
+
+void PathlossArea::calcPathloss(std::vector<antenna> vantenna)
+{ 
+    this->emisor->reservePathloss(this->dimensions[1], this->dimensions[0]);
+     std::cout << "calcpath" << std::endl;   
+    this->algorithm = this->model->createAlgorithm([vantenna, this](){this->onReady(vantenna);});
 }
 
 std::vector<int> PathlossArea::setgetDimensions(path corners, std::vector<double> resolution){
@@ -62,20 +71,6 @@ nlohmann::json PathlossArea::getParameters(std::vector<antenna> vantennas, std::
         {"lon", atributes.corners.lon2}
         }}
     }}
-    };
-    // j_out["type"] = "dimensions";
+    };                        
     return j_out;
 }
-
-// for(auto& antenna : vantenna){
-    //     this->emisor->collectLoss(this->model->calcDistance(antenna.lat, antenna.lon, current_point_lat, current_point_lon));
-    //     this->emisor->collectLoss(antenna.lat);
-    //     this->emisor->collectLoss(antenna.lon);
-    //     this->emisor->collectLoss(antenna.height);
-    //     this->emisor->collectLoss(antenna.freq);
-    // }
-    // this->emisor->collectLoss(current_point_lat);
-    // this->emisor->collectLoss(current_point_lon);
-    // this->emisor->collectLoss(this->resolution[0]);
-    // this->emisor->collectLoss(amount_lat);
-    // this->emisor->collectLoss(amount_lng);

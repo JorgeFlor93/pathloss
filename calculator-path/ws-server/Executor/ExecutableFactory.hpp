@@ -12,7 +12,7 @@
 
 class ExecutableFactory{
 public:
-  Executable* create(std::string executable, nlohmann::json njatributes, Websocket* ws);
+  void create(std::string executable, nlohmann::json njatributes, Websocket* ws, std::function<void(Executable*)> onReady);
   std::vector<double> setResolution(std::string resolution); 
 private:
   std::vector<antenna> vectorantennas;

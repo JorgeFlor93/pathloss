@@ -1,32 +1,12 @@
-
 #pragma once
-#include "../common.h"
-#include <string>
-#include <vector> 
-#include <ixwebsocket/IXHttpClient.h>
-#include "../json.hpp"
-#include <typeinfo>
-#include <sstream>
-#include "../Communications/Websocket.hpp"
-#include <thread>
-#include <chrono>
-
-using namespace ix;
+#include <ixwebsocket/IXHttp.h>
+#include <functional>
+#include <vector>
 
 class HttpGet{
     public:
-    HttpGet(path corners, Websocket* ws) : corners(corners), ws(ws){}; 
-    void setHeights();
-    float getHeight(const int pos);
-    private:
-    path corners;
-    Websocket* ws;
-    std::vector<float> heights;
+    // virtual ~HttpGet(){};
+    using OnReady = std::function<void(void)>;
+    virtual void request(HttpGet::OnReady onReady) = 0;
+    virtual const std::vector<float>& get() const = 0;
 };
-
-template < typename Type > std::string to_str (const Type & t)
-{
-  std::ostringstream os;
-  os << t;
-  return os.str ();
-}

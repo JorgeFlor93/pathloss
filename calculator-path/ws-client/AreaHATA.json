@@ -5,22 +5,29 @@
       "propagationModel":"hata",
       "propagationEnvironment":"rural",
       "resolution":"250m",
-      "progress":8,
+      "progress":5,
       "type":"area",
       "antennas":[
         {
           "id":"1",
-          "frequency":800,
-          "lat":42.49280,
-          "lon":1.66546,
-          "height":10
+          "frequency":1550,
+          "lat":42.495,
+          "lon":1.212317,
+          "height":2200
         },
         {
           "id":"2",
           "frequency":800,
-          "lat":42.60108,
-          "lon":1.27025,
-          "height":80
+          "lat":42.407,
+          "lon":1.802130,
+          "height":2000
+        },
+        {
+          "id":"3",
+          "frequency":1550,
+          "lat":42.421,
+          "lon":1.470123,
+          "height":2800
         }
       ],
       "corners": [

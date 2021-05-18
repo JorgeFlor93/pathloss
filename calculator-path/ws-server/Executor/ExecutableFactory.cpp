@@ -1,7 +1,10 @@
 
 #include "ExecutableFactory.hpp"
+#include "../Pathloss/HttpGetAntenna.hpp"
+#include "../Pathloss/HttpGet.hpp"
+#include <iostream>
 
-Executable* ExecutableFactory::create(std::string executable, nlohmann::json njatributes, Websocket* ws) {
+void ExecutableFactory::create(std::string executable, nlohmann::json njatributes, Websocket* ws, std::function<void(Executable*)> onReady) {
 
   if(executable == "pathloss"){
     /* 
@@ -51,6 +54,7 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
     this->atributes.resolution = setResolution(njatributes["resolution"].get<std::string>());
 
     /* Antennas */
+    std::vector<std::vector<double>> vlatlon;
     for(nlohmann::json& it : njatributes["antennas"]){
       antenna a;
       a.id = it["id"].get<std::string>();
@@ -58,15 +62,28 @@ Executable* ExecutableFactory::create(std::string executable, nlohmann::json nja
       a.lon = it["lon"].get<double>();
       a.height = it["height"].get<float>();
       a.freq = it["frequency"].get<float>();
+
+      std::vector<double> geoAntennaloc;
+      geoAntennaloc.emplace_back(a.lat);
+      geoAntennaloc.emplace_back(a.lon);
+      vlatlon.emplace_back(geoAntennaloc);
+
       this->vectorantennas.emplace_back(a);
     }
-
-    ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas}; //decorador
-    executablePathloss->addFixedPathloss(ws); 
-    return executablePathloss;
-  }
-  else {
-    return nullptr;
+      /* Get Tx Heights */
+    HttpGetAntenna httpGetAntenna{vlatlon};
+    httpGetAntenna.request([this, &onReady, &ws, &httpGetAntenna](){
+      const std::vector<float> antheights = httpGetAntenna.get();
+      int c = 0;
+      for(auto& antenna : this->vectorantennas){
+        antenna.height += antheights[c++];
+        std::cout << antenna.height << std::endl;
+      }
+      /* Decorator */
+      ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas}; //decorador
+      executablePathloss->addFixedPathloss(ws); 
+      onReady(executablePathloss);
+    });
   }
 }
 

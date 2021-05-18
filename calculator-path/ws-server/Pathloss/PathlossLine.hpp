@@ -5,13 +5,13 @@
 #include <functional>
 #include <math.h>
 #include "Model.hpp"
-#include "AbsPathloss.hpp"
+#include "PathlossAbs.hpp"
 #include "Emisor.hpp"
 #include "../common.h"
 #include "../Communications/Websocket.hpp"
 #include "../json.hpp"
 
-class PathlossLine : public AbsPathloss{
+class PathlossLine : public PathlossAbs{
 public:
   PathlossLine(Model* m, Emisor* e, std::vector<double> r, path c) : model(m), emisor(e), resolution(r), corners(c){};
   virtual void calcPathloss(std::vector<antenna> antenna) override final;

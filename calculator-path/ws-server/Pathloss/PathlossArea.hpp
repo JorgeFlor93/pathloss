@@ -4,17 +4,18 @@
 #include <vector> 
 #include <functional>
 #include <math.h>
-#include "AbsPathloss.hpp"
+#include "PathlossAbs.hpp"
 #include "Emisor.hpp"
 #include "Model.hpp"
 #include "../common.h"
 #include "../Communications/Websocket.hpp"
 #include "../json.hpp"
 
-class PathlossArea : public AbsPathloss{
+class PathlossArea : public PathlossAbs{
 public:
   PathlossArea(Model* model, Emisor* emisor, std::vector<double> res, path corners) : model(model), emisor(emisor), resolution(res), corners(corners){};
-  virtual void calcPathloss(std::vector<antenna> vantenna) override final;
+  void onReady(std::vector<antenna> vantenna);
+  virtual void calcPathloss(std::vector<antenna>/* & */ vantenna) override final;
   virtual std::vector<int> setgetDimensions(path corners, std::vector<double> resolution) override final;
   virtual nlohmann::json getParameters(std::vector<antenna> vantennas, std::vector<int> dimensions, ptAtributes atributes) override final;
 private:

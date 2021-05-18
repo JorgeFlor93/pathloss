@@ -1,45 +1,59 @@
 
 #include "Model.hpp"
+#include <iostream>
+#include "models/fspl.hh"
+#include "models/hata.hh"
+#include "models/egli.hh"
+#include "models/pel.hh"
 
-std::function<double(const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)> Model::lambdaFunction(){
+class ExecuteOnExit
+{
+private:
+    using ToExecute = std::function<void(void)>;
+    ToExecute toExecute;
+public:
+    ExecuteOnExit(ToExecute&& toExecute) : toExecute(std::move(toExecute)){}
+    ~ExecuteOnExit(){std::cout << "preexecute" << std::endl; toExecute(); std::cout << "\npostexecute\n" << std::endl;}
+};
+
+Model::Algorithm Model::createAlgorithm(HttpGet::OnReady onReady)
+{
+    std::cout << "1" << std::endl;   
     switch(this->pm){
         case(pmodel::fspl):
-            this->algorithm = [this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+        {
+            return  [this](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
                 return FSPLpathLoss(frequency, calcDistance(tlat, tlon, lat, lon));
             };
-            break;
+        }
         case(pmodel::hata):
         {  
-            this->httpget->setHeights(); // server http get area heights
-            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            ExecuteOnExit e([this, onReady](){this->httpget->request(onReady);}); // request de las alturas del área
+            return [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {  
-                return HATApathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
+                return HATApathLoss(frequency, theight, this->httpget->get()[pos], calcDistance(tlat, tlon, lat, lon), this->propagationEnvironment);
             };
-            break;
         }
         case(pmodel::egli):
         {
-            this->httpget->setHeights(); 
-            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            this->httpget->request(onReady); 
+            return [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
-                return EgliPathLoss(frequency, theight, this->httpget->getHeight(pos), calcDistance(tlat, tlon, lat, lon));
+                return EgliPathLoss(frequency, theight, this->httpget->get()[pos], calcDistance(tlat, tlon, lat, lon));
             };
-            break; 
         }
         case(pmodel::pel):
         {
-            this->httpget->setHeights();
-            this->algorithm = [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
+            this->httpget->request(onReady);
+            return  [=](const double lat, const double lon, const int pos, const double tlat, const double tlon, const float theight, const float frequency)
             {
-                return PlaneEarthLoss(calcDistance(tlat, tlon, lat, lon), theight, this->httpget->getHeight(pos));
+                return PlaneEarthLoss(calcDistance(tlat, tlon, lat, lon), theight, this->httpget->get()[pos]);
             };
-            break;
         }
-        default:
-            break;
     }
-    return this->algorithm;
+    std::cout << "Modelo no encontrado" << std::endl;
+    return nullptr;
 }
 
 

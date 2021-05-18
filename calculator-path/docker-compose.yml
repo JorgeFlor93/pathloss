@@ -23,8 +23,6 @@ services:
     build:
       context: ./
       dockerfile: Docker/ws-client.Dockerfile
-    depends_on: 
-      - ws-server
     volumes:
       - ./ws-client:/usr/share/nginx/html
     ports:

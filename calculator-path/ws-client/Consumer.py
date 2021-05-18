@@ -2,6 +2,7 @@
 
 # WS client example
 
+import sys
 import asyncio
 import websockets
 import json
@@ -9,6 +10,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import warnings
 import logging
 logger = logging.getLogger('websockets')
@@ -20,18 +22,19 @@ async def recvPathloss():
     store_array = []
     parameters = []
     final_array = []
-    async with websockets.connect(uri, max_size=1_000_000_000, ping_interval=40, ping_timeout=25, close_timeout=50) as websocket:
-        with open('/home/fpjorge/pathloss/calculator-path/ws-client/AreaEGLI.json') as f:
+    async with websockets.connect(uri, max_size=None, ping_interval=20, ping_timeout=20, close_timeout=50) as websocket:
+        model = await switchModel()
+        with open('/home/fpjorge/pathloss/calculator-path/ws-client/' + str(model)) as f:
             data = json.loads(f.read())
         await websocket.send(json.dumps(data)) 
         while True:
             greeting = await websocket.recv()              
             data = json.loads(greeting) # Dictionary
+            if data["type"] == "initial":
+                parameters = data["Parameters"]
             # if data["type"] == "partial":
                 # store_array.extend(data["result"]) # extend function instead of append or insert.     
             if data["type"] == "final":
-                parameters = data["Parameters"] 
-                # Almacenamos el array al final
                 for value in data["Final"]:
                     final_array.extend(value["result"])                   
                 break
@@ -43,16 +46,31 @@ async def heatmapImage(st, p):
     img = arr.reshape((p["height"], p["width"]))
     topleft = [p["corners"]["topleft"]["lat"], p["corners"]["topleft"]["lon"]]
     botright = [p["corners"]["botright"]["lat"], p["corners"]["botright"]["lon"]]
-    plt.imshow(img, cmap='inferno_r', extent=(topleft[1],botright[1], botright[0], topleft[0]))
-    cbar = plt.colorbar()
+    ax = plt.subplot()
+    im = ax.imshow(img, cmap='inferno_r', extent=(topleft[1],botright[1], botright[0], topleft[0]))
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = plt.colorbar(im, cax=cax)
     cbar.ax.set_ylabel('decibels [dB]', rotation = 270, labelpad=10)
+    ax.set_title('Pathloss heatmap with empirics algorithm')
     plt.show()
+
+async def switchModel():
+    model = sys.argv[1]
+    if model == "hata":
+        ofile = "AreaHATA.json"
+    elif model == "fspl":
+        ofile = "AreaFSPL.json"
+    elif model == "egli":
+        ofile = "AreaEGLI.json"
+    elif model == "prueba":
+        ofile = "prueba1.json"
+    else:
+        ofile = ""
+    return ofile
 
 async def main():
     st, fa, p = await recvPathloss()  
-    # print(p) # print parameters
-    # print(st) # print array 
-    # print(fa) # print final array
     await heatmapImage(fa, p)
 
 asyncio.get_event_loop().run_until_complete(main())

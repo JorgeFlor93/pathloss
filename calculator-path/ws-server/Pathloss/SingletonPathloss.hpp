@@ -2,7 +2,7 @@
 #include "PathlossArea.hpp"
 #include "PathlossLine.hpp"
 #include "PathlossPoint.hpp"
-#include "IPathloss.hpp"
+#include "PathlossInterface.hpp"
 #include "../common.h"
 #include "../json.hpp"
 #include "Model.hpp"
@@ -17,10 +17,10 @@ public:
         static SingletonPathloss instance; 
         return instance;
     }
-    static IPathloss* getPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
+    static PathlossInterface* getPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type){ 
         return Get().InternalGetPathloss(model, emisor, res, corners, type); 
     }
 private:
-    IPathloss* InternalGetPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type);
+    PathlossInterface* InternalGetPathloss(Model* model, Emisor* emisor, std::vector<double> res, path corners, ptype type);
     SingletonPathloss(){};
 };

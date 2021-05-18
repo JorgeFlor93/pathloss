@@ -11,9 +11,12 @@ void Executor::setActions(std::string actions) {
 
 void Executor::execute(){
   ExecutableFactory executableFactory;
-  Executable* executable = executableFactory.create(this->actions["executable"].get<std::string>(), this->actions["atributes"][0], this->ws); //CREAR
-  executable->execute(); //EJECUTAR
-  this->ws->sendFinal(executable->result()); //ENVIAR
+  executableFactory.create(
+    this->actions["executable"].get<std::string>(), 
+    this->actions["atributes"][0],
+    this->ws, 
+    [](Executable* executable){executable->execute();
+  }); //CREAR
+  std::cout << "final" << std::endl; 
   // this->ws->sendFinal();
 }
-
