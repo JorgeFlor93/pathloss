@@ -27,4 +27,3 @@ private:
   double bestloss;
   std::vector<int> dimensions;
 };
-
