@@ -1,3 +1,10 @@
+#### Aplicación para el cálculo de la propagación mediante algoritmos heurísticos
+
+Jorge Flordelís Prieto
+
+![Entorno_ejecución](https://user-images.githubusercontent.com/47349686/124378565-4da6d280-dcb2-11eb-9cc1-1fe772640a3b.png)
+
+
 #### Este documento resume el proyecto a desarrollar
 ------
 ### Funcionalidades a lograr
