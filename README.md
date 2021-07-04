@@ -1,7 +1,5 @@
 #### Aplicación para el cálculo de la propagación mediante algoritmos heurísticos
 
-Jorge Flordelís Prieto
-
 ![Entorno_ejecución](https://user-images.githubusercontent.com/47349686/124378565-4da6d280-dcb2-11eb-9cc1-1fe772640a3b.png)
 
 
@@ -113,3 +111,6 @@ También vamos a desechar la funcionalidad de devolver la información en forma 
 Como nueva funcionalidad está la Dockerización de la herramienta. La herramienta va a ser levantada en varios contenedores.
 
 Partimos de un servidor-web, servidores websockets y clientes websockets. Todos ellos han de ser adaptados a la necesidad de la futura aplicación, es decir, necesita modificación para que trabaje con información de geolocalizacón, latitud y longitud, en forma de vector.
+
+
+                                                                                                Jorge Flordelís Prieto
