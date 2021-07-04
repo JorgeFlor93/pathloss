@@ -112,5 +112,6 @@ Como nueva funcionalidad está la Dockerización de la herramienta. La herramien
 
 Partimos de un servidor-web, servidores websockets y clientes websockets. Todos ellos han de ser adaptados a la necesidad de la futura aplicación, es decir, necesita modificación para que trabaje con información de geolocalizacón, latitud y longitud, en forma de vector.
 
-
-                                                                                                Jorge Flordelís Prieto
+***
+Jorge Flordelís Prieto
+***
