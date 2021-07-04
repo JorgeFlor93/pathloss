@@ -10,6 +10,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "RandomIdClient.hpp"
 
 
 void handler(int sig) {
@@ -46,8 +47,10 @@ int main (int argc, char** argv){
   server.setOnConnectionCallback( [&server] (std::shared_ptr<WebSocket> webSocket, std::shared_ptr<ConnectionState> connectionState) {
     webSocket->setOnMessageCallback( [webSocket, connectionState, &server] (const WebSocketMessagePtr msg) {
       if (msg->type == WebSocketMessageType::Message) {
-        Executor executor;
-        executor.setWebSocket(new Websocket(webSocket));
+        RandomIdClient* r = new RandomIdClient{};
+        int n = r->getRandom();
+        Executor executor{n};
+        executor.setWebSocket(new Websocket(webSocket, n));
         executor.setActions(msg->str);
         executor.execute();
       }

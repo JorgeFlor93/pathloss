@@ -1,0 +1,37 @@
+{
+    "executable":"pathloss",
+    "atributes": [
+      { 
+        "propagationModel":"hata",
+        "propagationEnvironment":"rural",
+        "resolution":"250m",
+        "progress":40,
+        "type":"area",
+        "antennas":[
+          {
+            "id":"1",
+            "frequency":450,
+            "lat":40.402770,
+            "lon":-3.710738,
+            "height":20
+          }
+        ],
+        "corners": [
+          {
+            "topleft":[
+              {
+                "lat":40.652770,
+                "lon":-4.01
+              }
+            ],
+            "botright":[
+              {
+                "lat":40.152770,
+                "lon":-3.50738
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

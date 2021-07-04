@@ -1,20 +1,34 @@
 
 #include "ExecutableFactory.hpp"
-#include "../Pathloss/HttpGetAntenna.hpp"
-#include "../Pathloss/HttpGet.hpp"
+#include "../Communications/HttpGetAntenna.hpp"
+#include "../Communications/HttpGet.hpp"
 #include <iostream>
 
 void ExecutableFactory::create(std::string executable, nlohmann::json njatributes, Websocket* ws, std::function<void(Executable*)> onReady) {
 
   if(executable == "pathloss"){
+    std::cout << this->n <<": Parsing parameters" << std::endl; 
     /* 
     *   Leer JSON y 
     *   Asignar atributos
     */
     
     /* Model */
-    if(njatributes["propagationModel"].get<std::string>() == "fspl") this->atributes.propagationmodel = pmodel::fspl; 
+    bool aux = true;
+    if(njatributes["propagationModel"].get<std::string>() == "fspl") {
+      this->atributes.propagationmodel = pmodel::fspl; 
+      aux = false;
+    }
+    else if(njatributes["propagationModel"].get<std::string>() == "sui") this->atributes.propagationmodel = pmodel::sui;
+    else if(njatributes["propagationModel"].get<std::string>() == "soil") {
+      this->atributes.propagationmodel = pmodel::soil;
+      aux = false;    
+    }
+    else if(njatributes["propagationModel"].get<std::string>() == "ecc33") this->atributes.propagationmodel = pmodel::ecc33;
+    else if(njatributes["propagationModel"].get<std::string>() == "itwom") this->atributes.propagationmodel = pmodel::itwom;
+    else if(njatributes["propagationModel"].get<std::string>() == "ericcson") this->atributes.propagationmodel = pmodel::ericcson;
     else if(njatributes["propagationModel"].get<std::string>() == "hata") this->atributes.propagationmodel = pmodel::hata;
+    else if(njatributes["propagationModel"].get<std::string>() == "cost") this->atributes.propagationmodel = pmodel::cost;
     else if(njatributes["propagationModel"].get<std::string>() == "egli") this->atributes.propagationmodel = pmodel::egli;
     else if(njatributes["propagationModel"].get<std::string>() == "pel") this->atributes.propagationmodel = pmodel::pel;
     
@@ -33,7 +47,7 @@ void ExecutableFactory::create(std::string executable, nlohmann::json njatribute
     else if(njatributes["type"].get<std::string>() == "line"){
       this->atributes.enumtype = ptype::Line;
       atributes.corners.lat1 = atributes.edges["startpoint"][0]["lat"].get<double>();
-      atributes.corners.lon1 = atributes.edges["starpoint"][0]["lon"].get<double>();
+      atributes.corners.lon1 = atributes.edges["startpoint"][0]["lon"].get<double>();
       atributes.corners.lat2 = atributes.edges["endpoint"][0]["lat"].get<double>();
       atributes.corners.lon2 = atributes.edges["endpoint"][0]["lon"].get<double>();
     }
@@ -70,20 +84,27 @@ void ExecutableFactory::create(std::string executable, nlohmann::json njatribute
 
       this->vectorantennas.emplace_back(a);
     }
-      /* Get Tx Heights */
-    HttpGetAntenna httpGetAntenna{vlatlon};
-    httpGetAntenna.request([this, &onReady, &ws, &httpGetAntenna](){
-      const std::vector<float> antheights = httpGetAntenna.get();
-      int c = 0;
-      for(auto& antenna : this->vectorantennas){
-        antenna.height += antheights[c++];
-        std::cout << antenna.height << std::endl;
+      if(!aux){
+        ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas, this->n}; //decorador
+        executablePathloss->addFixedPathloss(ws); 
+        onReady(executablePathloss);
       }
-      /* Decorator */
-      ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas}; //decorador
-      executablePathloss->addFixedPathloss(ws); 
-      onReady(executablePathloss);
-    });
+      else{
+        /* Get Tx Heights */
+        HttpGetAntenna httpGetAntenna{vlatlon, this->n};
+        httpGetAntenna.request([this, &onReady, &ws, &httpGetAntenna](){
+          const std::vector<float> antheights = httpGetAntenna.get();
+          int c = 0;
+          for(auto& antenna : this->vectorantennas){
+            antenna.height += antheights[c++];
+            // std::cout << antenna.height << std::endl;
+          }
+          /* Decorator */
+          ExecutablePathloss* executablePathloss = new ExecutablePathloss{this->atributes, this->vectorantennas, this->n}; //decorador
+          executablePathloss->addFixedPathloss(ws); 
+          onReady(executablePathloss);
+        });
+      }
   }
 }
 

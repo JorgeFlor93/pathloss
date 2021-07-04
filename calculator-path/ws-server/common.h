@@ -20,7 +20,13 @@ enum class pmodel{
     fspl,
     hata,
     egli,
-    pel
+    pel,
+    cost,
+    sui,
+    soil,
+    ericcson,
+    ecc33,
+    itwom
 };
 
 enum class penv{

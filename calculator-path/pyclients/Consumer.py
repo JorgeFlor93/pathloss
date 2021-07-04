@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.8
 
 # WS client example
 
@@ -23,8 +23,8 @@ async def recvPathloss():
     parameters = []
     final_array = []
     async with websockets.connect(uri, max_size=None, ping_interval=20, ping_timeout=20, close_timeout=50) as websocket:
-        model = await switchModel()
-        with open('/home/fpjorge/pathloss/calculator-path/ws-client/' + str(model)) as f:
+        model = await modelCase()
+        with open('/home/fpjorge/pathloss/calculator-path/ws-client/JSONfiles/' + str(model)) as f:
             data = json.loads(f.read())
         await websocket.send(json.dumps(data)) 
         while True:
@@ -33,7 +33,7 @@ async def recvPathloss():
             if data["type"] == "initial":
                 parameters = data["Parameters"]
             # if data["type"] == "partial":
-                # store_array.extend(data["result"]) # extend function instead of append or insert.     
+                # store_array.extend(data["result"]) # extend mejor en vez de append para ir añadiendo datos    
             if data["type"] == "final":
                 for value in data["Final"]:
                     final_array.extend(value["result"])                   
@@ -52,10 +52,10 @@ async def heatmapImage(st, p):
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cbar = plt.colorbar(im, cax=cax)
     cbar.ax.set_ylabel('decibels [dB]', rotation = 270, labelpad=10)
-    ax.set_title('Pathloss heatmap with empirics algorithm')
+    ax.set_title('[' + str(sys.argv[1]) + ']Pathloss heatmap' )
     plt.show()
 
-async def switchModel():
+async def modelCase():
     model = sys.argv[1]
     if model == "hata":
         ofile = "AreaHATA.json"
@@ -63,8 +63,22 @@ async def switchModel():
         ofile = "AreaFSPL.json"
     elif model == "egli":
         ofile = "AreaEGLI.json"
+    elif model == "cost":
+        ofile = "AreaCOST.json"
+    elif model == "ericcson":
+        ofile = "AreaERICCSON.json"
+    elif model == "pel":
+        ofile = "AreaPEL.json"
+    elif model == "soil":
+        ofile = "AreaSOIL.json"
+    elif model == "sui":
+        ofile = "AreaSUI.json"
+    elif model == "ecc33":
+        ofile = "AreaECC33.json"
     elif model == "prueba":
         ofile = "prueba1.json"
+    elif model == "SS":
+        ofile = "SS.json"
     else:
         ofile = ""
     return ofile

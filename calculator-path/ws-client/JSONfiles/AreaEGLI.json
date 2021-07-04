@@ -1,0 +1,51 @@
+{
+  "executable":"pathloss",
+  "atributes": [
+    { 
+      "propagationModel":"egli",
+      "propagationEnvironment":"urban",
+      "resolution":"250m",
+      "progress":40,
+      "type":"area",
+      "antennas":[
+        {
+          "id":"1",
+          "frequency":550,
+          "lat":42.495,
+          "lon":1.212317,
+          "height":22
+        },
+        {
+          "id":"2",
+          "frequency":8000,
+          "lat":42.407,
+          "lon":1.802130,
+          "height":20
+        },
+        {
+          "id":"3",
+          "frequency":1000,
+          "lat":42.421,
+          "lon":1.470123,
+          "height":28
+        }
+      ],
+      "corners": [
+        {
+          "topleft":[
+            {
+              "lat":42.71638,
+              "lon":1.08734
+            }
+          ],
+          "botright":[
+            {
+              "lat":42.35778,
+              "lon":1.92677
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

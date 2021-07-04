@@ -26,7 +26,7 @@ services:
     volumes:
       - ./ws-client:/usr/share/nginx/html
     ports:
-      - 81:80
+      - 80:80
       
   genetic-server:
     container_name: genetic-server
@@ -35,4 +35,4 @@ services:
       - /home/fpjorge/DOCKER_HEIGHTS/data:/genetic-server/data
       - /home/fpjorge/DOCKER_HEIGHTS/images:/genetic-server/images
     ports:
-      - 82:80
+      - 5000:5000

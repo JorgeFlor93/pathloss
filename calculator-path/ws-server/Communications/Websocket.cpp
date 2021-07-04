@@ -1,11 +1,9 @@
 
 #include "Websocket.hpp"
-
-Websocket::Websocket(std::shared_ptr<ix::WebSocket> ws) {
-  this->ws = ws;
-}
+#include <iostream>
 
 void Websocket::sendInitial (nlohmann::json out) { 
+  std::cout << this->n << ":Sending parameters" << std::endl;  
   nlohmann::json j_out;
   j_out["Parameters"] = out;
   j_out["type"] = "initial";
@@ -18,6 +16,7 @@ void Websocket::sendPartial (nlohmann::json out) {
   this->acc.push_back(out);
   out["type"] = "partial";
   std::string s_out = out.dump();
+  std::cout << this->n << ":Sending Partial calculus" << std::endl;  
   this->ws->send(s_out);
 }
 
@@ -26,9 +25,12 @@ void Websocket::sendFinal() {
   j_out["Final"] = this->acc;
   j_out["type"] = "final";
   std::string s_out = j_out.dump();
+  std::cout << this->n << ":Sending All calculus" << std::endl;  
   this->ws->send(s_out);
 }
 
+
+/* Para la depuración del código */
 void Websocket::sendParameters(int tp, int height, int width, int vsize, int progress, path corners){
   nlohmann::json j_out;
   j_out["parameters"] = {

@@ -1,13 +1,9 @@
 #include "PathlossLine.hpp"
 
-void PathlossLine::calcPathloss(std::vector<antenna> vantenna)
-{   
+void PathlossLine::onReady(std::vector<antenna> vantenna){
     std::vector<double> currentpoint;
     currentpoint.emplace_back(this->corners.lat1);
     currentpoint.emplace_back(this->corners.lon1);
-    
-    this->emisor->reservePathloss(this->longitudeline[0], 1);
-    this->algorithm = this->model->createAlgorithm([](){});
     for(int i=0;i<this->longitudeline[0];i++){
         for(auto& antenna : vantenna){
         this->emisor->collectLoss(this->algorithm(currentpoint[0], currentpoint[1], 1/* i + (j*amount_lat) */, 
@@ -17,7 +13,14 @@ void PathlossLine::calcPathloss(std::vector<antenna> vantenna)
         }
     }
     this->emisor->sendfflush();
-} 
+    this->emisor->sendAll();
+}
+
+void PathlossLine::calcPathloss(std::vector<antenna>& vantenna){
+    this->emisor->reservePathloss(this->longitudeline[0], 1);
+    this->algorithm = this->model->createAlgorithm([vantenna, this](){this->onReady(vantenna);});
+    if(this->model->getModel() == pmodel::fspl || this->model->getModel() == pmodel::soil) {onReady(vantenna);}
+}
 
 std::vector<int> PathlossLine::setgetDimensions(path corners, std::vector<double> resolution){
     // longitud de la línea. Variable end
